@@ -4,353 +4,268 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>한국어교육AI연구개발원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'ShillaCulture';
-      src: url('./Shilla_Culture_B.ttf') format('truetype');
+      src: url('./Shilla_Culture(B).ttf') format('truetype');
       font-weight: 700;
       font-style: normal;
-    }
-
-    :root {
-      --red: #b51f2d;
-      --blue: #123f8c;
-      --ink: #111111;
-      --paper: #f5f1e8;
+      font-display: swap;
     }
 
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: 'ShillaCulture', serif;
+      width: 100%;
+      height: 100%;
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      color: #1c1712;
+      background: #f5f1e9;
     }
 
-    header {
+    body { overflow-x: hidden; }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background-image: linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,.18)), url('./hero-bg.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+    }
+
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 72px;
+      right: 0;
       z-index: 20;
+      height: 82px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 7vw;
-      background: rgba(245, 241, 232, 0.86);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      backdrop-filter: blur(10px);
+      padding: 0 58px;
+      background: rgba(246, 242, 235, .58);
+      backdrop-filter: blur(8px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       text-decoration: none;
-      color: var(--ink);
+      color: #201912;
     }
 
     .brand img {
-      width: 54px;
-      height: 54px;
+      width: 56px;
+      height: 56px;
       object-fit: contain;
-      display: block;
     }
 
     .brand-title {
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: 24px;
       line-height: 1.05;
-      font-size: 18px;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
+      letter-spacing: -.02em;
     }
 
     .brand-sub {
       margin-top: 4px;
-      font-family: Georgia, serif;
       font-size: 13px;
-      color: #6f6f6f;
-      letter-spacing: 0.01em;
+      color: #5f564b;
+      font-weight: 500;
     }
 
-    nav {
+    .menu {
       display: flex;
       align-items: center;
-      gap: 34px;
+      gap: 42px;
       font-size: 17px;
+      font-weight: 600;
     }
 
-    nav a {
-      color: var(--ink);
+    .menu a {
+      color: #31291f;
       text-decoration: none;
-    }
-
-    .contact-btn {
-      padding: 14px 25px;
-      border-radius: 999px;
-      background: var(--red);
-      color: white;
-      box-shadow: 0 10px 22px rgba(181,31,45,0.22);
-    }
-
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background-image:
-        linear-gradient(rgba(245,241,232,0.28), rgba(245,241,232,0.28)),
-        url('./hero-bg.png');
-      background-size: cover;
-      background-position: center;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(245,241,232,0.15), rgba(245,241,232,0.76) 75%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      width: min(980px, 92vw);
-      text-align: center;
-      padding-top: 64px;
-    }
-
-    .center-logo {
-      width: 116px;
-      height: 116px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 18px;
-      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.14));
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 8px 18px;
-      border: 1px solid rgba(18,63,140,0.24);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.72);
-      color: var(--blue);
-      font-size: 18px;
-      margin-bottom: 28px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(58px, 8vw, 112px);
-      line-height: 1.04;
-      letter-spacing: -0.06em;
-      font-weight: 700;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.65);
-    }
-
-    h1 .red { color: var(--red); }
-    h1 .blue { color: var(--blue); }
-
-    .lead {
-      margin: 30px auto 0;
-      max-width: 760px;
-      font-size: clamp(24px, 2.2vw, 34px);
-      line-height: 1.75;
-      word-break: keep-all;
     }
 
     .actions {
       display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 42px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
     }
 
-    .actions a {
+    .lang { display:flex; gap: 8px; font-size: 14px; color: #574d42; }
+    .lang span:first-child { background: rgba(255,255,255,.62); padding: 6px 8px; border-radius: 4px; }
+
+    .cta {
+      background: #211407;
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 3px;
       text-decoration: none;
-      padding: 17px 30px;
-      border-radius: 999px;
-      font-size: 18px;
-      background: white;
-      color: var(--ink);
-      border: 1px solid rgba(0,0,0,0.11);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(31,20,9,.16);
     }
 
-    .actions a.primary { background: var(--blue); color: white; }
-    .actions a.secondary { background: var(--red); color: white; }
-
-    section {
-      padding: 110px 7vw;
-      background: #fffaf0;
-    }
-
-    .section-title {
+    .center-title {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%);
+      width: min(1220px, 88vw);
       text-align: center;
-      font-size: clamp(38px, 4vw, 62px);
-      margin: 0 0 56px;
-      letter-spacing: -0.04em;
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(60px, 7vw, 138px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      color: #17120d;
+      text-shadow: 0 8px 14px rgba(0,0,0,.19);
+      animation: softBlink 3.2s ease-in-out infinite;
     }
 
-    .cards {
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+    @keyframes softBlink {
+      0%, 100% { opacity: .92; filter: brightness(1); }
+      50% { opacity: 1; filter: brightness(1.18); }
     }
 
-    .card {
-      min-height: 230px;
-      padding: 34px;
-      border-radius: 28px;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(0,0,0,0.08);
-      box-shadow: 0 18px 36px rgba(0,0,0,0.07);
+    .left-slogan {
+      position: absolute;
+      left: 8.5vw;
+      bottom: 14vh;
+      z-index: 5;
     }
 
-    .card h3 {
-      margin: 0 0 18px;
-      font-size: 30px;
+    .left-slogan .ko {
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(34px, 4vw, 70px);
+      line-height: 1.12;
+      letter-spacing: -.04em;
+      text-shadow: 0 4px 10px rgba(0,0,0,.15);
     }
 
-    .card p {
-      margin: 0;
-      font-size: 21px;
-      line-height: 1.65;
-      word-break: keep-all;
-    }
-
-    footer {
-      padding: 36px 7vw;
-      text-align: center;
-      background: #111;
-      color: white;
-      font-size: 16px;
+    .left-slogan .en {
+      margin-top: 18px;
       font-family: Georgia, serif;
+      font-size: clamp(18px, 1.7vw, 31px);
+      font-style: italic;
+      color: #7e6e5d;
     }
 
-    @media (max-width: 860px) {
-      header { padding: 0 22px; }
-      nav { display: none; }
-      .brand-title { font-size: 16px; }
-      .brand img { width: 46px; height: 46px; }
-      .center-logo { width: 92px; height: 92px; }
-      .cards { grid-template-columns: 1fr; }
-      .lead { font-size: 24px; }
+    .right-copy {
+      position: absolute;
+      right: 10vw;
+      bottom: 13vh;
+      width: 430px;
+      z-index: 5;
+      text-align: left;
+    }
+
+    .mini-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+
+    .mini-brand img { width: 38px; height: 38px; object-fit: contain; }
+
+    .right-copy p {
+      margin: 0 0 28px;
+      font-size: 19px;
+      line-height: 1.9;
+      color: #392f25;
+      font-weight: 500;
+    }
+
+    .buttons { display:flex; gap: 14px; }
+    .btn {
+      min-width: 172px;
+      padding: 18px 24px;
+      text-align: center;
+      border-radius: 2px;
+      font-weight: 800;
+      text-decoration:none;
+      border: 1px solid rgba(52,43,34,.18);
+    }
+    .btn.primary { background:#211407; color:#fff; }
+    .btn.secondary { background:rgba(255,255,255,.34); color:#211407; }
+
+    .scroll {
+      position: absolute;
+      left: 50%;
+      bottom: 4.5vh;
+      transform: translateX(-50%);
+      font-size: 12px;
+      letter-spacing: .25em;
+      color:#9b846b;
+    }
+    .scroll::after {
+      content:'';
+      display:block;
+      width:1px;
+      height:46px;
+      margin:10px auto 0;
+      background:#d0aa72;
+    }
+
+    @media (max-width: 980px) {
+      .nav { padding: 0 22px; height: 76px; }
+      .menu, .lang { display:none; }
+      .center-title { top: 38%; }
+      .left-slogan { left: 28px; bottom: 29vh; }
+      .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
+      .buttons { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="#top">
-      <img src="./logo.png" alt="한국어교육AI연구개발원 로고" />
-      <div>
-        <div class="brand-title">한국어교육AI연구개발원</div>
-        <div class="brand-sub">Korean Edu AI Institute</div>
-      </div>
-    </a>
-    <nav>
-      <a href="#philosophy">철학</a>
-      <a href="#platforms">플랫폼</a>
-      <a href="#research">연구개발</a>
-      <a href="#training">교육연수</a>
-      <a href="#partnership">기관제휴</a>
-      <a class="contact-btn" href="#contact">문의하기</a>
-    </nav>
-  </header>
-
-  <main id="top">
-    <section class="hero">
-      <div class="hero-inner">
-        <img class="center-logo" src="./logo.png" alt="한국어교육AI연구개발원" />
-        <div class="eyebrow">AI 기반 글로벌 한국어 교육 플랫폼</div>
-        <h1>
-          문화로 배우고,<br />
-          <span class="red">AI로</span> <span class="blue">연결하다</span>
-        </h1>
-        <p class="lead">
-          한국어교육AI연구개발원은 광개토 학습 플랫폼과 온마음 한국어 교사 플랫폼을 하나로 묶어, 전 세계 한국어 교육을 위한 새로운 생태계를 만듭니다.
-        </p>
-        <div class="actions">
-          <a class="primary" href="#platforms">플랫폼 보기</a>
-          <a class="secondary" href="#training">교원 참여하기</a>
-          <a href="#partnership">기관 제휴 문의</a>
+  <main class="hero">
+    <nav class="nav">
+      <a class="brand" href="./index.html">
+        <img src="./logo.png" alt="한국어교육AI연구개발원 로고" />
+        <div>
+          <div class="brand-title">한국어교육AI연구개발원</div>
+          <div class="brand-sub">Korean Edu AI Institute</div>
         </div>
+      </a>
+      <div class="menu">
+        <a href="./curriculum.html">커리큘럼</a>
+        <a href="./platform.html">플랫폼</a>
+        <a href="./research.html">연구개발</a>
+        <a href="./training.html">교육연수</a>
+        <a href="./partnership.html">기관제휴</a>
+      </div>
+      <div class="actions">
+        <div class="lang"><span>KR</span><span>EN</span><span>JP</span><span>ZH</span></div>
+        <a class="cta" href="./contact.html">문의하기</a>
+      </div>
+    </nav>
+
+    <h1 class="center-title">한국어교육AI연구개발원</h1>
+
+    <section class="left-slogan">
+      <div class="ko">문화로 배우고,<br />언어로 말하다</div>
+      <div class="en">Learn the culture. Speak the language.</div>
+    </section>
+
+    <section class="right-copy">
+      <div class="mini-brand"><img src="./logo.png" alt="" />한국어교육AI연구개발원</div>
+      <p>현장 교사들이 직접 설계하고, AI가 함께하는<br />진심 어린 한국어 교육 플랫폼</p>
+      <div class="buttons">
+        <a class="btn primary" href="./platform.html">플랫폼 보기</a>
+        <a class="btn secondary" href="./training.html">교육연수 보기</a>
       </div>
     </section>
 
-    <section id="philosophy">
-      <h2 class="section-title">교육 철학</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>배움은 연결입니다</h3>
-          <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
-        </article>
-        <article class="card">
-          <h3>기술보다 사람입니다</h3>
-          <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
-        </article>
-        <article class="card">
-          <h3>한국어를 보이게 합니다</h3>
-          <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="platforms">
-      <h2 class="section-title">플랫폼</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>광개토</h3>
-          <p>AI 기반 글로벌 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습을 제공합니다.</p>
-        </article>
-        <article class="card">
-          <h3>온마음 한국어</h3>
-          <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
-        </article>
-        <article class="card">
-          <h3>AI 콘텐츠 연구소</h3>
-          <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="research">
-      <h2 class="section-title">연구개발</h2>
-      <div class="cards">
-        <article class="card"><h3>AI 챗봇</h3><p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p></article>
-        <article class="card"><h3>발음 시각화</h3><p>자음, 모음, 받침, 연음의 원리를 그림과 애니메이션으로 설명합니다.</p></article>
-        <article class="card"><h3>교육용 게임</h3><p>성인 학습자도 몰입할 수 있는 실생활 중심 한국어 학습 게임을 개발합니다.</p></article>
-      </div>
-    </section>
-
-    <section id="training">
-      <h2 class="section-title">교육연수</h2>
-      <div class="cards">
-        <article class="card"><h3>ChatGPT</h3><p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p></article>
-        <article class="card"><h3>Canva</h3><p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p></article>
-        <article class="card"><h3>NotebookLM</h3><p>자료 정리, 발표자료 제작, 강의 구성 자동화를 교육 현장에 적용합니다.</p></article>
-      </div>
-    </section>
-
-    <section id="partnership">
-      <h2 class="section-title">기관 제휴</h2>
-      <div class="cards">
-        <article class="card"><h3>대학·어학원</h3><p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p></article>
-        <article class="card"><h3>다문화기관</h3><p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p></article>
-        <article class="card"><h3>기업 교육</h3><p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p></article>
-      </div>
-    </section>
+    <div class="scroll">SCROLL</div>
   </main>
-
-  <footer id="contact">
-    © Korean Edu AI Institute · 한국어교육AI연구개발원
-  </footer>
 </body>
 </html>

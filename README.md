@@ -1,10 +1,9 @@
 # 한국어교육AI연구개발원 홈페이지
 
-GitHub 저장소 루트에 아래 4개 파일을 그대로 업로드하세요.
-
+업로드 파일:
 - index.html
 - logo.png
 - hero-bg.png
-- Shilla_Culture_B.ttf
+- README.md
 
-Vercel Framework Preset은 Other로 설정하면 됩니다.
+신라문화체 파일은 별도로 GitHub 루트에 `Shilla_Culture(B).ttf` 이름 그대로 업로드해야 큰 제목에 적용됩니다.
