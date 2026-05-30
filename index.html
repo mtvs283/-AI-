@@ -10,7 +10,7 @@
   <style>
     @font-face {
       font-family: 'ShillaCulture';
-      src: url('./Shilla_Culture(B).ttf') format('truetype');
+      src: url('./Shilla_Culture_B.ttf') format('truetype');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
@@ -117,16 +117,16 @@
     .center-title {
       position: absolute;
       left: 50%;
-      top: 42%;
+      top: 34%;
       transform: translate(-50%, -50%);
-      width: min(1220px, 88vw);
+      width: min(1160px, 86vw);
       text-align: center;
       font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
-      font-size: clamp(60px, 7vw, 138px);
-      line-height: 1.02;
+      font-size: clamp(54px, 6.2vw, 112px);
+      line-height: 1.08;
       letter-spacing: -.035em;
       color: #17120d;
-      text-shadow: 0 8px 14px rgba(0,0,0,.19);
+      text-shadow: 0 6px 12px rgba(0,0,0,.16);
       animation: softBlink 3.2s ease-in-out infinite;
     }
 
@@ -137,8 +137,8 @@
 
     .left-slogan {
       position: absolute;
-      left: 8.5vw;
-      bottom: 14vh;
+      left: 7.2vw;
+      bottom: 12vh;
       z-index: 5;
     }
 
@@ -160,8 +160,8 @@
 
     .right-copy {
       position: absolute;
-      right: 10vw;
-      bottom: 13vh;
+      right: 9vw;
+      bottom: 11.5vh;
       width: 430px;
       z-index: 5;
       text-align: left;
@@ -219,7 +219,7 @@
     @media (max-width: 980px) {
       .nav { padding: 0 22px; height: 76px; }
       .menu, .lang { display:none; }
-      .center-title { top: 38%; }
+      .center-title { top: 33%; font-size: clamp(42px, 9vw, 74px); }
       .left-slogan { left: 28px; bottom: 29vh; }
       .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
       .buttons { flex-wrap: wrap; }
