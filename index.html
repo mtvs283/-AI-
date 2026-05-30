@@ -230,6 +230,11 @@
     }
 
     .content-section {
+      display: flex;
+      min-height: 100vh;
+      scroll-margin-top: 82px;
+      flex-direction: column;
+      justify-content: center;
       padding: 110px min(8vw, 120px);
       background: #f5f1e9;
       border-top: 1px solid rgba(86, 67, 47, .13);
@@ -273,7 +278,7 @@
       .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
       .buttons { flex-wrap: wrap; }
       .cards { grid-template-columns: 1fr; }
-      .content-section { padding: 76px 28px; }
+      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
     }
   </style>
 </head>
