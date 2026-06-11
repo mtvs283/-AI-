@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="한국어교육AI연구개발원 문의 게시판 — 기관 제휴, 교육연수, 플랫폼 도입 문의를 남겨주세요.">
+  <title>문의 게시판 | 한국어교육AI연구개발원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'ShillaCulture';
+      src: url('./Shilla_Culture_B.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body {
+      margin: 0; width: 100%;
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      color: #1c1712; background: #f5f1e9;
+    }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      height: 82px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 58px;
+      background: rgba(246, 242, 235, .86);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(86,67,47,.12);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #201912; }
+    .brand img { width: 56px; height: 56px; object-fit: contain; }
+    .brand-title { font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; }
+    .brand-sub { margin-top: 4px; font-size: 13px; color: #5f564b; font-weight: 500; }
+    .nav .home-link {
+      color: #31291f; text-decoration: none; font-weight: 700; font-size: 15px;
+      border: 1px solid rgba(52,43,34,.25); padding: 10px 20px; border-radius: 3px;
+    }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 140px 24px 90px; }
+
+    .page-head h1 {
+      margin: 0 0 10px;
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(30px, 4vw, 44px); color: #2c1d10; letter-spacing: .02em;
+    }
+    .page-head p { margin: 0 0 36px; color: #574d42; line-height: 1.8; font-size: 16px; }
+
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+    .btn {
+      display: inline-block; padding: 13px 26px; border-radius: 3px;
+      font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer;
+      border: 1px solid rgba(52,43,34,.18); font-family: inherit;
+    }
+    .btn.primary { background: #211407; color: #fff; }
+    .btn.ghost { background: rgba(255,255,255,.5); color: #211407; }
+    .btn:disabled { opacity: .5; cursor: default; }
+
+    table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,.55); }
+    thead th {
+      text-align: left; font-size: 13px; color: #6b5f51; font-weight: 700;
+      padding: 13px 14px; border-top: 2px solid #211407; border-bottom: 1px solid rgba(86,67,47,.2);
+    }
+    tbody td { padding: 15px 14px; border-bottom: 1px solid rgba(86,67,47,.12); font-size: 15px; vertical-align: middle; }
+    tbody tr { cursor: pointer; transition: background .15s; }
+    tbody tr:hover { background: rgba(208,170,114,.14); }
+    .col-num { width: 64px; color: #8a7c69; }
+    .col-date { width: 110px; color: #8a7c69; font-size: 13px; }
+    .col-name { width: 150px; }
+    .t-title { font-weight: 500; color: #2c241a; }
+    .t-title .lock { margin-right: 6px; }
+    .badge {
+      display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 10px;
+      font-size: 11px; font-weight: 700; background: #d0aa72; color: #211407; vertical-align: 2px;
+    }
+    .empty { padding: 56px 14px; text-align: center; color: #8a7c69; }
+
+    .panel {
+      display: none; background: rgba(255,255,255,.65);
+      border: 1px solid rgba(86,67,47,.16); padding: 34px; margin-top: 8px;
+    }
+    .panel.open { display: block; }
+    .panel h2 { margin: 0 0 22px; font-size: 22px; color: #2c1d10; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 700; color: #574d42; margin-bottom: 6px; }
+    .field input[type="text"], .field input[type="email"], .field input[type="password"], .field textarea {
+      width: 100%; padding: 12px 14px; font-size: 15px; font-family: inherit;
+      border: 1px solid rgba(86,67,47,.25); background: #fff; border-radius: 2px; color: #1c1712;
+    }
+    .field textarea { min-height: 180px; resize: vertical; line-height: 1.7; }
+    .field input:focus, .field textarea:focus { outline: 2px solid #d0aa72; border-color: transparent; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .secret-row { display: flex; align-items: center; gap: 10px; margin: 6px 0 16px; font-size: 15px; }
+    .secret-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: #211407; }
+    #pwField { display: none; }
+    .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+    .msg { margin-top: 14px; font-size: 14px; font-weight: 700; }
+    .msg.ok { color: #2e6b46; }
+    .msg.err { color: #a33b2a; }
+
+    .detail-meta { font-size: 13px; color: #8a7c69; margin-bottom: 18px; }
+    .detail-meta b { color: #3a3024; font-size: 15px; margin-right: 10px; }
+    .detail-content { white-space: pre-wrap; line-height: 1.85; font-size: 16px; color: #2c241a; padding: 6px 0 24px; border-bottom: 1px solid rgba(86,67,47,.14); }
+    .answer-box { margin-top: 22px; background: rgba(208,170,114,.16); border-left: 3px solid #d0aa72; padding: 18px 20px; }
+    .answer-box .a-label { font-size: 13px; font-weight: 800; color: #8a6a35; margin-bottom: 8px; }
+    .answer-box .a-body { white-space: pre-wrap; line-height: 1.8; font-size: 15px; color: #3a3024; }
+
+    footer { margin-top: 90px; padding: 34px min(8vw, 120px); background: #211407; color: rgba(255,255,255,.78); }
+
+    @media (max-width: 720px) {
+      .nav { padding: 0 18px; height: 70px; }
+      .brand img { width: 42px; height: 42px; }
+      .brand-title { font-size: 18px; }
+      .brand-sub { display: none; }
+      .wrap { padding-top: 110px; }
+      .col-date, .col-num { display: none; }
+      .grid2 { grid-template-columns: 1fr; }
+      .panel { padding: 22px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="./index.html">
+      <img src="./logo.png" alt="한국어교육AI연구개발원 로고" />
+      <div>
+        <div class="brand-title">한국어교육AI연구개발원</div>
+        <div class="brand-sub">Korean Edu AI Institute</div>
+      </div>
+    </a>
+    <a class="home-link" href="./index.html">홈으로</a>
+  </nav>
+
+  <div class="wrap">
+    <div class="page-head">
+      <h1>문의 게시판</h1>
+      <p>기관 제휴, 교육연수, 플랫폼 도입 등 무엇이든 남겨주세요.<br>
+      연락처 등 민감한 내용이 포함된 경우 <b>비밀글</b>로 작성하시면 비밀번호를 아는 분만 열람할 수 있습니다.</p>
+    </div>
+
+    <!-- 목록 -->
+    <div id="listView">
+      <div class="toolbar">
+        <button class="btn primary" onclick="showWrite()">문의 작성</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th class="col-num">번호</th><th>제목</th><th class="col-name">작성자</th><th class="col-date">날짜</th></tr>
+        </thead>
+        <tbody id="listBody">
+          <tr><td colspan="4" class="empty">불러오는 중...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 작성 -->
+    <div class="panel" id="writeView">
+      <h2>문의 작성</h2>
+      <div class="grid2">
+        <div class="field"><label>이름 *</label><input type="text" id="wName" maxlength="40" placeholder="홍길동"></div>
+        <div class="field"><label>소속 기관</label><input type="text" id="wOrg" maxlength="80" placeholder="○○대학교 / ○○다문화센터"></div>
+      </div>
+      <div class="field"><label>이메일 (답변 안내용, 게시판에 노출되지 않습니다)</label><input type="email" id="wEmail" maxlength="120" placeholder="example@email.com"></div>
+      <div class="field"><label>제목 *</label><input type="text" id="wTitle" maxlength="120"></div>
+      <div class="field"><label>내용 *</label><textarea id="wContent" maxlength="5000"></textarea></div>
+      <div class="secret-row">
+        <input type="checkbox" id="wSecret" onchange="document.getElementById('pwField').style.display = this.checked ? 'block' : 'none'">
+        <label for="wSecret" style="cursor:pointer">비밀글로 작성 (작성자와 관리자만 열람)</label>
+      </div>
+      <div class="field" id="pwField"><label>비밀번호 *</label><input type="password" id="wPassword" maxlength="40" placeholder="열람 시 사용할 비밀번호"></div>
+      <div class="form-actions">
+        <button class="btn ghost" onclick="showList()">취소</button>
+        <button class="btn primary" id="submitBtn" onclick="submitInquiry()">등록</button>
+      </div>
+      <div class="msg" id="writeMsg"></div>
+    </div>
+
+    <!-- 상세 -->
+    <div class="panel" id="detailView">
+      <h2 id="dTitle"></h2>
+      <div class="detail-meta" id="dMeta"></div>
+      <div class="detail-content" id="dContent"></div>
+      <div id="dAnswer"></div>
+      <div class="form-actions" style="margin-top:24px">
+        <button class="btn ghost" onclick="showList()">목록으로</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ▼▼▼ 여기 두 줄만 본인 값으로 교체하세요 (Supabase > Settings > API) ▼▼▼
+    const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhycmdmYmlkdHpzb2hkZGl3Y2JuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzMzMTUsImV4cCI6MjA5Njc0OTMxNX0.Fq-Kj8tbrhVbPGS0JKkXXPlAnP6M8U7h5SQDPTWGofo';
+    // ▲▲▲ anon public 키만 사용하세요. service_role 키는 절대 넣으면 안 됩니다. ▲▲▲
+
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const $ = id => document.getElementById(id);
+    const esc = s => (s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmtDate = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
+
+    function switchView(name) {
+      $('listView').style.display = name === 'list' ? 'block' : 'none';
+      $('writeView').classList.toggle('open', name === 'write');
+      $('detailView').classList.toggle('open', name === 'detail');
+      window.scrollTo({ top: 0 });
+    }
+    function showList() { switchView('list'); loadList(); }
+    function showWrite() {
+      ['wName','wOrg','wEmail','wTitle','wContent','wPassword'].forEach(id => $(id).value = '');
+      $('wSecret').checked = false; $('pwField').style.display = 'none';
+      $('writeMsg').textContent = ''; $('writeMsg').className = 'msg';
+      switchView('write');
+    }
+
+    async function loadList() {
+      const body = $('listBody');
+      body.innerHTML = '<tr><td colspan="4" class="empty">불러오는 중...</td></tr>';
+      const { data, error } = await sb.rpc('list_inquiries');
+      if (error) { body.innerHTML = '<tr><td colspan="4" class="empty">목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</td></tr>'; return; }
+      if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="4" class="empty">아직 등록된 문의가 없습니다. 첫 문의를 남겨주세요.</td></tr>'; return; }
+      body.innerHTML = data.map(r => `
+        <tr onclick="openDetail(${r.id}, ${r.is_secret})">
+          <td class="col-num">${r.id}</td>
+          <td class="t-title">${r.is_secret ? '<span class="lock">🔒</span>' : ''}${esc(r.title)}${r.answered ? '<span class="badge">답변완료</span>' : ''}</td>
+          <td class="col-name">${esc(r.name)}${r.org ? ' <span style="color:#8a7c69;font-size:12px">(' + esc(r.org) + ')</span>' : ''}</td>
+          <td class="col-date">${fmtDate(r.created_at)}</td>
+        </tr>`).join('');
+    }
+
+    async function openDetail(id, isSecret) {
+      let pw = null;
+      if (isSecret) {
+        pw = prompt('비밀글입니다. 비밀번호를 입력하세요.');
+        if (pw === null) return;
+      }
+      const { data, error } = await sb.rpc('get_inquiry', { p_id: id, p_password: pw });
+      if (error) { alert(error.message.includes('비밀번호') ? '비밀번호가 일치하지 않습니다.' : '글을 불러오지 못했습니다.'); return; }
+      const r = Array.isArray(data) ? data[0] : data;
+      if (!r) { alert('글을 불러오지 못했습니다.'); return; }
+      $('dTitle').textContent = (r.is_secret ? '🔒 ' : '') + r.title;
+      $('dMeta').innerHTML = `<b>${esc(r.name)}</b>${r.org ? esc(r.org) + ' · ' : ''}${fmtDate(r.created_at)}`;
+      $('dContent').textContent = r.content;
+      $('dAnswer').innerHTML = r.answer
+        ? `<div class="answer-box"><div class="a-label">연구개발원 답변${r.answered_at ? ' · ' + fmtDate(r.answered_at) : ''}</div><div class="a-body">${esc(r.answer)}</div></div>`
+        : '';
+      switchView('detail');
+    }
+
+    async function submitInquiry() {
+      const msg = $('writeMsg');
+      msg.className = 'msg'; msg.textContent = '';
+      const name = $('wName').value.trim(), title = $('wTitle').value.trim(), content = $('wContent').value.trim();
+      const isSecret = $('wSecret').checked, pw = $('wPassword').value;
+      if (!name || !title || !content) { msg.className = 'msg err'; msg.textContent = '이름, 제목, 내용은 필수입니다.'; return; }
+      if (isSecret && !pw) { msg.className = 'msg err'; msg.textContent = '비밀글은 비밀번호가 필요합니다.'; return; }
+      $('submitBtn').disabled = true;
+      const { error } = await sb.rpc('create_inquiry', {
+        p_name: name, p_org: $('wOrg').value.trim(), p_email: $('wEmail').value.trim(),
+        p_title: title, p_content: content, p_is_secret: isSecret, p_password: isSecret ? pw : null
+      });
+      $('submitBtn').disabled = false;
+      if (error) { msg.className = 'msg err'; msg.textContent = '등록에 실패했습니다. 잠시 후 다시 시도해주세요.'; return; }
+      alert('문의가 등록되었습니다. 확인 후 답변드리겠습니다.');
+      showList();
+    }
+
+    loadList();
+  </script>
+</body>
+</html>
