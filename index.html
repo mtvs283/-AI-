@@ -622,6 +622,92 @@
     .board-item a:focus-visible {
       text-decoration: underline;
     }
+
+    .file-link {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #7b4c18;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .file-link:hover,
+    .file-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    .board-shell {
+      margin-top: 24px;
+      padding: 28px;
+      border: 1px solid rgba(86, 67, 47, .14);
+      background: rgba(255, 255, 255, .6);
+    }
+
+    .board-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: end;
+      padding-bottom: 26px;
+      border-bottom: 2px solid #211407;
+    }
+
+    .board-header h4 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: #15100b;
+    }
+
+    .board-header p {
+      margin: 0;
+      color: #574d42;
+      line-height: 1.65;
+    }
+
+    .board-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, .46);
+    }
+
+    .board-table th,
+    .board-table td {
+      padding: 16px 14px;
+      border-bottom: 1px solid rgba(86, 67, 47, .13);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .board-table th {
+      color: #7e6e5d;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .board-table .num-col { width: 70px; }
+    .board-table .type-col { width: 130px; }
+    .board-table .date-col { width: 130px; }
+
+    .board-title-cell strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #15100b;
+    }
+
+    .board-title-cell p {
+      margin: 0;
+      color: #574d42;
+      line-height: 1.6;
+    }
+
+    .board-empty {
+      padding: 26px 14px;
+      color: #7e6e5d;
+      text-align: center;
+    }
     footer {
       padding: 34px min(8vw, 120px);
       background: #211407;
@@ -737,8 +823,8 @@
           <strong>수업 고민 나눔</strong>
         </button>
       </div>
-      <section class="shared-preview" id="share-board" aria-labelledby="shared-preview-title">
-        <div class="shared-preview-head">
+      <section class="shared-preview board-shell" id="share-board" aria-labelledby="shared-preview-title">
+        <div class="board-header">
           <div>
             <h4 id="shared-preview-title">자료공유</h4>
             <p>선생님들과 함께 수업 자료를 올리고 나누는 공간입니다.</p>
@@ -779,12 +865,21 @@
           </div>
         </form>
 
-        <div class="board-list" id="shared-material-list">
-          <article class="board-item">
-            <strong>자료를 불러오는 중입니다.</strong>
-            <div class="board-meta">잠시만 기다려 주세요.</div>
-          </article>
-        </div>
+        <table class="board-table" aria-label="자료공유 목록">
+          <thead>
+            <tr>
+              <th class="num-col">번호</th>
+              <th>제목</th>
+              <th class="type-col">종류</th>
+              <th class="date-col">날짜</th>
+            </tr>
+          </thead>
+          <tbody id="shared-material-list">
+            <tr>
+              <td colspan="4" class="board-empty">자료를 불러오는 중입니다.</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </section>
   </section>
@@ -897,7 +992,7 @@
       if (!sharedMaterialList) return;
 
       if (!supabaseClient) {
-        sharedMaterialList.innerHTML = '<article class="board-item"><strong>자료공유 DB 연결 대기 중입니다.</strong><div class="board-meta">인터넷 연결 후 새로고침해 주세요.</div></article>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료공유 DB 연결 대기 중입니다. 인터넷 연결 후 새로고침해 주세요.</td></tr>';
         return;
       }
 
@@ -908,21 +1003,21 @@
         .limit(12);
 
       if (error) {
-        sharedMaterialList.innerHTML = '<article class="board-item"><strong>자료를 불러오지 못했습니다.</strong><div class="board-meta">잠시 후 다시 확인해 주세요.</div></article>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.</td></tr>';
         console.error(error);
         return;
       }
 
       if (!data.length) {
-        sharedMaterialList.innerHTML = '<article class="board-item"><strong>아직 등록된 자료가 없습니다.</strong><div class="board-meta">첫 자료를 올려 주세요.</div></article>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">아직 등록된 자료가 없습니다. 첫 자료를 올려 주세요.</td></tr>';
         return;
       }
 
-      sharedMaterialList.innerHTML = data.map((item) => {
+      sharedMaterialList.innerHTML = data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
-        const fileLink = item.file_url ? `<a href="${item.file_url}" target="_blank" rel="noopener">파일 열기</a>` : '파일 없음';
+        const fileLink = item.file_path ? `<button class="file-link" type="button" data-file-path="${item.file_path}">파일 열기</button>` : '파일 없음';
         const note = item.note ? `<p>${item.note}</p>` : '';
-        return `<article class="board-item"><strong>${item.title}</strong><div class="board-meta">${item.category || '자료'} · ${createdAt} · ${fileLink}</div>${note}</article>`;
+        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${item.title}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${item.category || '자료'}</td><td>${createdAt}</td></tr>`;
       }).join('');
     }
 
@@ -960,17 +1055,13 @@
           return;
         }
 
-        const { data: publicData } = supabaseClient.storage
-          .from('teaching-materials')
-          .getPublicUrl(filePath);
-
         const { error } = await supabaseClient
           .from('shared_materials')
           .insert({
             title: document.getElementById('share-title').value.trim(),
             category: document.getElementById('share-category').value,
             note: document.getElementById('share-note').value.trim(),
-            file_url: publicData.publicUrl,
+            file_path: filePath,
             file_name: file.name
           });
 
@@ -988,6 +1079,30 @@
       });
     }
 
+
+    if (sharedMaterialList) {
+      sharedMaterialList.addEventListener('click', async (event) => {
+        const linkButton = event.target.closest('.file-link');
+        if (!linkButton || !supabaseClient) return;
+
+        const filePath = linkButton.dataset.filePath;
+        linkButton.textContent = '링크 생성 중...';
+
+        const { data, error } = await supabaseClient.storage
+          .from('teaching-materials')
+          .createSignedUrl(filePath, 60 * 10);
+
+        if (error) {
+          linkButton.textContent = '파일 열기';
+          alert('파일 링크를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.');
+          console.error(error);
+          return;
+        }
+
+        linkButton.textContent = '파일 열기';
+        window.open(data.signedUrl, '_blank', 'noopener');
+      });
+    }
     loadSharedMaterials();
   </script>
 </body>
