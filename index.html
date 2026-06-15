@@ -726,14 +726,14 @@
       <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
       <h3>온마음 한국어</h3>
 
-      <div class="feature-tabs" role="tablist" aria-label="온마음 한국어 기능">
-        <button class="feature-tab" type="button">
+      <div class="feature-tabs" aria-label="온마음 한국어 기능">
+        <button class="feature-tab" type="button" id="request-board-toggle">
           <strong>수업자료 요청</strong>
         </button>
-        <button class="feature-tab" type="button">
+        <button class="feature-tab" type="button" id="share-board-toggle">
           <strong>자료 공유</strong>
         </button>
-        <button class="feature-tab" type="button">
+        <button class="feature-tab" type="button" id="worry-board-toggle">
           <strong>수업 고민 나눔</strong>
         </button>
       </div>
@@ -849,7 +849,7 @@
   <script>
     const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const platforms = document.getElementById('platforms');
     const platformTitle = document.getElementById('platform-title');
     const onmaeumToggle = document.getElementById('onmaeum-toggle');
@@ -879,55 +879,17 @@ const platforms = document.getElementById('platforms');
       });
     });
 
-    const materialRequestForm = document.getElementById('material-request-form');
-    const requestStatus = document.getElementById('request-status');
-
-    materialRequestForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      requestStatus.classList.remove('is-error');
-      requestStatus.textContent = '요청을 저장하는 중입니다...';
-
-      const requestData = {
-        target_class: document.getElementById('target-class').value.trim(),
-        korean_level: document.getElementById('korean-level').value,
-        topic: document.getElementById('topic').value.trim(),
-        material_type: document.getElementById('material-type').value.trim(),
-        learner_language: document.getElementById('learner-language').value.trim(),
-        book_unit: document.getElementById('book-unit').value.trim(),
-        request_detail: document.getElementById('request-detail').value.trim()
-      };
-
-      if (!requestData.request_detail) {
-        requestStatus.classList.add('is-error');
-        requestStatus.textContent = '요청 내용을 적어 주세요.';
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from('material_requests')
-        .insert(requestData);
-
-      if (error) {
-        requestStatus.classList.add('is-error');
-        requestStatus.textContent = '저장에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-        console.error(error);
-        return;
-      }
-
-      materialRequestForm.reset();
-      requestStatus.textContent = '요청이 저장되었습니다.';
-    });
-
     const shareBoardToggle = document.getElementById('share-board-toggle');
     const shareBoard = document.getElementById('share-board');
     const shareFormToggle = document.getElementById('share-form-toggle');
     const shareForm = document.getElementById('shared-material-form');
     const shareStatus = document.getElementById('share-status');
     const sharedMaterialList = document.getElementById('shared-material-list');
-
-    shareBoardToggle.addEventListener('click', () => {
-      shareBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+    if (shareBoardToggle) {
+      shareBoardToggle.addEventListener('click', () => {
+        shareBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
 
     shareFormToggle.addEventListener('click', () => {
       shareForm.classList.toggle('is-open');
