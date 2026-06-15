@@ -731,6 +731,58 @@
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(255, 255, 255, .6);
     }
+
+    .board-row-clickable { cursor: pointer; }
+    .board-row-clickable:hover { background: rgba(86, 67, 47, .04); }
+
+    .board-detail-row > td {
+      background: rgba(86, 67, 47, .04);
+      padding: 18px 22px;
+    }
+    .board-detail-row .post-body {
+      white-space: pre-wrap;
+      color: #2a2218;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+    .comments-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .comments-list li {
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid rgba(86, 67, 47, .12);
+      font-size: 14px;
+    }
+    .comments-list .comment-meta {
+      font-size: 12px;
+      color: #7e6e5d;
+      margin-top: 4px;
+    }
+    .comments-empty {
+      font-size: 13px;
+      color: #7e6e5d;
+      margin: 0 0 14px;
+    }
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .comment-form input[type="text"] {
+      padding: 8px 10px;
+      border: 1px solid rgba(86, 67, 47, .25);
+      background: #fff;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .comment-form input.comment-author { width: 130px; }
+    .comment-form input.comment-text { flex: 1; min-width: 180px; }
     footer {
       padding: 34px min(8vw, 120px);
       background: #211407;
@@ -856,36 +908,15 @@
         <form class="form-grid" id="material-request-form">
           <div class="form-field">
             <label for="target-class">수업 대상</label>
-            <input id="target-class" type="text" placeholder="초등 다문화 / 중학생 / 성인 초급" />
-          </div>
-          <div class="form-field">
-            <label for="korean-level">한국어 수준</label>
-            <select id="korean-level">
-              <option>한글 미해득</option>
-              <option>초급</option>
-              <option>중급</option>
-              <option>고급</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="topic">주제</label>
-            <input id="topic" type="text" placeholder="병원 가기, 학교생활, 급식, 친구 사귀기" />
-          </div>
-          <div class="form-field">
-            <label for="material-type">필요한 자료</label>
-            <input id="material-type" type="text" placeholder="그림카드, 활동지, 역할극, 문법 설명 그림" />
+            <input id="target-class" type="text" placeholder="초등 다문화 / 중학생 / 성인 초급" required />
           </div>
           <div class="form-field">
             <label for="learner-language">학습자 언어</label>
             <input id="learner-language" type="text" placeholder="베트남어, 중국어, 러시아어 등" />
           </div>
-          <div class="form-field">
-            <label for="book-unit">교재/단원</label>
-            <input id="book-unit" type="text" placeholder="표준한국어 3학년 5과 / 세종한국어 2A 3과" />
-          </div>
           <div class="form-field full">
             <label for="request-detail">요청 내용</label>
-            <textarea id="request-detail" placeholder="아플 때 보건실 가는 대화문이 필요해요."></textarea>
+            <textarea id="request-detail" placeholder="예) 아플 때 보건실 가는 대화문이 필요해요. / 친구 사귀기 그림카드 만들어 주세요." required></textarea>
           </div>
           <div class="form-actions full">
             <button class="mini-button" type="submit">요청 남기기</button>
@@ -893,6 +924,22 @@
             <p class="form-status" id="request-status" aria-live="polite"></p>
           </div>
         </form>
+
+        <table class="board-table" aria-label="수업자료 요청 목록">
+          <thead>
+            <tr>
+              <th class="num-col">번호</th>
+              <th>요청 내용</th>
+              <th class="type-col">대상</th>
+              <th class="date-col">날짜</th>
+            </tr>
+          </thead>
+          <tbody id="material-request-list">
+            <tr>
+              <td colspan="4" class="board-empty">요청을 불러오는 중입니다.</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
       <section class="shared-preview board-shell sub-board is-active" id="share-board" aria-labelledby="shared-preview-title">
         <div class="board-header">
@@ -961,8 +1008,41 @@
             <h4 id="worry-board-title">수업 고민 나눔</h4>
             <p>수업 중 어려웠던 표현, 상황, 학습자 반응을 게시판처럼 나누는 공간입니다.</p>
           </div>
-          <button class="mini-button secondary" type="button">글쓰기</button>
+          <button class="mini-button secondary" type="button" id="worry-form-toggle">글쓰기</button>
         </div>
+
+        <form class="share-form" id="worry-post-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="worry-author">작성자(닉네임)</label>
+              <input id="worry-author" type="text" placeholder="홍길동 / 김선생" required />
+            </div>
+            <div class="form-field">
+              <label for="worry-category">분류</label>
+              <select id="worry-category">
+                <option>수업 운영</option>
+                <option>학습자 반응</option>
+                <option>표현·문법</option>
+                <option>문화 차이</option>
+                <option>기타</option>
+              </select>
+            </div>
+            <div class="form-field full">
+              <label for="worry-title">제목</label>
+              <input id="worry-title" type="text" placeholder="중국 학생이 받침 발음을 너무 어려워해요" required />
+            </div>
+            <div class="form-field full">
+              <label for="worry-content">내용</label>
+              <textarea id="worry-content" placeholder="어떤 상황이었는지, 어떻게 대응하셨는지 자유롭게 적어 주세요." required></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="mini-button" type="submit">등록하기</button>
+            <button class="mini-button secondary" type="reset">초기화</button>
+            <p class="form-status" id="worry-status" aria-live="polite"></p>
+          </div>
+        </form>
+
         <table class="board-table" aria-label="수업 고민 목록">
           <thead>
             <tr>
@@ -972,9 +1052,9 @@
               <th class="date-col">날짜</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="worry-post-list">
             <tr>
-              <td colspan="4" class="board-empty">아직 등록된 고민 글이 없습니다.</td>
+              <td colspan="4" class="board-empty">고민 글을 불러오는 중입니다.</td>
             </tr>
           </tbody>
         </table>
@@ -1218,7 +1298,252 @@
         window.open(data.signedUrl, '_blank', 'noopener');
       });
     }
+
+    // ─────────────────────────────────────────
+    // 수업자료 요청
+    // ─────────────────────────────────────────
+    const requestForm = document.getElementById('material-request-form');
+    const requestStatus = document.getElementById('request-status');
+    const requestList = document.getElementById('material-request-list');
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    async function loadMaterialRequests() {
+      if (!requestList) return;
+      if (!supabaseClient) {
+        requestList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다. 새로고침해 주세요.</td></tr>';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('material_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(30);
+
+      if (error) {
+        requestList.innerHTML = '<tr><td colspan="4" class="board-empty">요청을 불러오지 못했습니다.</td></tr>';
+        console.error(error);
+        return;
+      }
+      if (!data.length) {
+        requestList.innerHTML = '<tr><td colspan="4" class="board-empty">아직 등록된 요청이 없습니다. 첫 요청을 남겨 주세요.</td></tr>';
+        return;
+      }
+      requestList.innerHTML = data.map((item, index) => {
+        const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
+        const detail = escapeHtml(item.detail || '');
+        const lang = item.learner_language ? `<div class="board-meta">학습자 언어: ${escapeHtml(item.learner_language)}</div>` : '';
+        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${detail}</strong>${lang}</td><td>${escapeHtml(item.target_class || '-')}</td><td>${createdAt}</td></tr>`;
+      }).join('');
+    }
+
+    if (requestForm) {
+      requestForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!requestStatus) return;
+        requestStatus.classList.remove('is-error');
+
+        if (!supabaseClient) {
+          requestStatus.classList.add('is-error');
+          requestStatus.textContent = 'DB 연결을 불러오지 못했습니다.';
+          return;
+        }
+
+        requestStatus.textContent = '요청을 등록하는 중입니다...';
+
+        const { error } = await supabaseClient
+          .from('material_requests')
+          .insert({
+            target_class: document.getElementById('target-class').value.trim(),
+            learner_language: document.getElementById('learner-language').value.trim(),
+            detail: document.getElementById('request-detail').value.trim()
+          });
+
+        if (error) {
+          requestStatus.classList.add('is-error');
+          requestStatus.textContent = '요청 등록에 실패했습니다.';
+          console.error(error);
+          return;
+        }
+
+        requestForm.reset();
+        requestStatus.textContent = '요청이 등록되었습니다.';
+        await loadMaterialRequests();
+      });
+    }
+
+    // ─────────────────────────────────────────
+    // 수업 고민 나눔 (글 + 댓글)
+    // ─────────────────────────────────────────
+    const worryFormToggle = document.getElementById('worry-form-toggle');
+    const worryForm = document.getElementById('worry-post-form');
+    const worryStatus = document.getElementById('worry-status');
+    const worryList = document.getElementById('worry-post-list');
+
+    if (worryFormToggle && worryForm) {
+      worryFormToggle.addEventListener('click', () => {
+        worryForm.classList.toggle('is-open');
+      });
+    }
+
+    async function loadWorryPosts() {
+      if (!worryList) return;
+      if (!supabaseClient) {
+        worryList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다.</td></tr>';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('worry_posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(30);
+
+      if (error) {
+        worryList.innerHTML = '<tr><td colspan="4" class="board-empty">고민 글을 불러오지 못했습니다.</td></tr>';
+        console.error(error);
+        return;
+      }
+      if (!data.length) {
+        worryList.innerHTML = '<tr><td colspan="4" class="board-empty">아직 등록된 고민 글이 없습니다. 첫 글을 남겨 주세요.</td></tr>';
+        return;
+      }
+      worryList.innerHTML = data.map((item, index) => {
+        const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
+        return `
+          <tr class="board-row-clickable" data-post-id="${item.id}">
+            <td>${data.length - index}</td>
+            <td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong><div class="board-meta">${escapeHtml(item.author || '익명')}</div></td>
+            <td>${escapeHtml(item.category || '기타')}</td>
+            <td>${createdAt}</td>
+          </tr>
+          <tr class="board-detail-row" id="worry-detail-${item.id}" hidden>
+            <td colspan="4">
+              <p class="post-body">${escapeHtml(item.content)}</p>
+              <ul class="comments-list" id="comments-${item.id}"><li class="comments-empty">댓글을 불러오는 중...</li></ul>
+              <form class="comment-form" data-post-id="${item.id}">
+                <input class="comment-author" type="text" placeholder="닉네임" required />
+                <input class="comment-text" type="text" placeholder="댓글 남기기" required />
+                <button class="mini-button" type="submit">등록</button>
+              </form>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function loadComments(postId) {
+      const ul = document.getElementById(`comments-${postId}`);
+      if (!ul || !supabaseClient) return;
+      const { data, error } = await supabaseClient
+        .from('worry_comments')
+        .select('*')
+        .eq('post_id', postId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        ul.innerHTML = '<li class="comments-empty">댓글을 불러오지 못했습니다.</li>';
+        console.error(error);
+        return;
+      }
+      if (!data.length) {
+        ul.innerHTML = '<p class="comments-empty">아직 댓글이 없습니다.</p>';
+        return;
+      }
+      ul.innerHTML = data.map((c) => {
+        const createdAt = new Date(c.created_at).toLocaleString('ko-KR');
+        return `<li>${escapeHtml(c.content)}<div class="comment-meta">${escapeHtml(c.author || '익명')} · ${createdAt}</div></li>`;
+      }).join('');
+    }
+
+    if (worryList) {
+      worryList.addEventListener('click', async (event) => {
+        const row = event.target.closest('.board-row-clickable');
+        if (row) {
+          const postId = row.dataset.postId;
+          const detail = document.getElementById(`worry-detail-${postId}`);
+          if (!detail) return;
+          const wasHidden = detail.hasAttribute('hidden');
+          if (wasHidden) {
+            detail.removeAttribute('hidden');
+            loadComments(postId);
+          } else {
+            detail.setAttribute('hidden', '');
+          }
+        }
+      });
+
+      worryList.addEventListener('submit', async (event) => {
+        const form = event.target.closest('.comment-form');
+        if (!form) return;
+        event.preventDefault();
+        if (!supabaseClient) return;
+
+        const postId = form.dataset.postId;
+        const authorEl = form.querySelector('.comment-author');
+        const textEl = form.querySelector('.comment-text');
+
+        const { error } = await supabaseClient
+          .from('worry_comments')
+          .insert({
+            post_id: postId,
+            author: authorEl.value.trim(),
+            content: textEl.value.trim()
+          });
+
+        if (error) {
+          alert('댓글 등록에 실패했습니다.');
+          console.error(error);
+          return;
+        }
+        textEl.value = '';
+        loadComments(postId);
+      });
+    }
+
+    if (worryForm) {
+      worryForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!worryStatus) return;
+        worryStatus.classList.remove('is-error');
+
+        if (!supabaseClient) {
+          worryStatus.classList.add('is-error');
+          worryStatus.textContent = 'DB 연결을 불러오지 못했습니다.';
+          return;
+        }
+
+        worryStatus.textContent = '글을 등록하는 중입니다...';
+
+        const { error } = await supabaseClient
+          .from('worry_posts')
+          .insert({
+            author: document.getElementById('worry-author').value.trim(),
+            category: document.getElementById('worry-category').value,
+            title: document.getElementById('worry-title').value.trim(),
+            content: document.getElementById('worry-content').value.trim()
+          });
+
+        if (error) {
+          worryStatus.classList.add('is-error');
+          worryStatus.textContent = '글 등록에 실패했습니다.';
+          console.error(error);
+          return;
+        }
+
+        worryForm.reset();
+        worryForm.classList.remove('is-open');
+        worryStatus.textContent = '고민 글이 등록되었습니다.';
+        await loadWorryPosts();
+      });
+    }
+
     loadSharedMaterials();
+    loadMaterialRequests();
+    loadWorryPosts();
   </script>
 </body>
 </html>
