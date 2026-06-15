@@ -278,16 +278,31 @@
       color: rgba(255, 255, 255, .78);
     }
 
-    @media (max-width: 980px) {
-      .nav { padding: 0 22px; height: 76px; }
-      .menu { display:none; }
-      .center-title { top: 33%; font-size: clamp(42px, 9vw, 74px); }
-      .left-slogan { left: 28px; bottom: 29vh; }
-      .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
-      .buttons { flex-wrap: wrap; }
-      .cards { grid-template-columns: 1fr; }
-      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
-    }
+  @media (max-width: 980px) {
+    .nav { padding: 0 22px; height: 76px; }
+    .menu { display:none; }
+    .center-title { top: 33%; font-size: clamp(42px, 9vw, 74px); }
+    .left-slogan { left: 28px; bottom: 29vh; }
+    .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
+    .buttons { flex-wrap: wrap; }
+    .cards { grid-template-columns: 1fr; }
+    .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
+}
+    .platform-sub {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+}
+
+    .platform-sub h3 {
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+}
+
+    .platform-sub h4 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+}
   </style>
 </head>
 <body>
@@ -338,7 +353,8 @@
     </div>
   </section>
   <section class="content-section" id="platforms">
-    <h2>플랫폼</h2>
+<h2>플랫폼</h2>
+
 <div class="cards">
   <article class="card">
     <h3>광개토</h3>
@@ -351,16 +367,30 @@
   </article>
 
   <article class="card">
-    <h3>수업자료 요청함</h3>
-    <p>선생님들이 필요한 활동지, 그림카드, 역할극, 번역 자료 등을 남기는 자료 요청 공간입니다.</p>
+    <h3>AI 콘텐츠 연구소</h3>
+    <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
   </article>
-
- <article class="card">
-  <h3>수업자료 요청함</h3>
-  <p>선생님이 필요한 자료를 남기면, 온마음 한국어가 그 자료를 채워갑니다.</p>
-</article>
 </div>
-  </section>
+
+<section class="platform-sub">
+  <h3>온마음 한국어 하위 공간</h3>
+  <div class="cards">
+    <article class="card">
+      <h4>수업자료 요청함</h4>
+      <p>선생님이 필요한 자료를 남기면, 온마음 한국어가 그 자료를 채워갑니다.</p>
+    </article>
+
+    <article class="card">
+      <h4>자료 공유</h4>
+      <p>수업에 바로 활용할 수 있는 활동지, 그림카드, 역할극 자료를 함께 나눕니다.</p>
+    </article>
+
+    <article class="card">
+      <h4>수업 고민 나눔</h4>
+      <p>가르치기 어려운 표현, 상황, 학습자 반응을 함께 나누고 해결 방향을 찾습니다.</p>
+    </article>
+  </div>
+</section>
   <section class="content-section" id="research">
     <h2>연구개발</h2>
     <div class="cards">
