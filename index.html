@@ -1015,7 +1015,7 @@
           </div>
           <div class="form-actions">
             <button class="mini-button" type="submit">등록하기</button>
-            <button class="mini-button secondary" type="reset">초기화</button>
+            <button class="mini-button secondary" type="button" id="share-back">돌아가기</button>
             <p class="form-status" id="share-status" aria-live="polite"></p>
           </div>
         </form>
@@ -1075,7 +1075,7 @@
           </div>
           <div class="form-actions">
             <button class="mini-button" type="submit">등록하기</button>
-            <button class="mini-button secondary" type="reset">초기화</button>
+            <button class="mini-button secondary" type="button" id="worry-back">돌아가기</button>
             <p class="form-status" id="worry-status" aria-live="polite"></p>
           </div>
         </form>
@@ -1202,6 +1202,15 @@
     if (shareFormToggle && shareForm) {
       shareFormToggle.addEventListener('click', () => {
         shareForm.classList.toggle('is-open');
+      });
+    }
+
+    const shareBackBtn = document.getElementById('share-back');
+    if (shareBackBtn && shareForm) {
+      shareBackBtn.addEventListener('click', () => {
+        shareForm.reset();
+        shareForm.classList.remove('is-open');
+        if (shareStatus) shareStatus.textContent = '';
       });
     }
 
@@ -1446,6 +1455,15 @@
     if (worryFormToggle && worryForm) {
       worryFormToggle.addEventListener('click', () => {
         worryForm.classList.toggle('is-open');
+      });
+    }
+
+    const worryBackBtn = document.getElementById('worry-back');
+    if (worryBackBtn && worryForm) {
+      worryBackBtn.addEventListener('click', () => {
+        worryForm.reset();
+        worryForm.classList.remove('is-open');
+        if (worryStatus) worryStatus.textContent = '';
       });
     }
 
