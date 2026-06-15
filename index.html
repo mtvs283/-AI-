@@ -844,58 +844,63 @@
   </section>
 
   <footer id="contact">Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
-    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-const platforms = document.getElementById('platforms');
+    const supabaseClient = window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    const platforms = document.getElementById('platforms');
     const platformTitle = document.getElementById('platform-title');
     const onmaeumToggle = document.getElementById('onmaeum-toggle');
     const platformBack = document.getElementById('platform-back');
-
-    onmaeumToggle.addEventListener('click', () => {
-      platforms.classList.add('is-detail');
-      platformTitle.textContent = '온마음 한국어';
-      onmaeumToggle.setAttribute('aria-expanded', 'true');
-      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    platformBack.addEventListener('click', () => {
-      platforms.classList.remove('is-detail');
-      platformTitle.textContent = '플랫폼';
-      onmaeumToggle.setAttribute('aria-expanded', 'false');
-      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-        featurePanels.forEach((panel) => {
-          panel.classList.remove('is-active');
-        });
-
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
-        targetPanel.classList.add('is-active');
-      });
-    });
-
     const shareBoardToggle = document.getElementById('share-board-toggle');
     const shareBoard = document.getElementById('share-board');
     const shareFormToggle = document.getElementById('share-form-toggle');
     const shareForm = document.getElementById('shared-material-form');
     const shareStatus = document.getElementById('share-status');
     const sharedMaterialList = document.getElementById('shared-material-list');
-    if (shareBoardToggle) {
+
+    if (onmaeumToggle && platforms && platformTitle) {
+      onmaeumToggle.addEventListener('click', () => {
+        platforms.classList.add('is-detail');
+        platformTitle.textContent = '온마음 한국어';
+        onmaeumToggle.setAttribute('aria-expanded', 'true');
+        platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    if (platformBack && platforms && platformTitle && onmaeumToggle) {
+      platformBack.addEventListener('click', () => {
+        platforms.classList.remove('is-detail');
+        platformTitle.textContent = '플랫폼';
+        onmaeumToggle.setAttribute('aria-expanded', 'false');
+        platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    if (shareBoardToggle && shareBoard) {
       shareBoardToggle.addEventListener('click', () => {
         shareBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     }
 
-    shareFormToggle.addEventListener('click', () => {
-      shareForm.classList.toggle('is-open');
-    });
+    if (shareFormToggle && shareForm) {
+      shareFormToggle.addEventListener('click', () => {
+        shareForm.classList.toggle('is-open');
+      });
+    }
 
     async function loadSharedMaterials() {
+      if (!sharedMaterialList) return;
+
+      if (!supabaseClient) {
+        sharedMaterialList.innerHTML = '<article class="board-item"><strong>자료공유 DB 연결 대기 중입니다.</strong><div class="board-meta">인터넷 연결 후 새로고침해 주세요.</div></article>';
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from('shared_materials')
         .select('*')
@@ -916,63 +921,72 @@ const platforms = document.getElementById('platforms');
       sharedMaterialList.innerHTML = data.map((item) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = item.file_url ? `<a href="${item.file_url}" target="_blank" rel="noopener">파일 열기</a>` : '파일 없음';
-        return `<article class="board-item"><strong>${item.title}</strong><div class="board-meta">${item.category || '자료'} · ${createdAt} · ${fileLink}</div>${item.note ? `<p>${item.note}</p>` : ''}</article>`;
+        const note = item.note ? `<p>${item.note}</p>` : '';
+        return `<article class="board-item"><strong>${item.title}</strong><div class="board-meta">${item.category || '자료'} · ${createdAt} · ${fileLink}</div>${note}</article>`;
       }).join('');
     }
 
-    shareForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      shareStatus.classList.remove('is-error');
-      shareStatus.textContent = '자료를 올리는 중입니다...';
+    if (shareForm) {
+      shareForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        shareStatus.classList.remove('is-error');
 
-      const fileInput = document.getElementById('share-file');
-      const file = fileInput.files[0];
+        if (!supabaseClient) {
+          shareStatus.classList.add('is-error');
+          shareStatus.textContent = 'DB 연결을 불러오지 못했습니다. 인터넷 연결 후 새로고침해 주세요.';
+          return;
+        }
 
-      if (!file) {
-        shareStatus.classList.add('is-error');
-        shareStatus.textContent = '파일을 선택해 주세요.';
-        return;
-      }
+        shareStatus.textContent = '자료를 올리는 중입니다...';
+        const fileInput = document.getElementById('share-file');
+        const file = fileInput.files[0];
 
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      const filePath = `${Date.now()}-${safeName}`;
-      const uploadResult = await supabaseClient.storage
-        .from('teaching-materials')
-        .upload(filePath, file);
+        if (!file) {
+          shareStatus.classList.add('is-error');
+          shareStatus.textContent = '파일을 선택해 주세요.';
+          return;
+        }
 
-      if (uploadResult.error) {
-        shareStatus.classList.add('is-error');
-        shareStatus.textContent = '파일 업로드에 실패했습니다.';
-        console.error(uploadResult.error);
-        return;
-      }
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const filePath = `${Date.now()}-${safeName}`;
+        const uploadResult = await supabaseClient.storage
+          .from('teaching-materials')
+          .upload(filePath, file);
 
-      const { data: publicData } = supabaseClient.storage
-        .from('teaching-materials')
-        .getPublicUrl(filePath);
+        if (uploadResult.error) {
+          shareStatus.classList.add('is-error');
+          shareStatus.textContent = '파일 업로드에 실패했습니다.';
+          console.error(uploadResult.error);
+          return;
+        }
 
-      const { error } = await supabaseClient
-        .from('shared_materials')
-        .insert({
-          title: document.getElementById('share-title').value.trim(),
-          category: document.getElementById('share-category').value,
-          note: document.getElementById('share-note').value.trim(),
-          file_url: publicData.publicUrl,
-          file_name: file.name
-        });
+        const { data: publicData } = supabaseClient.storage
+          .from('teaching-materials')
+          .getPublicUrl(filePath);
 
-      if (error) {
-        shareStatus.classList.add('is-error');
-        shareStatus.textContent = '자료 등록에 실패했습니다.';
-        console.error(error);
-        return;
-      }
+        const { error } = await supabaseClient
+          .from('shared_materials')
+          .insert({
+            title: document.getElementById('share-title').value.trim(),
+            category: document.getElementById('share-category').value,
+            note: document.getElementById('share-note').value.trim(),
+            file_url: publicData.publicUrl,
+            file_name: file.name
+          });
 
-      shareForm.reset();
-      shareForm.classList.remove('is-open');
-      shareStatus.textContent = '자료가 등록되었습니다.';
-      await loadSharedMaterials();
-    });
+        if (error) {
+          shareStatus.classList.add('is-error');
+          shareStatus.textContent = '자료 등록에 실패했습니다.';
+          console.error(error);
+          return;
+        }
+
+        shareForm.reset();
+        shareForm.classList.remove('is-open');
+        shareStatus.textContent = '자료가 등록되었습니다.';
+        await loadSharedMaterials();
+      });
+    }
 
     loadSharedMaterials();
   </script>
