@@ -23,6 +23,14 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: 'KimjungchulScript';
+      src: url('./KimjungchulScript-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
@@ -666,8 +674,10 @@
 
     .board-header h4 {
       margin: 0 0 8px;
-      font-size: 28px;
+      font-family: 'KimjungchulScript', 'Noto Sans KR', sans-serif;
+      font-size: 38px;
       color: #15100b;
+      letter-spacing: 0.01em;
     }
 
     .board-header p {
@@ -1379,7 +1389,8 @@
 
         if (error) {
           requestStatus.classList.add('is-error');
-          requestStatus.textContent = '요청 등록에 실패했습니다.';
+          requestStatus.textContent = '요청 등록 실패: ' + (error.message || error.code || '알 수 없는 오류');
+          alert('[자료요청 등록 실패]\n\n' + JSON.stringify(error, null, 2));
           console.error(error);
           return;
         }
