@@ -269,6 +269,12 @@
       color: #2c1d10;
     }
 
+
+    #platform-title {
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(34px, 3.6vw, 48px);
+      letter-spacing: 0;
+    }
     .cards {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -342,9 +348,11 @@
     }
 
     .platform-back {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      margin-bottom: 24px;
+      justify-content: flex-end;
+      width: 100%;
+      margin-bottom: 14px;
       padding: 0;
       border: 0;
       background: transparent;
@@ -365,12 +373,12 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 12px;
     }
 
     .feature-tab {
-      min-height: 112px;
-      padding: 20px;
+      min-height: 46px;
+      padding: 10px 16px;
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(255, 255, 255, .58);
       color: inherit;
@@ -381,8 +389,8 @@
 
     .feature-tab strong {
       display: block;
-      margin-bottom: 8px;
-      font-size: 20px;
+      margin-bottom: 0;
+      font-size: 16px;
       color: #15100b;
     }
 
@@ -400,7 +408,7 @@
 
     .feature-panel {
       display: none;
-      padding: 28px;
+      padding: 24px 28px;
       background: rgba(255, 255, 255, .72);
       border: 1px solid rgba(86, 67, 47, .14);
     }
@@ -491,7 +499,7 @@
     .upload-box,
     .chat-box,
     .board-preview {
-      padding: 20px;
+      padding: 10px 16px;
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(255, 255, 255, .48);
     }
@@ -500,7 +508,7 @@
     .chat-box h5,
     .board-preview h5 {
       margin: 0 0 12px;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .file-drop {
@@ -575,8 +583,8 @@
     }
 
     .shared-preview {
-      margin-top: 24px;
-      padding: 28px;
+      margin-top: 10px;
+      padding: 24px 28px;
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(255, 255, 255, .6);
     }
@@ -602,7 +610,7 @@
 
     .share-form {
       display: none;
-      margin-bottom: 22px;
+      margin-bottom: 12px;
       padding: 22px;
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(245, 241, 233, .52);
@@ -640,8 +648,8 @@
     }
 
     .board-shell {
-      margin-top: 24px;
-      padding: 28px;
+      margin-top: 10px;
+      padding: 24px 28px;
       border: 1px solid rgba(86, 67, 47, .14);
       background: rgba(255, 255, 255, .6);
     }
@@ -707,6 +715,21 @@
       padding: 26px 14px;
       color: #7e6e5d;
       text-align: center;
+    }
+
+    .sub-board {
+      display: none;
+    }
+
+    .sub-board.is-active {
+      display: block;
+    }
+
+    .request-form-shell {
+      margin-top: 10px;
+      padding: 24px 28px;
+      border: 1px solid rgba(86, 67, 47, .14);
+      background: rgba(255, 255, 255, .6);
     }
     footer {
       padding: 34px min(8vw, 120px);
@@ -810,7 +833,7 @@
 
     <section class="platform-sub" id="onmaeum-sub" aria-label="온마음 한국어 하위 공간">
       <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
-      <h3>온마음 한국어</h3>
+
 
       <div class="feature-tabs" aria-label="온마음 한국어 기능">
         <button class="feature-tab" type="button" id="request-board-toggle">
@@ -823,7 +846,55 @@
           <strong>수업 고민 나눔</strong>
         </button>
       </div>
-      <section class="shared-preview board-shell" id="share-board" aria-labelledby="shared-preview-title">
+      <section class="request-form-shell sub-board" id="request-board" aria-labelledby="request-board-title">
+        <div class="board-header">
+          <div>
+            <h4 id="request-board-title">수업자료 요청</h4>
+            <p>필요한 수업자료를 양식에 맞춰 남겨 주세요.</p>
+          </div>
+        </div>
+        <form class="form-grid" id="material-request-form">
+          <div class="form-field">
+            <label for="target-class">수업 대상</label>
+            <input id="target-class" type="text" placeholder="초등 다문화 / 중학생 / 성인 초급" />
+          </div>
+          <div class="form-field">
+            <label for="korean-level">한국어 수준</label>
+            <select id="korean-level">
+              <option>한글 미해득</option>
+              <option>초급</option>
+              <option>중급</option>
+              <option>고급</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="topic">주제</label>
+            <input id="topic" type="text" placeholder="병원 가기, 학교생활, 급식, 친구 사귀기" />
+          </div>
+          <div class="form-field">
+            <label for="material-type">필요한 자료</label>
+            <input id="material-type" type="text" placeholder="그림카드, 활동지, 역할극, 문법 설명 그림" />
+          </div>
+          <div class="form-field">
+            <label for="learner-language">학습자 언어</label>
+            <input id="learner-language" type="text" placeholder="베트남어, 중국어, 러시아어 등" />
+          </div>
+          <div class="form-field">
+            <label for="book-unit">교재/단원</label>
+            <input id="book-unit" type="text" placeholder="표준한국어 3학년 5과 / 세종한국어 2A 3과" />
+          </div>
+          <div class="form-field full">
+            <label for="request-detail">요청 내용</label>
+            <textarea id="request-detail" placeholder="아플 때 보건실 가는 대화문이 필요해요."></textarea>
+          </div>
+          <div class="form-actions full">
+            <button class="mini-button" type="submit">요청 남기기</button>
+            <button class="mini-button secondary" type="reset">초기화</button>
+            <p class="form-status" id="request-status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+      <section class="shared-preview board-shell sub-board is-active" id="share-board" aria-labelledby="shared-preview-title">
         <div class="board-header">
           <div>
             <h4 id="shared-preview-title">자료공유</h4>
@@ -882,6 +953,32 @@
         </table>
       </section>
     </section>
+  </section>
+
+      <section class="request-form-shell sub-board" id="worry-board" aria-labelledby="worry-board-title">
+        <div class="board-header">
+          <div>
+            <h4 id="worry-board-title">수업 고민 나눔</h4>
+            <p>수업 중 어려웠던 표현, 상황, 학습자 반응을 게시판처럼 나누는 공간입니다.</p>
+          </div>
+          <button class="mini-button secondary" type="button">글쓰기</button>
+        </div>
+        <table class="board-table" aria-label="수업 고민 목록">
+          <thead>
+            <tr>
+              <th class="num-col">번호</th>
+              <th>제목</th>
+              <th class="type-col">분류</th>
+              <th class="date-col">날짜</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" class="board-empty">아직 등록된 고민 글이 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
   </section>
 
   <section class="content-section" id="research">
@@ -961,7 +1058,7 @@
     if (onmaeumToggle && platforms && platformTitle) {
       onmaeumToggle.addEventListener('click', () => {
         platforms.classList.add('is-detail');
-        platformTitle.textContent = '온마음 한국어';
+        platformTitle.textContent = '자료공유';
         onmaeumToggle.setAttribute('aria-expanded', 'true');
         platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
@@ -976,18 +1073,36 @@
       });
     }
 
-    if (shareBoardToggle && shareBoard) {
-      shareBoardToggle.addEventListener('click', () => {
-        shareBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    }
-
     if (shareFormToggle && shareForm) {
       shareFormToggle.addEventListener('click', () => {
         shareForm.classList.toggle('is-open');
       });
     }
 
+
+    const requestBoardToggle = document.getElementById('request-board-toggle');
+    const worryBoardToggle = document.getElementById('worry-board-toggle');
+    const requestBoard = document.getElementById('request-board');
+    const worryBoard = document.getElementById('worry-board');
+    const subBoards = [requestBoard, shareBoard, worryBoard].filter(Boolean);
+
+    function showOnmaeumBoard(targetBoard, title) {
+      subBoards.forEach((board) => board.classList.remove('is-active'));
+      targetBoard.classList.add('is-active');
+      targetBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    if (requestBoardToggle && requestBoard) {
+      requestBoardToggle.addEventListener('click', () => showOnmaeumBoard(requestBoard, '수업자료 요청'));
+    }
+
+    if (shareBoardToggle && shareBoard) {
+      shareBoardToggle.addEventListener('click', () => showOnmaeumBoard(shareBoard, '자료공유'));
+    }
+
+    if (worryBoardToggle && worryBoard) {
+      worryBoardToggle.addEventListener('click', () => showOnmaeumBoard(worryBoard, '수업 고민 나눔'));
+    }
     async function loadSharedMaterials() {
       if (!sharedMaterialList) return;
 
