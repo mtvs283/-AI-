@@ -2,10 +2,6 @@
 <html lang="ko">
 <head>
   <meta name="google-site-verification" content="4_Y5XOtmEYxQTzn8uC1fCAV8vbaS41HVdn0BllmRCXQ" />
-  <meta name="naver-site-verification" content="a824591232<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta name="google-site-verification" content="4_Y5XOtmEYxQTzn8uC1fCAV8vbaS41HVdn0BllmRCXQ" />
   <meta name="naver-site-verification" content="a824591232b2e50df60dd6a191f1bea56745b9c9" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -318,27 +314,20 @@
       outline: none;
     }
 
-    .platform-card-button::after {
-      content: '클릭해서 하위 공간 열기';
-      display: inline-block;
-      margin-top: 18px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #7b4c18;
-    }
-
-    .platform-card-button[aria-expanded="true"]::after {
-      content: '하위 공간 닫기';
+    .platform-main {
+      display: grid;
     }
 
     .platform-sub {
       display: none;
-      margin-top: 28px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(86, 67, 47, .18);
+      width: 100%;
     }
 
-    .platform-sub.is-open {
+    #platforms.is-detail .platform-main {
+      display: none;
+    }
+
+    #platforms.is-detail .platform-sub {
       display: block;
     }
 
@@ -350,6 +339,25 @@
 
     .platform-sub .cards {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .platform-back {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #7b4c18;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .platform-back:hover,
+    .platform-back:focus-visible {
+      text-decoration: underline;
+      outline: none;
     }
 
     footer {
@@ -434,8 +442,8 @@
   </section>
 
   <section class="content-section" id="platforms">
-    <h2>플랫폼</h2>
-    <div class="cards">
+    <h2 id="platform-title">플랫폼</h2>
+    <div class="cards platform-main">
       <article class="card">
         <h3>광개토</h3>
         <p>AI 기반 글로벌 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습을 제공합니다.</p>
@@ -453,7 +461,8 @@
     </div>
 
     <section class="platform-sub" id="onmaeum-sub" aria-label="온마음 한국어 하위 공간">
-      <h3>온마음 한국어 하위 공간</h3>
+      <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
+      <h3>온마음 한국어</h3>
       <div class="cards">
         <article class="card">
           <h4>수업자료 요청함</h4>
@@ -470,7 +479,6 @@
       </div>
     </section>
   </section>
-
   <section class="content-section" id="research">
     <h2>연구개발</h2>
     <div class="cards">
@@ -528,429 +536,24 @@
   <footer id="contact">Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
 
   <script>
+    const platforms = document.getElementById('platforms');
+    const platformTitle = document.getElementById('platform-title');
     const onmaeumToggle = document.getElementById('onmaeum-toggle');
-    const onmaeumSub = document.getElementById('onmaeum-sub');
+    const platformBack = document.getElementById('platform-back');
 
     onmaeumToggle.addEventListener('click', () => {
-      const isOpen = onmaeumSub.classList.toggle('is-open');
-      onmaeumToggle.setAttribute('aria-expanded', String(isOpen));
+      platforms.classList.add('is-detail');
+      platformTitle.textContent = '온마음 한국어';
+      onmaeumToggle.setAttribute('aria-expanded', 'true');
+      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    platformBack.addEventListener('click', () => {
+      platforms.classList.remove('is-detail');
+      platformTitle.textContent = '플랫폼';
+      onmaeumToggle.setAttribute('aria-expanded', 'false');
+      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   </script>
-</body>
-</html>
-b2e50df60dd6a191f1bea56745b9c9" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <meta name="description" content="온마음 한국어는 AI로 한글·생활한국어·다문화 교육 콘텐츠를 제공하는 플랫폼입니다.">
-
-  <meta property="og:title" content="온마음 한국어 | AI 기반 한국어 교육 플랫폼">
-
-  <meta property="og:description" content="문화로 배우고 언어로 성장하는 온마음 한국어. AI와 함께하는 한국어 학습 플랫폼입니다.">
-
-  <meta property="og:type" content="website">
-  
-  <title>한국어교육AI연구개발원</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <style>
-    @font-face {
-      font-family: 'ShillaCulture';
-      src: url('./Shilla_Culture_B.ttf') format('truetype');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      font-family: 'Noto Sans KR', system-ui, sans-serif;
-      color: #1c1712;
-      background: #f5f1e9;
-    }
-
-    body { overflow-x: hidden; }
-
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      background-image: linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,.18)), url('./hero-bg.png');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      overflow: hidden;
-    }
-
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 20;
-      height: 82px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 58px;
-      background: rgba(246, 242, 235, .58);
-      backdrop-filter: blur(8px);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #201912;
-    }
-
-    .brand img {
-      width: 56px;
-      height: 56px;
-      object-fit: contain;
-    }
-
-    .brand-title {
-      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
-      font-size: 24px;
-      line-height: 1.05;
-      letter-spacing: -.02em;
-    }
-
-    .brand-sub {
-      margin-top: 4px;
-      font-size: 13px;
-      color: #5f564b;
-      font-weight: 500;
-    }
-
-    .menu {
-      display: flex;
-      align-items: center;
-      gap: 42px;
-      font-size: 17px;
-      font-weight: 600;
-    }
-
-    .menu a {
-      color: #31291f;
-      text-decoration: none;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .cta {
-      background: #211407;
-      color: #fff;
-      padding: 16px 28px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: 800;
-      box-shadow: 0 12px 24px rgba(31,20,9,.16);
-    }
-
-    .center-title {
-      position: absolute;
-      left: 50%;
-      top: 34%;
-      transform: translate(-50%, -50%);
-      width: min(1160px, 86vw);
-      text-align: center;
-      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
-      font-size: clamp(54px, 6.2vw, 112px);
-      line-height: 1.08;
-      letter-spacing: .08em;
-      color: #17120d;
-      text-shadow: 0 6px 12px rgba(0,0,0,.16);
-      animation: titleFlowBlink 4.8s ease-in-out infinite;
-    }
-
-    @keyframes titleFlowBlink {
-      0%, 100% {
-        opacity: .9;
-        filter: brightness(.94);
-        transform: translate(-50%, -50%) translateX(-10px);
-        text-shadow: -10px 6px 14px rgba(0,0,0,.12);
-      }
-      50% {
-        opacity: 1;
-        filter: brightness(1.2);
-        transform: translate(-50%, -50%) translateX(10px);
-        text-shadow: 10px 6px 14px rgba(0,0,0,.2);
-      }
-    }
-
-    .left-slogan {
-      position: absolute;
-      left: 7.2vw;
-      bottom: 12vh;
-      z-index: 5;
-    }
-
-    .left-slogan .ko {
-      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
-      font-size: clamp(34px, 4vw, 70px);
-      line-height: 1.12;
-      letter-spacing: -.04em;
-      text-shadow: 0 4px 10px rgba(0,0,0,.15);
-    }
-
-    .left-slogan .en {
-      margin-top: 18px;
-      font-family: Georgia, serif;
-      font-size: clamp(18px, 1.7vw, 31px);
-      font-style: italic;
-      color: #7e6e5d;
-    }
-
-    .right-copy {
-      position: absolute;
-      right: 9vw;
-      bottom: 11.5vh;
-      width: 430px;
-      z-index: 5;
-      text-align: left;
-    }
-
-    .mini-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      font-weight: 800;
-    }
-
-    .mini-brand img { width: 38px; height: 38px; object-fit: contain; }
-
-    .right-copy p {
-      margin: 0 0 28px;
-      font-size: 19px;
-      line-height: 1.9;
-      color: #392f25;
-      font-weight: 500;
-    }
-
-    .buttons { display:flex; gap: 14px; }
-    .btn {
-      min-width: 172px;
-      padding: 18px 24px;
-      text-align: center;
-      border-radius: 2px;
-      font-weight: 800;
-      text-decoration:none;
-      border: 1px solid rgba(52,43,34,.18);
-    }
-    .btn.primary { background:#211407; color:#fff; }
-    .btn.secondary { background:rgba(255,255,255,.34); color:#211407; }
-
-    .scroll {
-      position: absolute;
-      left: 50%;
-      bottom: 4.5vh;
-      transform: translateX(-50%);
-      font-size: 12px;
-      letter-spacing: .25em;
-      color:#9b846b;
-      text-decoration: none;
-    }
-    .scroll::after {
-      content:'';
-      display:block;
-      width:1px;
-      height:46px;
-      margin:10px auto 0;
-      background:#d0aa72;
-    }
-
-    .content-section {
-      display: flex;
-      min-height: 100vh;
-      scroll-margin-top: 82px;
-      flex-direction: column;
-      justify-content: center;
-      padding: 110px min(8vw, 120px);
-      background: #f5f1e9;
-      border-top: 1px solid rgba(86, 67, 47, .13);
-    }
-
-    .content-section:nth-of-type(even) { background: #ebe4d8; }
-
-    .content-section h2 {
-      margin: 0 0 34px;
-      font-size: clamp(30px, 3vw, 48px);
-      color: #2c1d10;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      min-height: 170px;
-      padding: 26px;
-      background: rgba(255, 255, 255, .58);
-      border: 1px solid rgba(86, 67, 47, .12);
-    }
-
-    .card h3 { margin: 0 0 12px; font-size: 21px; }
-    .card p { margin: 0; color: #574d42; line-height: 1.75; }
-
-    footer {
-      padding: 34px min(8vw, 120px);
-      background: #211407;
-      color: rgba(255, 255, 255, .78);
-    }
-
-  @media (max-width: 980px) {
-    .nav { padding: 0 22px; height: 76px; }
-    .menu { display:none; }
-    .center-title { top: 33%; font-size: clamp(42px, 9vw, 74px); }
-    .left-slogan { left: 28px; bottom: 29vh; }
-    .right-copy { left: 28px; right:auto; bottom: 8vh; width: calc(100vw - 56px); }
-    .buttons { flex-wrap: wrap; }
-    .cards { grid-template-columns: 1fr; }
-    .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
-}
-    .platform-sub {
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid #ddd;
-}
-
-    .platform-sub h3 {
-      margin-bottom: 16px;
-      font-size: 1.25rem;
-}
-
-    .platform-sub h4 {
-      margin: 0 0 10px;
-      font-size: 1.05rem;
-}
-  </style>
-</head>
-<body>
-  <main class="hero">
-    <nav class="nav">
-      <a class="brand" href="./index.html">
-        <img src="./logo.png" alt="한국어교육AI연구개발원 로고" />
-        <div>
-          <div class="brand-title">한국어교육AI연구개발원</div>
-          <div class="brand-sub">Korean Edu AI Institute</div>
-        </div>
-      </a>
-      <div class="menu">
-        <a href="#philosophy">커리큘럼</a>
-        <a href="#platforms">플랫폼</a>
-        <a href="#research">연구개발</a>
-        <a href="#training">교육연수</a>
-        <a href="#partnership">기관제휴</a>
-      </div>
-      <div class="actions">
-       <a class="cta" href="./board.html">문의하기</a>
-      </div>
-    </nav>
-
-    <h1 class="center-title">한국어교육AI연구개발원</h1>
-
-    <section class="left-slogan">
-      <div class="ko">문화로 배우고,<br />언어로 말하다</div>
-      <div class="en">Learn the culture. Speak the language.</div>
-    </section>
-
-    <section class="right-copy">
-      <p>현장 교사들이 직접 설계하고, AI가 함께하는<br />진심 어린 한국어 교육 플랫폼</p>
-      <div class="buttons">
-        <a class="btn primary" href="#platforms">플랫폼 보기</a>
-        <a class="btn secondary" href="#training">교육연수 보기</a>
-      </div>
-    </section>
-
-    <a class="scroll" href="#philosophy">SCROLL</a>
-  </main>
-  <section class="content-section" id="philosophy">
-    <h2>교육 철학</h2>
-    <div class="cards">
-      <article class="card"><h3>배움은 연결입니다</h3><p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p></article>
-      <article class="card"><h3>기술보다 사람입니다</h3><p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p></article>
-      <article class="card"><h3>한국어를 보이게 합니다</h3><p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p></article>
-    </div>
-  </section>
-  <section class="content-section" id="platforms">
-<h2>플랫폼</h2>
-
-<div class="cards">
-  <article class="card">
-    <h3>광개토</h3>
-    <p>AI 기반 글로벌 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습을 제공합니다.</p>
-  </article>
-
-  <article class="card">
-    <h3>온마음 한국어</h3>
-    <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
-  </article>
-
-  <article class="card">
-    <h3>AI 콘텐츠 연구소</h3>
-    <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
-  </article>
-</div>
-
-<section class="platform-sub">
-  <h3>온마음 한국어 하위 공간</h3>
-  <div class="cards">
-    <article class="card">
-      <h4>수업자료 요청함</h4>
-      <p>선생님이 필요한 자료를 남기면, 온마음 한국어가 그 자료를 채워갑니다.</p>
-    </article>
-
-    <article class="card">
-      <h4>자료 공유</h4>
-      <p>수업에 바로 활용할 수 있는 활동지, 그림카드, 역할극 자료를 함께 나눕니다.</p>
-    </article>
-
-    <article class="card">
-      <h4>수업 고민 나눔</h4>
-      <p>가르치기 어려운 표현, 상황, 학습자 반응을 함께 나누고 해결 방향을 찾습니다.</p>
-    </article>
-  </div>
-</section>
-  <section class="content-section" id="research">
-    <h2>연구개발</h2>
-    <div class="cards">
-      <article class="card"><h3>AI 챗봇</h3><p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p></article>
-      <article class="card"><h3>발음 시각화</h3><p>자음, 모음, 받침, 연음의 원리를 그림과 애니메이션으로 설명합니다.</p></article>
-      <article class="card"><h3>교육용 게임</h3><p>성인 학습자도 몰입할 수 있는 실생활 중심 한국어 학습 게임을 개발합니다.</p></article>
-    </div>
-  </section>
-  <section class="content-section" id="training">
-    <h2>교육연수</h2>
-    <div class="cards">
-      <article class="card"><h3>ChatGPT</h3><p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p></article>
-      <article class="card"><h3>Canva</h3><p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p></article>
-      <article class="card"><h3>NotebookLM</h3><p>자료 정리, 발표자료 제작, 강의 구성 자동화를 교육 현장에 적용합니다.</p></article>
-    </div>
-  </section>
-  <section class="content-section" id="partnership">
-    <h2>기관 제휴</h2>
-    <div class="cards">
-      <article class="card"><h3>대학·어학원</h3><p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p></article>
-      <article class="card"><h3>다문화기관</h3><p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p></article>
-      <article class="card"><h3>기업 교육</h3><p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p></article>
-    </div>
-  </section>
-  <footer id="contact">© Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
 </body>
 </html>
