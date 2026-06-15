@@ -2,7 +2,978 @@
 <html lang="ko">
 <head>
   <meta name="google-site-verification" content="4_Y5XOtmEYxQTzn8uC1fCAV8vbaS41HVdn0BllmRCXQ" />
+  <meta name="naver-site-verification" content="a8245<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta name="google-site-verification" content="4_Y5XOtmEYxQTzn8uC1fCAV8vbaS41HVdn0BllmRCXQ" />
   <meta name="naver-site-verification" content="a824591232b2e50df60dd6a191f1bea56745b9c9" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="온마음 한국어는 AI로 한글, 생활한국어, 다문화 교육 콘텐츠를 제공하는 플랫폼입니다." />
+  <meta property="og:title" content="온마음 한국어 | AI 기반 한국어 교육 플랫폼" />
+  <meta property="og:description" content="문화로 배우고 언어로 성장하는 온마음 한국어. AI와 함께하는 한국어 학습 플랫폼입니다." />
+  <meta property="og:type" content="website" />
+
+  <title>한국어교육AI연구개발원</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'ShillaCulture';
+      src: url('./Shilla_Culture_B.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      color: #1c1712;
+      background: #f5f1e9;
+    }
+
+    body { overflow-x: hidden; }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background-image: linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,.18)), url('./hero-bg.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 58px;
+      background: rgba(246, 242, 235, .58);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #201912;
+    }
+
+    .brand img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #5f564b;
+      font-weight: 500;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 42px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .menu a {
+      color: #31291f;
+      text-decoration: none;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cta {
+      background: #211407;
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 3px;
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(31,20,9,.16);
+    }
+
+    .center-title {
+      position: absolute;
+      left: 50%;
+      top: 34%;
+      transform: translate(-50%, -50%);
+      width: min(1160px, 86vw);
+      text-align: center;
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(54px, 6.2vw, 112px);
+      line-height: 1.08;
+      letter-spacing: .08em;
+      color: #17120d;
+      text-shadow: 0 6px 12px rgba(0,0,0,.16);
+      animation: titleFlowBlink 4.8s ease-in-out infinite;
+    }
+
+    @keyframes titleFlowBlink {
+      0%, 100% {
+        opacity: .9;
+        filter: brightness(.94);
+        transform: translate(-50%, -50%) translateX(-10px);
+        text-shadow: -10px 6px 14px rgba(0,0,0,.12);
+      }
+      50% {
+        opacity: 1;
+        filter: brightness(1.2);
+        transform: translate(-50%, -50%) translateX(10px);
+        text-shadow: 10px 6px 14px rgba(0,0,0,.2);
+      }
+    }
+
+    .left-slogan {
+      position: absolute;
+      left: 7.2vw;
+      bottom: 12vh;
+      z-index: 5;
+    }
+
+    .left-slogan .ko {
+      font-family: 'ShillaCulture', 'Noto Sans KR', sans-serif;
+      font-size: clamp(34px, 4vw, 70px);
+      line-height: 1.12;
+      letter-spacing: -.04em;
+      text-shadow: 0 4px 10px rgba(0,0,0,.15);
+    }
+
+    .left-slogan .en {
+      margin-top: 18px;
+      font-family: Georgia, serif;
+      font-size: clamp(18px, 1.7vw, 31px);
+      font-style: italic;
+      color: #7e6e5d;
+    }
+
+    .right-copy {
+      position: absolute;
+      right: 9vw;
+      bottom: 11.5vh;
+      width: 430px;
+      z-index: 5;
+      text-align: left;
+    }
+
+    .mini-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+
+    .mini-brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .right-copy p {
+      margin: 0 0 28px;
+      font-size: 19px;
+      line-height: 1.9;
+      color: #392f25;
+      font-weight: 500;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+    }
+
+    .btn {
+      min-width: 172px;
+      padding: 18px 24px;
+      text-align: center;
+      border-radius: 2px;
+      font-weight: 800;
+      text-decoration: none;
+      border: 1px solid rgba(52,43,34,.18);
+    }
+
+    .btn.primary {
+      background: #211407;
+      color: #fff;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,.34);
+      color: #211407;
+    }
+
+    .scroll {
+      position: absolute;
+      left: 50%;
+      bottom: 4.5vh;
+      transform: translateX(-50%);
+      font-size: 12px;
+      letter-spacing: .25em;
+      color: #9b846b;
+      text-decoration: none;
+    }
+
+    .scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 46px;
+      margin: 10px auto 0;
+      background: #d0aa72;
+    }
+
+    .content-section {
+      display: flex;
+      min-height: 100vh;
+      scroll-margin-top: 82px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 110px min(8vw, 120px);
+      background: #f5f1e9;
+      border-top: 1px solid rgba(86, 67, 47, .13);
+    }
+
+    .content-section:nth-of-type(even) { background: #ebe4d8; }
+
+    .content-section h2 {
+      margin: 0 0 34px;
+      font-size: clamp(30px, 3vw, 48px);
+      color: #2c1d10;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-height: 170px;
+      padding: 26px;
+      background: rgba(255, 255, 255, .58);
+      border: 1px solid rgba(86, 67, 47, .12);
+    }
+
+    .card h3,
+    .card h4 {
+      margin: 0 0 12px;
+      font-size: 21px;
+      color: #15100b;
+    }
+
+    .card h4 { font-size: 19px; }
+
+    .card p {
+      margin: 0;
+      color: #574d42;
+      line-height: 1.75;
+    }
+
+    .platform-card-button {
+      width: 100%;
+      font: inherit;
+      text-align: left;
+      color: inherit;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .platform-card-button:hover,
+    .platform-card-button:focus-visible {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, .78);
+      border-color: rgba(86, 67, 47, .28);
+      outline: none;
+    }
+
+    .platform-main {
+      display: grid;
+    }
+
+    .platform-sub {
+      display: none;
+      width: 100%;
+    }
+
+    #platforms.is-detail .platform-main {
+      display: none;
+    }
+
+    #platforms.is-detail .platform-sub {
+      display: block;
+    }
+
+    .platform-sub h3 {
+      margin: 0 0 18px;
+      font-size: 24px;
+      color: #2c1d10;
+    }
+
+    .platform-sub .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .platform-back {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #7b4c18;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .platform-back:hover,
+    .platform-back:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+
+    .feature-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .feature-tab {
+      min-height: 112px;
+      padding: 20px;
+      border: 1px solid rgba(86, 67, 47, .14);
+      background: rgba(255, 255, 255, .58);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .feature-tab strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 20px;
+      color: #15100b;
+    }
+
+    .feature-tab span {
+      display: block;
+      color: #574d42;
+      line-height: 1.65;
+    }
+
+    .feature-tab.is-active {
+      background: rgba(255, 255, 255, .86);
+      border-color: rgba(123, 76, 24, .55);
+      box-shadow: 0 14px 28px rgba(45, 30, 16, .08);
+    }
+
+    .feature-panel {
+      display: none;
+      padding: 28px;
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(86, 67, 47, .14);
+    }
+
+    .feature-panel.is-active {
+      display: block;
+    }
+
+    .feature-panel h4 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: #15100b;
+    }
+
+    .feature-panel .panel-intro {
+      margin: 0 0 24px;
+      color: #574d42;
+      line-height: 1.75;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label {
+      font-weight: 800;
+      color: #2c1d10;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 12px 14px;
+      border: 1px solid rgba(86, 67, 47, .2);
+      background: rgba(255, 255, 255, .72);
+      color: #1c1712;
+      font: inherit;
+    }
+
+    .form-field textarea {
+      min-height: 118px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .mini-button {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid rgba(52,43,34,.18);
+      background: #211407;
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .mini-button.secondary {
+      background: rgba(255,255,255,.42);
+      color: #211407;
+    }
+
+    .share-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: 18px;
+    }
+
+    .upload-box,
+    .chat-box,
+    .board-preview {
+      padding: 20px;
+      border: 1px solid rgba(86, 67, 47, .14);
+      background: rgba(255, 255, 255, .48);
+    }
+
+    .upload-box h5,
+    .chat-box h5,
+    .board-preview h5 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .file-drop {
+      display: block;
+      padding: 22px;
+      border: 1px dashed rgba(86, 67, 47, .36);
+      background: rgba(245, 241, 233, .55);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .file-drop input {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .chat-messages {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .chat-message {
+      padding: 12px;
+      background: rgba(245, 241, 233, .72);
+      color: #574d42;
+      line-height: 1.55;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .board-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .board-item {
+      padding: 16px;
+      border: 1px solid rgba(86, 67, 47, .14);
+      background: rgba(255, 255, 255, .5);
+    }
+
+    .board-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #15100b;
+    }
+
+    .board-meta {
+      font-size: 13px;
+      color: #7e6e5d;
+    }
+
+    .form-status {
+      width: 100%;
+      margin: 6px 0 0;
+      color: #7b4c18;
+      font-weight: 800;
+    }
+
+    .form-status.is-error {
+      color: #9b1c1c;
+    }
+    footer {
+      padding: 34px min(8vw, 120px);
+      background: #211407;
+      color: rgba(255, 255, 255, .78);
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        height: 76px;
+        padding: 0 22px;
+      }
+
+      .menu { display: none; }
+      .center-title { top: 33%; font-size: clamp(42px, 9vw, 74px); }
+      .left-slogan { left: 28px; bottom: 29vh; }
+      .right-copy { left: 28px; right: auto; bottom: 8vh; width: calc(100vw - 56px); }
+      .buttons { flex-wrap: wrap; }
+      .cards,
+      .platform-sub .cards { grid-template-columns: 1fr; }
+      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <nav class="nav">
+      <a class="brand" href="./index.html">
+        <img src="./logo.png" alt="한국어교육AI연구개발원 로고" />
+        <div>
+          <div class="brand-title">한국어교육AI연구개발원</div>
+          <div class="brand-sub">Korean Edu AI Institute</div>
+        </div>
+      </a>
+      <div class="menu">
+        <a href="#philosophy">교육 철학</a>
+        <a href="#platforms">플랫폼</a>
+        <a href="#research">연구개발</a>
+        <a href="#training">교육연수</a>
+        <a href="#partnership">기관 제휴</a>
+      </div>
+      <div class="actions">
+        <a class="cta" href="./board.html">문의하기</a>
+      </div>
+    </nav>
+
+    <h1 class="center-title">한국어교육AI연구개발원</h1>
+
+    <section class="left-slogan">
+      <div class="ko">문화로 배우고<br />언어로 말하다</div>
+      <div class="en">Learn the culture. Speak the language.</div>
+    </section>
+
+    <section class="right-copy">
+      <p>현장 교사들이 직접 설계하고, AI가 함께하는<br />진심 어린 한국어 교육 플랫폼</p>
+      <div class="buttons">
+        <a class="btn primary" href="#platforms">플랫폼 보기</a>
+        <a class="btn secondary" href="#training">교육연수 보기</a>
+      </div>
+    </section>
+
+    <a class="scroll" href="#philosophy">SCROLL</a>
+  </main>
+
+  <section class="content-section" id="philosophy">
+    <h2>교육 철학</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>배움은 연결입니다</h3>
+        <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
+      </article>
+      <article class="card">
+        <h3>기술보다 사람입니다</h3>
+        <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
+      </article>
+      <article class="card">
+        <h3>한국어를 보이게 합니다</h3>
+        <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="content-section" id="platforms">
+    <h2 id="platform-title">플랫폼</h2>
+    <div class="cards platform-main">
+      <article class="card">
+        <h3>광개토</h3>
+        <p>AI 기반 글로벌 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습을 제공합니다.</p>
+      </article>
+
+      <button class="card platform-card-button" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
+        <h3>온마음 한국어</h3>
+        <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
+      </button>
+
+      <article class="card">
+        <h3>AI 콘텐츠 연구소</h3>
+        <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
+      </article>
+    </div>
+
+    <section class="platform-sub" id="onmaeum-sub" aria-label="온마음 한국어 하위 공간">
+      <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
+      <h3>온마음 한국어</h3>
+
+      <div class="feature-tabs" role="tablist" aria-label="온마음 한국어 기능">
+        <button class="feature-tab is-active" type="button" data-panel="request-panel" role="tab" aria-selected="true">
+          <strong>수업자료 요청함</strong>
+          <span>필요한 자료를 양식에 맞춰 요청합니다.</span>
+        </button>
+        <button class="feature-tab" type="button" data-panel="share-panel" role="tab" aria-selected="false">
+          <strong>자료 공유</strong>
+          <span>선생님과 운영자가 파일을 올리고 짧게 대화합니다.</span>
+        </button>
+        <button class="feature-tab" type="button" data-panel="worry-panel" role="tab" aria-selected="false">
+          <strong>수업 고민 나눔</strong>
+          <span>수업 고민을 게시판처럼 남기고 함께 답을 찾습니다.</span>
+        </button>
+      </div>
+
+      <section class="feature-panel is-active" id="request-panel">
+        <h4>수업자료 요청함</h4>
+        <p class="panel-intro">단원, 주제, 학습자 수준, 필요한 자료 형태를 적어 주세요. 반복 요청이 많은 자료부터 제작 우선순위에 반영합니다.</p>
+        <form class="form-grid">
+          <div class="form-field">
+            <label for="target-class">수업 대상</label>
+            <input id="target-class" type="text" placeholder="초등 다문화 / 중학생 / 성인 초급" />
+          </div>
+          <div class="form-field">
+            <label for="korean-level">한국어 수준</label>
+            <select id="korean-level">
+              <option>한글 미해득</option>
+              <option>초급</option>
+              <option>중급</option>
+              <option>고급</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="topic">주제</label>
+            <input id="topic" type="text" placeholder="병원 가기, 학교생활, 급식, 친구 사귀기" />
+          </div>
+          <div class="form-field">
+            <label for="material-type">필요한 자료</label>
+            <input id="material-type" type="text" placeholder="그림카드, 활동지, 역할극, 문법 설명 그림" />
+          </div>
+          <div class="form-field">
+            <label for="learner-language">학습자 언어</label>
+            <input id="learner-language" type="text" placeholder="베트남어, 중국어, 러시아어 등" />
+          </div>
+          <div class="form-field">
+            <label for="book-unit">교재/단원</label>
+            <input id="book-unit" type="text" placeholder="표준한국어 3학년 5과 / 세종한국어 2A 3과" />
+          </div>
+          <div class="form-field full">
+            <label for="request-detail">요청 내용</label>
+            <textarea id="request-detail" placeholder="아플 때 보건실 가는 대화문이 필요해요."></textarea>
+          </div>
+        </form>
+        <div class="form-actions">
+          <button class="mini-button" type="button">요청 남기기</button>
+          <button class="mini-button secondary" type="button">양식 초기화</button>
+        </div>
+      </section>
+
+      <section class="feature-panel" id="share-panel">
+        <h4>자료 공유</h4>
+        <p class="panel-intro">선생님들도 자료를 올리고, 운영자도 새 자료를 공유하는 공간입니다. 파일 업로드와 간단한 대화 흐름을 함께 둡니다.</p>
+        <div class="share-layout">
+          <div class="upload-box">
+            <h5>자료 올리기</h5>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="share-title">자료 제목</label>
+                <input id="share-title" type="text" placeholder="보건실 가기 역할극 카드" />
+              </div>
+              <div class="form-field">
+                <label for="share-category">자료 종류</label>
+                <select id="share-category">
+                  <option>활동지</option>
+                  <option>그림카드</option>
+                  <option>역할극</option>
+                  <option>다국어 안내문</option>
+                  <option>수업 PPT</option>
+                </select>
+              </div>
+              <div class="form-field full">
+                <label class="file-drop" for="share-file">
+                  파일을 선택하거나 이곳에 올려 주세요
+                  <input id="share-file" type="file" />
+                </label>
+              </div>
+              <div class="form-field full">
+                <label for="share-note">자료 설명</label>
+                <textarea id="share-note" placeholder="어떤 수업에서 어떻게 쓰면 좋은지 적어 주세요."></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="mini-button" type="button">자료 올리기</button>
+            </div>
+          </div>
+
+          <aside class="chat-box">
+            <h5>간단 대화창</h5>
+            <div class="chat-messages">
+              <div class="chat-message"><strong>운영자</strong><br />새 자료를 올리면 여기에서 활용 방법을 함께 이야기해요.</div>
+              <div class="chat-message"><strong>선생님</strong><br />초급 학습자용 그림카드도 함께 있으면 좋겠어요.</div>
+            </div>
+            <div class="chat-input">
+              <input type="text" placeholder="짧은 의견을 남겨 주세요" />
+              <button class="mini-button" type="button">전송</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="feature-panel" id="worry-panel">
+        <h4>수업 고민 나눔</h4>
+        <p class="panel-intro">가르치기 어려운 표현, 상황, 학습자 반응을 게시판처럼 남기고 해결 방향을 함께 찾습니다.</p>
+        <form class="form-grid">
+          <div class="form-field">
+            <label for="worry-category">분류</label>
+            <select id="worry-category">
+              <option>발음</option>
+              <option>문법</option>
+              <option>생활한국어</option>
+              <option>학습자 반응</option>
+              <option>수업 운영</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="worry-title">글 제목</label>
+            <input id="worry-title" type="text" placeholder="받침 발음을 계속 어려워해요" />
+          </div>
+          <div class="form-field full">
+            <label for="worry-body">고민 내용</label>
+            <textarea id="worry-body" placeholder="수업 상황, 학습자 수준, 어려운 점을 적어 주세요."></textarea>
+          </div>
+        </form>
+        <div class="form-actions">
+          <button class="mini-button" type="button">게시글 올리기</button>
+        </div>
+        <div class="board-list">
+          <article class="board-item">
+            <strong>초급 학습자가 조사 ‘이/가’를 계속 헷갈려요</strong>
+            <div class="board-meta">문법 · 댓글 3 · 방금 전</div>
+          </article>
+          <article class="board-item">
+            <strong>병원 상황 역할극에서 필요한 표현을 정리하고 싶어요</strong>
+            <div class="board-meta">생활한국어 · 댓글 5 · 어제</div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </section>
+  <section class="content-section" id="research">
+    <h2>연구개발</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>AI 챗봇</h3>
+        <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
+      </article>
+      <article class="card">
+        <h3>발음 시각화</h3>
+        <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
+      </article>
+      <article class="card">
+        <h3>교육용 게임</h3>
+        <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임을 개발합니다.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="content-section" id="training">
+    <h2>교육연수</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>ChatGPT</h3>
+        <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
+      </article>
+      <article class="card">
+        <h3>Canva</h3>
+        <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
+      </article>
+      <article class="card">
+        <h3>NotebookLM</h3>
+        <p>자료 정리, 발표자료 제작, 강의 구성 자동화를 교육 현장에 적용합니다.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="content-section" id="partnership">
+    <h2>기관 제휴</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>대안언어학원</h3>
+        <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
+      </article>
+      <article class="card">
+        <h3>이민·다문화 기관</h3>
+        <p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p>
+      </article>
+      <article class="card">
+        <h3>기업 교육</h3>
+        <p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer id="contact">Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const platforms = document.getElementById('platforms');
+    const platformTitle = document.getElementById('platform-title');
+    const onmaeumToggle = document.getElementById('onmaeum-toggle');
+    const platformBack = document.getElementById('platform-back');
+
+    onmaeumToggle.addEventListener('click', () => {
+      platforms.classList.add('is-detail');
+      platformTitle.textContent = '온마음 한국어';
+      onmaeumToggle.setAttribute('aria-expanded', 'true');
+      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    platformBack.addEventListener('click', () => {
+      platforms.classList.remove('is-detail');
+      platformTitle.textContent = '플랫폼';
+      onmaeumToggle.setAttribute('aria-expanded', 'false');
+      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const featureTabs = document.querySelectorAll('.feature-tab');
+    const featurePanels = document.querySelectorAll('.feature-panel');
+
+    featureTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetPanel = document.getElementById(tab.dataset.panel);
+
+        featureTabs.forEach((item) => {
+          item.classList.remove('is-active');
+          item.setAttribute('aria-selected', 'false');
+        });
+
+        featurePanels.forEach((panel) => {
+          panel.classList.remove('is-active');
+        });
+
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('is-active');
+      });
+    });
+
+    const materialRequestForm = document.getElementById('material-request-form');
+    const requestStatus = document.getElementById('request-status');
+
+    materialRequestForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      requestStatus.classList.remove('is-error');
+      requestStatus.textContent = '요청을 저장하는 중입니다...';
+
+      const requestData = {
+        target_class: document.getElementById('target-class').value.trim(),
+        korean_level: document.getElementById('korean-level').value,
+        topic: document.getElementById('topic').value.trim(),
+        material_type: document.getElementById('material-type').value.trim(),
+        learner_language: document.getElementById('learner-language').value.trim(),
+        book_unit: document.getElementById('book-unit').value.trim(),
+        request_detail: document.getElementById('request-detail').value.trim()
+      };
+
+      if (!requestData.request_detail) {
+        requestStatus.classList.add('is-error');
+        requestStatus.textContent = '요청 내용을 적어 주세요.';
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('material_requests')
+        .insert(requestData);
+
+      if (error) {
+        requestStatus.classList.add('is-error');
+        requestStatus.textContent = '저장에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+        console.error(error);
+        return;
+      }
+
+      materialRequestForm.reset();
+      requestStatus.textContent = '요청이 저장되었습니다.';
+    });
+  </script>
+</body>
+</html>
+91232b2e50df60dd6a191f1bea56745b9c9" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="온마음 한국어는 AI로 한글, 생활한국어, 다문화 교육 콘텐츠를 제공하는 플랫폼입니다." />
