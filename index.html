@@ -735,6 +735,28 @@
 
     .sub-board.is-active {
       display: block;
+      max-height: calc(100vh - 220px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    /* 게시판 표 헤더는 스크롤해도 위에 붙어 있게 */
+    .sub-board .board-table thead th {
+      position: sticky;
+      top: 0;
+      background: rgba(245, 241, 233, .96);
+      backdrop-filter: blur(4px);
+      z-index: 2;
+    }
+
+    /* board-header(제목+설명+버튼)도 스크롤 시 위에 붙어 있게 */
+    .sub-board .board-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(4px);
+      z-index: 3;
+      padding-top: 6px;
     }
 
     .request-form-shell {
@@ -931,11 +953,11 @@
           </div>
           <div class="form-field full">
             <label for="request-detail">요청 내용</label>
-            <textarea id="request-detail" placeholder="예) 아플 때 보건실 가는 대화문이 필요해요. / 친구 사귀기 그림카드 만들어 주세요." required></textarea>
+            <textarea id="request-detail" placeholder="예) 매번 단어카드 만들 때 번역하는 게 번거로워요. 단어 입력하면 학습자 언어로 자동 번역되는 도구 있으면 좋겠어요. / 활동지 만들 때 자모음 받침 자동 분류해주는 기능이 있으면 좋겠습니다." required></textarea>
           </div>
           <div class="form-actions full">
             <button class="mini-button" type="submit">요청 남기기</button>
-            <button class="mini-button secondary" type="reset">초기화</button>
+            <button class="mini-button secondary" type="button" id="request-back">돌아가기</button>
             <p class="form-status" id="request-status" aria-live="polite"></p>
           </div>
         </form>
@@ -1389,8 +1411,7 @@
 
         if (error) {
           requestStatus.classList.add('is-error');
-          requestStatus.textContent = '요청 등록 실패: ' + (error.message || error.code || '알 수 없는 오류');
-          alert('[자료요청 등록 실패]\n\n' + JSON.stringify(error, null, 2));
+          requestStatus.textContent = '요청 등록에 실패했습니다.';
           console.error(error);
           return;
         }
@@ -1398,6 +1419,19 @@
         requestForm.reset();
         requestStatus.textContent = '요청이 등록되었습니다.';
         await loadMaterialRequests();
+        // 등록한 글이 보이도록 목록 영역으로 스크롤
+        if (requestList) requestList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+
+    // 수업자료 요청 폼의 "돌아가기" → 플랫폼 메인(카드 3개) 화면으로
+    const requestBackBtn = document.getElementById('request-back');
+    if (requestBackBtn) {
+      requestBackBtn.addEventListener('click', () => {
+        if (platforms) platforms.classList.remove('is-detail');
+        if (platformTitle) platformTitle.textContent = '플랫폼';
+        if (onmaeumToggle) onmaeumToggle.setAttribute('aria-expanded', 'false');
+        if (platforms) platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     }
 
