@@ -1013,7 +1013,7 @@
             </div>
             <div class="form-field full">
               <label for="share-file">파일</label>
-              <input id="share-file" type="file" required />
+              <input id="share-file" type="file" />
             </div>
             <div class="form-field full">
               <label for="share-note">자료 설명</label>
@@ -1273,7 +1273,7 @@
       sharedMaterialList.innerHTML = data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = item.file_path ? `<button class="file-link" type="button" data-file-path="${item.file_path}">파일 열기</button>` : '파일 없음';
-        const note = item.note ? `<p>${item.note}</p>` : '';
+        const note = item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
         return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${item.title}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${item.category || '자료'}</td><td>${createdAt}</td></tr>`;
       }).join('');
     }
@@ -1293,23 +1293,23 @@
         const fileInput = document.getElementById('share-file');
         const file = fileInput.files[0];
 
-        if (!file) {
-          shareStatus.classList.add('is-error');
-          shareStatus.textContent = '파일을 선택해 주세요.';
-          return;
-        }
+        let filePath = null;
+        let fileName = null;
 
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-        const filePath = `${Date.now()}-${safeName}`;
-        const uploadResult = await supabaseClient.storage
-          .from('teaching-materials')
-          .upload(filePath, file);
+        if (file) {
+          const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          filePath = `${Date.now()}-${safeName}`;
+          fileName = file.name;
+          const uploadResult = await supabaseClient.storage
+            .from('teaching-materials')
+            .upload(filePath, file);
 
-        if (uploadResult.error) {
-          shareStatus.classList.add('is-error');
-          shareStatus.textContent = '파일 업로드에 실패했습니다.';
-          console.error(uploadResult.error);
-          return;
+          if (uploadResult.error) {
+            shareStatus.classList.add('is-error');
+            shareStatus.textContent = '파일 업로드에 실패했습니다.';
+            console.error(uploadResult.error);
+            return;
+          }
         }
 
         const { error } = await supabaseClient
@@ -1319,7 +1319,7 @@
             category: document.getElementById('share-category').value,
             note: document.getElementById('share-note').value.trim(),
             file_path: filePath,
-            file_name: file.name
+            file_name: fileName
           });
 
         if (error) {
@@ -1372,6 +1372,13 @@
       return String(str ?? '').replace(/[&<>"']/g, (c) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[c]));
+    }
+
+    function linkifyUrls(str) {
+      return escapeHtml(str).replace(
+        /(https?:\/\/[^\s<]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+      );
     }
 
     async function loadMaterialRequests() {
