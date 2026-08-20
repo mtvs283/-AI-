@@ -1,7 +1,7 @@
 -- 온마음 문의 게시판 (약방 수파베이스에 설치)
 -- 실행: GitHub로 연 약방 프로젝트 → SQL Editor → 이 파일 전체 붙여넣기 → Run
 
-create extension if not exists pgcrypto;
+create extension if not exists pgcrypto with schema extensions;
 
 create table if not exists public.onmaeum_inquiries (
   id bigint generated always as identity primary key,
@@ -30,11 +30,11 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
   select coalesce(
     (
-      select crypt(p_password, s.admin_password_hash) = s.admin_password_hash
+      select extensions.crypt(p_password, s.admin_password_hash) = s.admin_password_hash
       from public.onmaeum_inquiry_settings s
       where s.id = 1
     ),
@@ -55,7 +55,7 @@ returns table (
 language sql
 stable
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
   select
     i.id,
@@ -85,7 +85,7 @@ returns table (
 language plpgsql
 stable
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   r public.onmaeum_inquiries%rowtype;
@@ -101,7 +101,7 @@ begin
   if r.is_secret and not admin then
     if r.password_hash is null
        or p_password is null
-       or crypt(p_password, r.password_hash) <> r.password_hash then
+       or extensions.crypt(p_password, r.password_hash) <> r.password_hash then
       raise exception '비밀번호가 일치하지 않습니다.';
     end if;
   end if;
@@ -133,7 +133,7 @@ create or replace function public.onmaeum_create_inquiry(
 returns bigint
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   new_id bigint;
@@ -157,7 +157,7 @@ begin
     trim(p_content),
     coalesce(p_is_secret, false),
     case when coalesce(p_is_secret, false)
-      then crypt(p_password, gen_salt('bf'))
+      then extensions.crypt(p_password, extensions.gen_salt('bf'))
       else null
     end
   )
@@ -175,5 +175,5 @@ grant execute on function public.onmaeum_get_inquiry(bigint, text) to anon, auth
 grant execute on function public.onmaeum_create_inquiry(text, text, text, text, text, boolean, text) to anon, authenticated;
 
 insert into public.onmaeum_inquiry_settings (id, admin_password_hash)
-values (1, crypt('onmaeum-admin', gen_salt('bf')))
+values (1, extensions.crypt('onmaeum-admin', extensions.gen_salt('bf')))
 on conflict (id) do nothing;
