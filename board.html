@@ -140,12 +140,13 @@
     <div class="page-head">
       <h1>문의 게시판</h1>
       <p>기관 제휴, 교육연수, 플랫폼 도입 등 무엇이든 남겨주세요.<br>
-      연락처 등 민감한 내용이 포함된 경우 <b>비밀글</b>로 작성하시면 비밀번호를 아는 분만 열람할 수 있습니다.</p>
+      연락처 등 민감한 내용이 포함된 경우 <b>비밀글</b>로 작성하시면 작성자 비밀번호 또는 관리자만 열람할 수 있습니다.</p>
     </div>
 
     <!-- 목록 -->
     <div id="listView">
-      <div class="toolbar">
+      <div class="toolbar" style="display:flex;gap:10px;justify-content:flex-end;align-items:center">
+        <button class="btn ghost" id="adminBtn" onclick="toggleAdmin()">관리자</button>
         <button class="btn primary" onclick="showWrite()">문의 작성</button>
       </div>
       <table>
@@ -196,16 +197,42 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ▼▼▼ 여기 두 줄만 본인 값으로 교체하세요 (Supabase > Settings > API) ▼▼▼
-    const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhycmdmYmlkdHpzb2hkZGl3Y2JuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzMzMTUsImV4cCI6MjA5Njc0OTMxNX0.Fq-Kj8tbrhVbPGS0JKkXXPlAnP6M8U7h5SQDPTWGofo';
-    // ▲▲▲ anon public 키만 사용하세요. service_role 키는 절대 넣으면 안 됩니다. ▲▲▲
+    // 약방 수파베이스(GitHub mtvs283으로 열리는 프로젝트). anon 키만 사용.
+    const SUPABASE_URL = 'https://uytwcadtsypybispugrz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5dHdjYWR0c3lweWJpc3B1Z3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjcwNjIsImV4cCI6MjA5NzY0MzA2Mn0.0oeD6GJgryeetU4HTDqtL3XLwZvlIkrfGt7zo46vue4';
 
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const ADMIN_KEY = 'onmaeum_admin_pw';
 
     const $ = id => document.getElementById(id);
     const esc = s => (s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtDate = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
+    const getAdminPw = () => sessionStorage.getItem(ADMIN_KEY);
+
+    function updateAdminBtn() {
+      const on = !!getAdminPw();
+      const btn = $('adminBtn');
+      if (!btn) return;
+      btn.textContent = on ? '관리자 모드 종료' : '관리자';
+      btn.className = on ? 'btn primary' : 'btn ghost';
+    }
+
+    async function toggleAdmin() {
+      if (getAdminPw()) {
+        sessionStorage.removeItem(ADMIN_KEY);
+        updateAdminBtn();
+        return;
+      }
+      const pw = prompt('관리자 비밀번호를 입력하세요.');
+      if (pw === null || !pw) return;
+      const { data, error } = await sb.rpc('onmaeum_is_admin', { p_password: pw });
+      if (error || data !== true) {
+        alert('관리자 비밀번호가 아닙니다.');
+        return;
+      }
+      sessionStorage.setItem(ADMIN_KEY, pw);
+      updateAdminBtn();
+    }
 
     function switchView(name) {
       $('listView').style.display = name === 'list' ? 'block' : 'none';
@@ -224,7 +251,7 @@
     async function loadList() {
       const body = $('listBody');
       body.innerHTML = '<tr><td colspan="4" class="empty">불러오는 중...</td></tr>';
-      const { data, error } = await sb.rpc('list_inquiries');
+      const { data, error } = await sb.rpc('onmaeum_list_inquiries');
       if (error) { body.innerHTML = '<tr><td colspan="4" class="empty">목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</td></tr>'; return; }
       if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="4" class="empty">아직 등록된 문의가 없습니다. 첫 문의를 남겨주세요.</td></tr>'; return; }
       body.innerHTML = data.map(r => `
@@ -237,17 +264,17 @@
     }
 
     async function openDetail(id, isSecret) {
-      let pw = null;
-      if (isSecret) {
-        pw = prompt('비밀글입니다. 비밀번호를 입력하세요.');
+      let pw = getAdminPw();
+      if (isSecret && !pw) {
+        pw = prompt('비밀글입니다. 작성자 비밀번호 또는 관리자 비밀번호를 입력하세요.');
         if (pw === null) return;
       }
-      const { data, error } = await sb.rpc('get_inquiry', { p_id: id, p_password: pw });
+      const { data, error } = await sb.rpc('onmaeum_get_inquiry', { p_id: id, p_password: pw });
       if (error) { alert(error.message.includes('비밀번호') ? '비밀번호가 일치하지 않습니다.' : '글을 불러오지 못했습니다.'); return; }
       const r = Array.isArray(data) ? data[0] : data;
       if (!r) { alert('글을 불러오지 못했습니다.'); return; }
       $('dTitle').textContent = (r.is_secret ? '🔒 ' : '') + r.title;
-      $('dMeta').innerHTML = `<b>${esc(r.name)}</b>${r.org ? esc(r.org) + ' · ' : ''}${fmtDate(r.created_at)}`;
+      $('dMeta').innerHTML = `<b>${esc(r.name)}</b>${r.org ? esc(r.org) + ' · ' : ''}${r.email ? esc(r.email) + ' · ' : ''}${fmtDate(r.created_at)}`;
       $('dContent').textContent = r.content;
       $('dAnswer').innerHTML = r.answer
         ? `<div class="answer-box"><div class="a-label">연구개발원 답변${r.answered_at ? ' · ' + fmtDate(r.answered_at) : ''}</div><div class="a-body">${esc(r.answer)}</div></div>`
@@ -263,7 +290,7 @@
       if (!name || !title || !content) { msg.className = 'msg err'; msg.textContent = '이름, 제목, 내용은 필수입니다.'; return; }
       if (isSecret && !pw) { msg.className = 'msg err'; msg.textContent = '비밀글은 비밀번호가 필요합니다.'; return; }
       $('submitBtn').disabled = true;
-      const { error } = await sb.rpc('create_inquiry', {
+      const { error } = await sb.rpc('onmaeum_create_inquiry', {
         p_name: name, p_org: $('wOrg').value.trim(), p_email: $('wEmail').value.trim(),
         p_title: title, p_content: content, p_is_secret: isSecret, p_password: isSecret ? pw : null
       });
@@ -273,6 +300,7 @@
       showList();
     }
 
+    updateAdminBtn();
     loadList();
   </script>
 </body>
