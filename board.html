@@ -187,6 +187,16 @@
       <div class="detail-meta" id="dMeta"></div>
       <div class="detail-content" id="dContent"></div>
       <div id="dAnswer"></div>
+      <div id="dReply" style="display:none;margin-top:22px">
+        <div class="field">
+          <label>답변 작성</label>
+          <textarea id="dReplyText" maxlength="5000" placeholder="작성자에게 보낼 답변을 입력하세요."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn primary" id="replyBtn" onclick="submitReply()">답변 등록</button>
+        </div>
+        <div class="msg" id="replyMsg"></div>
+      </div>
       <div class="form-actions" style="margin-top:24px">
         <button class="btn ghost" onclick="showList()">목록으로</button>
       </div>
@@ -263,6 +273,25 @@
         </tr>`).join('');
     }
 
+    let currentInquiry = null;
+
+    function renderDetail(r) {
+      currentInquiry = r;
+      const isAdmin = !!getAdminPw();
+      $('dTitle').textContent = (r.is_secret ? '🔒 ' : '') + r.title;
+      const mail = r.email
+        ? ` · <a href="mailto:${esc(r.email)}" style="color:#5c4033;font-weight:700">${esc(r.email)}</a>`
+        : '';
+      $('dMeta').innerHTML = `<b>${esc(r.name)}</b>${r.org ? ' ' + esc(r.org) : ''}${mail} · ${fmtDate(r.created_at)}`;
+      $('dContent').textContent = r.content;
+      $('dAnswer').innerHTML = r.answer
+        ? `<div class="answer-box"><div class="a-label">연구개발원 답변${r.answered_at ? ' · ' + fmtDate(r.answered_at) : ''}</div><div class="a-body">${esc(r.answer)}</div></div>`
+        : '';
+      $('dReply').style.display = isAdmin ? 'block' : 'none';
+      $('dReplyText').value = '';
+      $('replyMsg').textContent = '';
+      $('replyMsg').className = 'msg';
+    }
     async function openDetail(id, isSecret) {
       let pw = getAdminPw();
       if (isSecret && !pw) {
@@ -273,13 +302,30 @@
       if (error) { alert(error.message.includes('비밀번호') ? '비밀번호가 일치하지 않습니다.' : '글을 불러오지 못했습니다.'); return; }
       const r = Array.isArray(data) ? data[0] : data;
       if (!r) { alert('글을 불러오지 못했습니다.'); return; }
-      $('dTitle').textContent = (r.is_secret ? '🔒 ' : '') + r.title;
-      $('dMeta').innerHTML = `<b>${esc(r.name)}</b>${r.org ? esc(r.org) + ' · ' : ''}${r.email ? esc(r.email) + ' · ' : ''}${fmtDate(r.created_at)}`;
-      $('dContent').textContent = r.content;
-      $('dAnswer').innerHTML = r.answer
-        ? `<div class="answer-box"><div class="a-label">연구개발원 답변${r.answered_at ? ' · ' + fmtDate(r.answered_at) : ''}</div><div class="a-body">${esc(r.answer)}</div></div>`
-        : '';
+      renderDetail(r);
       switchView('detail');
+    }
+
+    async function submitReply() {
+      const msg = $('replyMsg');
+      msg.className = 'msg'; msg.textContent = '';
+      const answer = $('dReplyText').value.trim();
+      const pw = getAdminPw();
+      if (!pw) { msg.className = 'msg err'; msg.textContent = '관리자 모드에서만 답변할 수 있습니다.'; return; }
+      if (!currentInquiry) { msg.className = 'msg err'; msg.textContent = '글을 다시 열어주세요.'; return; }
+      if (!answer) { msg.className = 'msg err'; msg.textContent = '답변 내용을 입력하세요.'; return; }
+      $('replyBtn').disabled = true;
+      const { error } = await sb.rpc('onmaeum_answer_inquiry', {
+        p_id: currentInquiry.id,
+        p_password: pw,
+        p_answer: answer
+      });
+      $('replyBtn').disabled = false;
+      if (error) { msg.className = 'msg err'; msg.textContent = '답변 등록에 실패했습니다.'; return; }
+      const emailed = !!currentInquiry.email;
+      await openDetail(currentInquiry.id, currentInquiry.is_secret);
+      $('replyMsg').className = 'msg ok';
+      $('replyMsg').textContent = emailed ? '답변을 등록했고, 작성자에게 메일을 보냈습니다.' : '답변을 등록했습니다.';
     }
 
     async function submitInquiry() {
