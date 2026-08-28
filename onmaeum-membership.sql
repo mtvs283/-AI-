@@ -10,6 +10,14 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null,
   display_name text not null,
+  requested_membership_type text not null default 'general'
+    check (requested_membership_type in ('general', 'teacher')),
+  membership_type text not null default 'general'
+    check (membership_type in ('general', 'teacher')),
+  activity_region text not null default 'not_set'
+    check (activity_region in ('not_set', 'seoul', 'busan', 'daegu', 'incheon', 'gwangju', 'daejeon', 'ulsan', 'sejong', 'gyeonggi', 'gangwon', 'chungbuk', 'chungnam', 'jeonbuk', 'jeonnam', 'gyeongbuk', 'gyeongnam', 'jeju', 'overseas')),
+  workplace_type text not null default 'not_set'
+    check (workplace_type in ('not_set', 'center', 'university_language_institute', 'school', 'private_academy', 'kiip', 'corporate_public', 'online', 'freelance', 'other')),
   verification_status text not null default 'not_submitted'
     check (verification_status in ('not_submitted', 'pending', 'verified', 'rejected')),
   seller_status text not null default 'inactive'
@@ -25,6 +33,8 @@ create table if not exists public.teacher_verifications (
   user_id uuid primary key references public.profiles(id) on delete cascade,
   file_path text not null,
   original_file_name text not null,
+  document_type text not null
+    check (document_type in ('teacher_certificate', 'qualification_confirmation')),
   status text not null default 'pending'
     check (status in ('pending', 'verified', 'rejected')),
   submitted_at timestamptz not null default now(),
@@ -40,6 +50,12 @@ create policy "members_read_own_profile"
 on public.profiles for select
 to authenticated
 using ((select auth.uid()) = id);
+
+create policy "members_update_own_activity_profile"
+on public.profiles for update
+to authenticated
+using ((select auth.uid()) = id)
+with check ((select auth.uid()) = id);
 
 create policy "members_read_own_verification"
 on public.teacher_verifications for select
@@ -75,6 +91,8 @@ with check (
 );
 
 grant select on public.profiles to authenticated;
+revoke update on public.profiles from authenticated;
+grant update (requested_membership_type, activity_region, workplace_type) on public.profiles to authenticated;
 grant select, insert, update on public.teacher_verifications to authenticated;
 
 create or replace function private.handle_new_onmaeum_user()
@@ -84,11 +102,14 @@ security definer
 set search_path = ''
 as $$
 begin
-  insert into public.profiles (id, full_name, display_name)
+  insert into public.profiles (id, full_name, display_name, requested_membership_type, activity_region, workplace_type)
   values (
     new.id,
     left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'full_name'), ''), '이름 미입력'), 60),
-    left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40)
+    left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40),
+    case when new.raw_user_meta_data ->> 'signup_intent' = 'teacher' then 'teacher' else 'general' end,
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'activity_region'), ''), 'not_set'),
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'workplace_type'), ''), 'not_set')
   );
   return new;
 end;
@@ -101,11 +122,14 @@ create trigger on_auth_user_created_onmaeum
   for each row execute procedure private.handle_new_onmaeum_user();
 
 -- 회원 기능을 붙이기 전에 만들어진 기존 Auth 사용자가 있다면 프로필을 보완합니다.
-insert into public.profiles (id, full_name, display_name)
+insert into public.profiles (id, full_name, display_name, requested_membership_type, activity_region, workplace_type)
 select
   u.id,
   left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'full_name'), ''), '이름 미입력'), 60),
-  left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40)
+  left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40),
+  case when u.raw_user_meta_data ->> 'signup_intent' = 'teacher' then 'teacher' else 'general' end,
+  coalesce(nullif(trim(u.raw_user_meta_data ->> 'activity_region'), ''), 'not_set'),
+  coalesce(nullif(trim(u.raw_user_meta_data ->> 'workplace_type'), ''), 'not_set')
 from auth.users u
 on conflict (id) do nothing;
 
@@ -152,6 +176,6 @@ with check (
 
 -- 운영자 승인은 브라우저의 공개 키로 처리하지 않습니다.
 -- 관리자 화면 또는 서버 함수에서만 teacher_verifications.status와
--- profiles.verification_status를 함께 변경해야 합니다.
+-- profiles.verification_status, profiles.membership_type을 함께 변경해야 합니다.
 
 commit;

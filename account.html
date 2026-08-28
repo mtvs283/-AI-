@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="온마음 한국어 교사 회원가입과 교원자격증 인증" />
+  <meta name="description" content="온마음 한국어 교사 회원가입과 교원자격증·교원자격확인서 인증" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>교사 회원 | 온마음 한국어</title>
+  <title>회원 | 온마음 한국어</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -19,7 +19,7 @@
         radial-gradient(circle at 15% 12%, rgba(199, 160, 103, .2), transparent 34%),
         linear-gradient(145deg, #f7f3ec 0%, #ece4d7 100%);
     }
-    button, input { font: inherit; }
+    button, input, select { font: inherit; }
     button { cursor: pointer; }
     .site-header {
       min-height: 78px;
@@ -88,7 +88,7 @@
     .field { display: flex; flex-direction: column; gap: 8px; }
     .field.full { grid-column: 1 / -1; }
     .field label { font-weight: 800; }
-    .field input {
+    .field input, .field select {
       width: 100%;
       min-height: 48px;
       padding: 11px 13px;
@@ -96,7 +96,7 @@
       background: rgba(255, 255, 255, .9);
       color: #211b15;
     }
-    .field input:focus { border-color: #8a5b25; outline: 2px solid rgba(138, 91, 37, .13); }
+    .field input:focus, .field select:focus { border-color: #8a5b25; outline: 2px solid rgba(138, 91, 37, .13); }
     .hint { margin: 0; color: #827467; font-size: 13px; line-height: 1.5; }
     .check-row { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; color: #5e5145; line-height: 1.55; }
     .check-row input { margin-top: 5px; }
@@ -147,17 +147,17 @@
 
   <main class="page-shell">
     <section class="intro">
-      <p class="eyebrow">TEACHER MEMBERSHIP</p>
-      <h1>선생님을 위한<br />안전한 자료 공간</h1>
-      <p>회원가입 후 교원자격증 한 개를 제출하면 확인 절차가 시작됩니다. 인증된 교사만 자료 구매와 판매에 참여할 수 있도록 준비하고 있습니다.</p>
+      <p class="eyebrow">ONMAEUM MEMBERSHIP</p>
+      <h1>함께 배우고 나누는<br />안전한 자료 공간</h1>
+      <p>일반 회원은 자료 목록과 소개를 열람할 수 있으며, 언제든 교사 회원 전환을 신청할 수 있습니다. 교사 전환에는 활동 정보와 자격 확인 서류가 필요합니다.</p>
     </section>
 
-    <section class="auth-card" aria-label="교사 회원">
+    <section class="auth-card" aria-label="회원">
       <div class="auth-main">
         <div id="signed-out-view">
           <div class="tabs" role="tablist" aria-label="회원 메뉴">
             <button class="tab is-active" id="login-tab" type="button" role="tab" aria-selected="true" aria-controls="login-panel">로그인</button>
-            <button class="tab" id="signup-tab" type="button" role="tab" aria-selected="false" aria-controls="signup-panel">교사 회원가입</button>
+            <button class="tab" id="signup-tab" type="button" role="tab" aria-selected="false" aria-controls="signup-panel">회원가입</button>
           </div>
 
           <section class="panel is-active" id="login-panel" role="tabpanel" aria-labelledby="login-tab">
@@ -181,8 +181,8 @@
           </section>
 
           <section class="panel" id="signup-panel" role="tabpanel" aria-labelledby="signup-tab">
-            <h2>교사 회원가입</h2>
-            <p class="panel-intro">결제 정보는 받지 않습니다. 계정 생성 후 교원자격증을 별도로 제출합니다.</p>
+            <h2>회원가입</h2>
+            <p class="panel-intro">일반 회원 또는 교사 회원을 선택해 가입할 수 있습니다. 교사 회원은 가입 후 자격 확인 서류를 제출해야 합니다.</p>
             <form id="signup-form">
               <div class="form-grid">
                 <div class="field">
@@ -198,6 +198,53 @@
                   <label for="signup-email">이메일</label>
                   <input id="signup-email" type="email" autocomplete="email" required />
                 </div>
+                <div class="field full">
+                  <label for="signup-member-kind">가입 유형</label>
+                  <select id="signup-member-kind" required>
+                    <option value="general">일반 회원</option>
+                    <option value="teacher">교사 회원</option>
+                  </select>
+                  <p class="hint">교사 회원은 가입 후 서류 확인이 끝나야 교사 권한이 적용됩니다. 일반 회원도 나중에 교사 전환을 신청할 수 있습니다.</p>
+                </div>
+                <div class="field teacher-signup-field" hidden>
+                  <label for="signup-region">주 활동 지역</label>
+                  <select id="signup-region">
+                    <option value="">선택해 주세요</option>
+                    <option value="seoul">서울</option>
+                    <option value="busan">부산</option>
+                    <option value="daegu">대구</option>
+                    <option value="incheon">인천</option>
+                    <option value="gwangju">광주</option>
+                    <option value="daejeon">대전</option>
+                    <option value="ulsan">울산</option>
+                    <option value="sejong">세종</option>
+                    <option value="gyeonggi">경기</option>
+                    <option value="gangwon">강원</option>
+                    <option value="chungbuk">충북</option>
+                    <option value="chungnam">충남</option>
+                    <option value="jeonbuk">전북</option>
+                    <option value="jeonnam">전남</option>
+                    <option value="gyeongbuk">경북</option>
+                    <option value="gyeongnam">경남</option>
+                    <option value="jeju">제주</option>
+                    <option value="overseas">해외</option>
+                  </select>
+                </div>
+                <div class="field teacher-signup-field" hidden>
+                  <label for="signup-workplace-type">주 근무 유형</label>
+                  <select id="signup-workplace-type">
+                    <option value="">선택해 주세요</option>
+                    <option value="center">다문화·외국인지원센터</option>
+                    <option value="university_language_institute">대학교 부설 어학당</option>
+                    <option value="school">초·중·고등학교</option>
+                    <option value="private_academy">한국어교육기관·학원</option>
+                    <option value="kiip">사회통합프로그램 운영기관</option>
+                    <option value="corporate_public">기업·공공기관</option>
+                    <option value="online">온라인 교육</option>
+                    <option value="freelance">프리랜서·개인교습</option>
+                    <option value="other">기타</option>
+                  </select>
+                </div>
                 <div class="field">
                   <label for="signup-password">비밀번호</label>
                   <input id="signup-password" type="password" autocomplete="new-password" minlength="8" required />
@@ -210,32 +257,89 @@
               </div>
               <label class="check-row">
                 <input id="signup-consent" type="checkbox" required />
-                <span>회원 운영과 교사 인증을 위해 이메일, 이름, 활동 이름과 제출한 자격증 파일을 처리하는 것에 동의합니다.</span>
+                <span>회원 운영을 위해 이메일, 이름, 활동 이름과 선택한 가입 유형의 정보를 처리하는 것에 동의합니다.</span>
               </label>
-              <button class="primary-button" type="submit">가입하고 이메일 확인하기</button>
+              <button class="primary-button" type="submit">회원가입하고 이메일 확인하기</button>
               <p class="status" id="signup-status" aria-live="polite"></p>
             </form>
           </section>
         </div>
 
         <section class="account-panel" id="account-panel" aria-labelledby="account-title">
-          <h2 id="account-title">내 교사 계정</h2>
+          <h2 id="account-title">내 회원 계정</h2>
           <p class="panel-intro">인증 상태와 제출 자료를 확인할 수 있습니다.</p>
           <div class="account-summary">
             <div class="summary-row"><span>이메일</span><strong id="account-email">-</strong></div>
             <div class="summary-row"><span>활동 이름</span><strong id="account-display-name">-</strong></div>
+            <div class="summary-row"><span>선택한 가입 유형</span><strong id="account-requested-membership-type">일반 회원</strong></div>
+            <div class="summary-row"><span>현재 회원 등급</span><strong id="account-membership-type">일반 회원</strong></div>
+            <div class="summary-row"><span>주 활동 지역</span><strong id="account-region">-</strong></div>
+            <div class="summary-row"><span>주 근무 유형</span><strong id="account-workplace-type">-</strong></div>
             <div class="summary-row"><span>교사 인증</span><strong><span class="badge" id="verification-badge">미제출</span></strong></div>
           </div>
 
           <div class="verification-box" id="verification-box">
-            <h3>교원자격증 제출</h3>
-            <p>자격증 전체가 선명하게 보이는 파일 한 개만 제출해 주세요. 제출 파일은 공개 자료와 분리된 비공개 공간에 저장됩니다.</p>
+            <h3>교사 회원 신청</h3>
+            <p>가입할 때 교사 회원을 선택했거나 일반 회원에서 전환하려면, 활동 정보와 교원자격증 또는 교원자격확인서 중 하나를 제출해 주세요. 관리자 확인이 끝나면 교사 권한이 적용됩니다.</p>
             <form id="verification-form">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="verification-region">주 활동 지역</label>
+                  <select id="verification-region" required>
+                    <option value="">선택해 주세요</option>
+                    <option value="seoul">서울</option>
+                    <option value="busan">부산</option>
+                    <option value="daegu">대구</option>
+                    <option value="incheon">인천</option>
+                    <option value="gwangju">광주</option>
+                    <option value="daejeon">대전</option>
+                    <option value="ulsan">울산</option>
+                    <option value="sejong">세종</option>
+                    <option value="gyeonggi">경기</option>
+                    <option value="gangwon">강원</option>
+                    <option value="chungbuk">충북</option>
+                    <option value="chungnam">충남</option>
+                    <option value="jeonbuk">전북</option>
+                    <option value="jeonnam">전남</option>
+                    <option value="gyeongbuk">경북</option>
+                    <option value="gyeongnam">경남</option>
+                    <option value="jeju">제주</option>
+                    <option value="overseas">해외</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="verification-workplace-type">주 근무 유형</label>
+                  <select id="verification-workplace-type" required>
+                    <option value="">선택해 주세요</option>
+                    <option value="center">다문화·외국인지원센터</option>
+                    <option value="university_language_institute">대학교 부설 어학당</option>
+                    <option value="school">초·중·고등학교</option>
+                    <option value="private_academy">한국어교육기관·학원</option>
+                    <option value="kiip">사회통합프로그램 운영기관</option>
+                    <option value="corporate_public">기업·공공기관</option>
+                    <option value="online">온라인 교육</option>
+                    <option value="freelance">프리랜서·개인교습</option>
+                    <option value="other">기타</option>
+                  </select>
+                </div>
+              </div>
               <div class="field">
-                <label for="certificate-file">자격증 파일 한 개</label>
+                <label for="document-type">제출 서류 종류</label>
+                <select id="document-type" required>
+                  <option value="">선택해 주세요</option>
+                  <option value="teacher_certificate">교원자격증</option>
+                  <option value="qualification_confirmation">교원자격확인서</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="certificate-file">자격 확인 서류 파일 한 개</label>
                 <input id="certificate-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required />
                 <p class="hint">PDF, JPG, PNG · 최대 10MB</p>
               </div>
+              <label class="check-row">
+                <input id="verification-consent" type="checkbox" required />
+                <span>교사 자격 확인을 위해 활동 지역, 근무 유형과 제출한 자격 확인 서류를 처리하는 것에 동의합니다.</span>
+              </label>
               <button class="primary-button" type="submit">인증 자료 제출</button>
               <p class="status" id="verification-status" aria-live="polite"></p>
             </form>
@@ -267,14 +371,14 @@
       </div>
 
       <aside class="auth-aside">
-        <h2>가입과 인증 순서</h2>
+        <h2>회원 이용 순서</h2>
         <ol>
-          <li>이메일로 교사 계정을 만듭니다.</li>
-          <li>메일함에서 가입을 확인합니다.</li>
-          <li>교원자격증 파일 한 개를 제출합니다.</li>
-          <li>관리자가 확인하면 교사 인증이 완료됩니다.</li>
+          <li>일반 회원 또는 교사 회원을 선택해 가입합니다.</li>
+          <li>자료 목록과 소개를 열람합니다.</li>
+          <li>원할 때 교사 회원 전환을 신청합니다.</li>
+          <li>활동 정보와 자격 서류를 확인하면 교사 등급으로 바뀝니다.</li>
         </ol>
-        <p>자료 구매와 판매 기능은 인증 계정에 연결됩니다. 결제수단과 정산 정보는 실제 판매 기능을 열 때 결제사를 통해 별도로 받습니다.</p>
+        <p>일반 회원은 자료를 열람만 할 수 있습니다. 교사용 자료 이용 권한은 교사 인증이 완료된 계정에 연결됩니다. 결제수단과 정산 정보는 실제 판매 기능을 열 때 결제사를 통해 별도로 받습니다.</p>
       </aside>
     </section>
   </main>
@@ -302,7 +406,7 @@
     }
 
     function setBusy(form, busy) {
-      form.querySelectorAll('button, input').forEach((element) => {
+      form.querySelectorAll('button, input, select').forEach((element) => {
         element.disabled = busy;
       });
     }
@@ -320,6 +424,17 @@
     loginTab.addEventListener('click', () => activateTab('login'));
     signupTab.addEventListener('click', () => activateTab('signup'));
 
+    const signupMemberKind = document.getElementById('signup-member-kind');
+    const teacherSignupFields = document.querySelectorAll('.teacher-signup-field');
+    function updateSignupKind() {
+      const isTeacher = signupMemberKind.value === 'teacher';
+      teacherSignupFields.forEach((field) => { field.hidden = !isTeacher; });
+      document.getElementById('signup-region').required = isTeacher;
+      document.getElementById('signup-workplace-type').required = isTeacher;
+    }
+    signupMemberKind.addEventListener('change', updateSignupKind);
+    updateSignupKind();
+
     async function loadAccount(user) {
       if (!user) {
         signedOutView.hidden = false;
@@ -335,7 +450,7 @@
 
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
-        .select('display_name, verification_status')
+        .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -345,6 +460,31 @@
       }
 
       document.getElementById('account-display-name').textContent = profile?.display_name || user.user_metadata?.display_name || '-';
+      document.getElementById('account-requested-membership-type').textContent = profile?.requested_membership_type === 'teacher' ? '교사 회원' : '일반 회원';
+      document.getElementById('account-membership-type').textContent = profile?.membership_type === 'teacher' ? '교사 회원' : '일반 회원';
+
+      const regionLabels = {
+        seoul: '서울', busan: '부산', daegu: '대구', incheon: '인천', gwangju: '광주',
+        daejeon: '대전', ulsan: '울산', sejong: '세종', gyeonggi: '경기', gangwon: '강원',
+        chungbuk: '충북', chungnam: '충남', jeonbuk: '전북', jeonnam: '전남',
+        gyeongbuk: '경북', gyeongnam: '경남', jeju: '제주', overseas: '해외', not_set: '미입력'
+      };
+      const workplaceLabels = {
+        center: '다문화·외국인지원센터',
+        university_language_institute: '대학교 부설 어학당',
+        school: '초·중·고등학교',
+        private_academy: '한국어교육기관·학원',
+        kiip: '사회통합프로그램 운영기관',
+        corporate_public: '기업·공공기관',
+        online: '온라인 교육',
+        freelance: '프리랜서·개인교습',
+        other: '기타',
+        not_set: '미입력'
+      };
+      document.getElementById('account-region').textContent = regionLabels[profile?.activity_region] || '-';
+      document.getElementById('account-workplace-type').textContent = workplaceLabels[profile?.workplace_type] || '-';
+      document.getElementById('verification-region').value = profile?.activity_region === 'not_set' ? '' : (profile?.activity_region || '');
+      document.getElementById('verification-workplace-type').value = profile?.workplace_type === 'not_set' ? '' : (profile?.workplace_type || '');
 
       const { data: verification, error: verificationError } = await supabaseClient
         .from('teacher_verifications')
@@ -364,7 +504,7 @@
       const badge = document.getElementById('verification-badge');
       badge.textContent = labels[status] || '미제출';
       badge.className = `badge${status === 'verified' ? ' is-verified' : ''}${status === 'rejected' ? ' is-rejected' : ''}`;
-      document.getElementById('verification-box').hidden = status === 'verified';
+      document.getElementById('verification-box').hidden = status === 'verified' && profile?.membership_type === 'teacher';
     }
 
     document.getElementById('signup-form').addEventListener('submit', async (event) => {
@@ -380,13 +520,14 @@
 
       const password = document.getElementById('signup-password').value;
       const passwordConfirm = document.getElementById('signup-password-confirm').value;
+      const signupKind = document.getElementById('signup-member-kind').value;
       if (password !== passwordConfirm) {
         setStatus(statusElement, '비밀번호가 서로 다릅니다.', true);
         return;
       }
 
       setBusy(form, true);
-      setStatus(statusElement, '교사 계정을 만드는 중입니다...');
+      setStatus(statusElement, '회원 계정을 만드는 중입니다...');
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
       const { data, error } = await supabaseClient.auth.signUp({
         email: document.getElementById('signup-email').value.trim(),
@@ -395,7 +536,10 @@
           emailRedirectTo: redirectTo,
           data: {
             full_name: document.getElementById('signup-name').value.trim(),
-            display_name: document.getElementById('signup-display-name').value.trim()
+            display_name: document.getElementById('signup-display-name').value.trim(),
+            signup_intent: signupKind,
+            activity_region: signupKind === 'teacher' ? document.getElementById('signup-region').value : 'not_set',
+            workplace_type: signupKind === 'teacher' ? document.getElementById('signup-workplace-type').value : 'not_set'
           }
         }
       });
@@ -407,8 +551,11 @@
       }
 
       form.reset();
+      updateSignupKind();
       if (data.session) {
-        setStatus(statusElement, '가입되었습니다. 교원자격증을 제출해 주세요.');
+        setStatus(statusElement, signupKind === 'teacher'
+          ? '계정이 만들어졌습니다. 로그인 후 자격증 또는 자격확인서를 제출해 주세요.'
+          : '일반 회원으로 가입되었습니다. 원할 때 교사 회원 전환을 신청할 수 있습니다.');
         await loadAccount(data.user);
       } else {
         setStatus(statusElement, '확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 로그인해 주세요.');
@@ -458,7 +605,13 @@
       const form = event.currentTarget;
       const statusElement = document.getElementById('verification-status');
       const file = document.getElementById('certificate-file').files[0];
-      if (!file) return;
+      const documentType = document.getElementById('document-type').value;
+      const activityRegion = document.getElementById('verification-region').value;
+      const workplaceType = document.getElementById('verification-workplace-type').value;
+      if (!activityRegion || !workplaceType || !documentType || !file) {
+        setStatus(statusElement, '활동 정보와 서류 종류를 선택하고 파일 한 개를 제출해 주세요.', true);
+        return;
+      }
 
       if (file.size > 10 * 1024 * 1024) {
         setStatus(statusElement, '파일은 10MB 이하만 제출할 수 있습니다.', true);
@@ -472,11 +625,23 @@
       }
 
       setBusy(form, true);
-      setStatus(statusElement, '자격증을 안전하게 제출하는 중입니다...');
+      setStatus(statusElement, '자격 확인 서류를 안전하게 제출하는 중입니다...');
       const { data: userData, error: userError } = await supabaseClient.auth.getUser();
       if (userError || !userData.user) {
         setBusy(form, false);
         setStatus(statusElement, '로그인이 만료되었습니다. 다시 로그인해 주세요.', true);
+        return;
+      }
+
+      const { error: profileUpdateError } = await supabaseClient
+        .from('profiles')
+        .update({ requested_membership_type: 'teacher', activity_region: activityRegion, workplace_type: workplaceType })
+        .eq('id', userData.user.id);
+
+      if (profileUpdateError) {
+        setBusy(form, false);
+        setStatus(statusElement, '교사 활동 정보를 저장하지 못했습니다.', true);
+        console.error(profileUpdateError);
         return;
       }
 
@@ -487,7 +652,7 @@
 
       if (uploadResult.error) {
         setBusy(form, false);
-        setStatus(statusElement, '자격증 파일을 제출하지 못했습니다.', true);
+        setStatus(statusElement, '자격 확인 서류를 제출하지 못했습니다.', true);
         console.error(uploadResult.error);
         return;
       }
@@ -498,6 +663,7 @@
           user_id: userData.user.id,
           file_path: filePath,
           original_file_name: file.name,
+          document_type: documentType,
           status: 'pending',
           submitted_at: new Date().toISOString(),
           reviewed_at: null,
