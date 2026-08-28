@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="온마음 한국어 교사 회원가입과 교원자격증 인증" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>교사 회원 | 온마음 한국어</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      color: #211b15;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(199, 160, 103, .2), transparent 34%),
+        linear-gradient(145deg, #f7f3ec 0%, #ece4d7 100%);
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .site-header {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px clamp(22px, 5vw, 64px);
+      border-bottom: 1px solid rgba(83, 63, 42, .13);
+      background: rgba(250, 247, 242, .78);
+      backdrop-filter: blur(10px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .brand img { width: 48px; height: 48px; object-fit: contain; }
+    .brand small { display: block; margin-top: 2px; color: #756a5e; font-weight: 500; }
+    .home-link { color: #5f4b36; text-decoration: none; font-weight: 700; }
+    .home-link:hover, .home-link:focus-visible { color: #7b4c18; text-decoration: underline; }
+    .page-shell {
+      width: min(1080px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 92px) 0;
+    }
+    .intro { max-width: 720px; margin-bottom: 34px; }
+    .eyebrow { margin: 0 0 10px; color: #8a5b25; font-weight: 800; letter-spacing: .08em; }
+    h1 { margin: 0 0 14px; font-size: clamp(34px, 5vw, 60px); line-height: 1.16; }
+    .intro p { margin: 0; color: #65594d; font-size: 17px; line-height: 1.8; }
+    .auth-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, .7fr);
+      overflow: hidden;
+      border: 1px solid rgba(83, 63, 42, .16);
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 24px 70px rgba(65, 46, 27, .11);
+    }
+    .auth-main { padding: clamp(26px, 5vw, 48px); }
+    .auth-aside {
+      padding: clamp(26px, 4vw, 42px);
+      background: #2d2116;
+      color: rgba(255, 255, 255, .9);
+    }
+    .auth-aside h2 { margin-top: 0; color: #fff; font-size: 23px; }
+    .auth-aside ol { margin: 20px 0 0; padding-left: 22px; line-height: 1.9; }
+    .auth-aside p { color: rgba(255, 255, 255, .7); line-height: 1.7; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 30px; }
+    .tab {
+      flex: 1;
+      min-height: 48px;
+      border: 1px solid rgba(83, 63, 42, .18);
+      background: #f3ede4;
+      color: #665747;
+      font-weight: 800;
+    }
+    .tab.is-active { background: #2d2116; border-color: #2d2116; color: #fff; }
+    .panel { display: none; }
+    .panel.is-active { display: block; }
+    .panel h2 { margin: 0 0 6px; font-size: 27px; }
+    .panel-intro { margin: 0 0 24px; color: #756a5e; line-height: 1.65; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-weight: 800; }
+    .field input {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 13px;
+      border: 1px solid rgba(83, 63, 42, .24);
+      background: rgba(255, 255, 255, .9);
+      color: #211b15;
+    }
+    .field input:focus { border-color: #8a5b25; outline: 2px solid rgba(138, 91, 37, .13); }
+    .hint { margin: 0; color: #827467; font-size: 13px; line-height: 1.5; }
+    .check-row { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; color: #5e5145; line-height: 1.55; }
+    .check-row input { margin-top: 5px; }
+    .primary-button, .secondary-button {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 20px;
+      border: 1px solid #2d2116;
+      font-weight: 800;
+    }
+    .primary-button { background: #2d2116; color: #fff; }
+    .secondary-button { background: transparent; color: #2d2116; }
+    .primary-button:disabled, .secondary-button:disabled { cursor: wait; opacity: .58; }
+    .status { min-height: 24px; margin: 14px 0 0; color: #75501f; font-weight: 700; line-height: 1.55; }
+    .status.is-error { color: #a02c28; }
+    .account-panel { display: none; }
+    .account-panel.is-active { display: block; }
+    .account-summary { display: grid; gap: 12px; margin: 20px 0 28px; }
+    .summary-row { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid rgba(83, 63, 42, .13); }
+    .summary-row span:first-child { color: #756a5e; }
+    .badge { display: inline-flex; align-items: center; min-height: 30px; padding: 4px 10px; border-radius: 99px; background: #eee4d4; color: #775323; font-size: 13px; font-weight: 800; }
+    .badge.is-verified { background: #dcecdf; color: #236137; }
+    .badge.is-rejected { background: #f4dddd; color: #96352f; }
+    .verification-box { margin-top: 24px; padding: 22px; border: 1px solid rgba(83, 63, 42, .16); background: #f7f2e9; }
+    .verification-box h3 { margin: 0 0 8px; }
+    .verification-box p { margin: 0 0 16px; color: #6e6154; line-height: 1.65; }
+    .privacy-note { margin-top: 14px; padding: 12px 14px; background: #eee6da; color: #665849; font-size: 13px; line-height: 1.65; }
+    [hidden] { display: none !important; }
+    @media (max-width: 780px) {
+      .site-header { align-items: flex-start; }
+      .brand small { display: none; }
+      .auth-card { grid-template-columns: 1fr; }
+      .auth-aside { order: -1; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .summary-row { flex-direction: column; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./index.html">
+      <img src="./logo.png" alt="온마음 한국어 로고" />
+      <span>온마음 한국어<small>한국어교육AI연구개발원</small></span>
+    </a>
+    <a class="home-link" href="./index.html">홈으로</a>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">TEACHER MEMBERSHIP</p>
+      <h1>선생님을 위한<br />안전한 자료 공간</h1>
+      <p>회원가입 후 교원자격증 한 개를 제출하면 확인 절차가 시작됩니다. 인증된 교사만 자료 구매와 판매에 참여할 수 있도록 준비하고 있습니다.</p>
+    </section>
+
+    <section class="auth-card" aria-label="교사 회원">
+      <div class="auth-main">
+        <div id="signed-out-view">
+          <div class="tabs" role="tablist" aria-label="회원 메뉴">
+            <button class="tab is-active" id="login-tab" type="button" role="tab" aria-selected="true" aria-controls="login-panel">로그인</button>
+            <button class="tab" id="signup-tab" type="button" role="tab" aria-selected="false" aria-controls="signup-panel">교사 회원가입</button>
+          </div>
+
+          <section class="panel is-active" id="login-panel" role="tabpanel" aria-labelledby="login-tab">
+            <h2>다시 만나서 반가워요</h2>
+            <p class="panel-intro">가입한 이메일과 비밀번호를 입력해 주세요.</p>
+            <form id="login-form">
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="login-email">이메일</label>
+                  <input id="login-email" type="email" autocomplete="email" required />
+                </div>
+                <div class="field full">
+                  <label for="login-password">비밀번호</label>
+                  <input id="login-password" type="password" autocomplete="current-password" required />
+                </div>
+              </div>
+              <button class="primary-button" type="submit">로그인</button>
+              <button class="secondary-button" id="reset-password-button" type="button">비밀번호 재설정 메일 받기</button>
+              <p class="status" id="login-status" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="panel" id="signup-panel" role="tabpanel" aria-labelledby="signup-tab">
+            <h2>교사 회원가입</h2>
+            <p class="panel-intro">결제 정보는 받지 않습니다. 계정 생성 후 교원자격증을 별도로 제출합니다.</p>
+            <form id="signup-form">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="signup-name">이름</label>
+                  <input id="signup-name" type="text" autocomplete="name" maxlength="60" required />
+                </div>
+                <div class="field">
+                  <label for="signup-display-name">활동 이름</label>
+                  <input id="signup-display-name" type="text" maxlength="40" required />
+                  <p class="hint">자료와 게시글에 표시할 이름입니다.</p>
+                </div>
+                <div class="field full">
+                  <label for="signup-email">이메일</label>
+                  <input id="signup-email" type="email" autocomplete="email" required />
+                </div>
+                <div class="field">
+                  <label for="signup-password">비밀번호</label>
+                  <input id="signup-password" type="password" autocomplete="new-password" minlength="8" required />
+                  <p class="hint">8자 이상 입력해 주세요.</p>
+                </div>
+                <div class="field">
+                  <label for="signup-password-confirm">비밀번호 확인</label>
+                  <input id="signup-password-confirm" type="password" autocomplete="new-password" minlength="8" required />
+                </div>
+              </div>
+              <label class="check-row">
+                <input id="signup-consent" type="checkbox" required />
+                <span>회원 운영과 교사 인증을 위해 이메일, 이름, 활동 이름과 제출한 자격증 파일을 처리하는 것에 동의합니다.</span>
+              </label>
+              <button class="primary-button" type="submit">가입하고 이메일 확인하기</button>
+              <p class="status" id="signup-status" aria-live="polite"></p>
+            </form>
+          </section>
+        </div>
+
+        <section class="account-panel" id="account-panel" aria-labelledby="account-title">
+          <h2 id="account-title">내 교사 계정</h2>
+          <p class="panel-intro">인증 상태와 제출 자료를 확인할 수 있습니다.</p>
+          <div class="account-summary">
+            <div class="summary-row"><span>이메일</span><strong id="account-email">-</strong></div>
+            <div class="summary-row"><span>활동 이름</span><strong id="account-display-name">-</strong></div>
+            <div class="summary-row"><span>교사 인증</span><strong><span class="badge" id="verification-badge">미제출</span></strong></div>
+          </div>
+
+          <div class="verification-box" id="verification-box">
+            <h3>교원자격증 제출</h3>
+            <p>자격증 전체가 선명하게 보이는 파일 한 개만 제출해 주세요. 제출 파일은 공개 자료와 분리된 비공개 공간에 저장됩니다.</p>
+            <form id="verification-form">
+              <div class="field">
+                <label for="certificate-file">자격증 파일 한 개</label>
+                <input id="certificate-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required />
+                <p class="hint">PDF, JPG, PNG · 최대 10MB</p>
+              </div>
+              <button class="primary-button" type="submit">인증 자료 제출</button>
+              <p class="status" id="verification-status" aria-live="polite"></p>
+            </form>
+            <div class="privacy-note">주민등록번호가 표시된 경우 뒤쪽 번호는 가리고 제출해 주세요. 교사 확인에 필요하지 않은 개인정보는 제출하지 않는 것이 좋습니다.</div>
+          </div>
+
+          <button class="secondary-button" id="logout-button" type="button">로그아웃</button>
+          <p class="status" id="account-status" aria-live="polite"></p>
+        </section>
+
+        <section class="account-panel" id="recovery-panel" aria-labelledby="recovery-title">
+          <h2 id="recovery-title">새 비밀번호 설정</h2>
+          <p class="panel-intro">메일에서 연 재설정 링크가 확인되었습니다. 새 비밀번호를 입력해 주세요.</p>
+          <form id="recovery-form">
+            <div class="form-grid">
+              <div class="field full">
+                <label for="recovery-password">새 비밀번호</label>
+                <input id="recovery-password" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="field full">
+                <label for="recovery-password-confirm">새 비밀번호 확인</label>
+                <input id="recovery-password-confirm" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+            </div>
+            <button class="primary-button" type="submit">새 비밀번호 저장</button>
+            <p class="status" id="recovery-status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <aside class="auth-aside">
+        <h2>가입과 인증 순서</h2>
+        <ol>
+          <li>이메일로 교사 계정을 만듭니다.</li>
+          <li>메일함에서 가입을 확인합니다.</li>
+          <li>교원자격증 파일 한 개를 제출합니다.</li>
+          <li>관리자가 확인하면 교사 인증이 완료됩니다.</li>
+        </ol>
+        <p>자료 구매와 판매 기능은 인증 계정에 연결됩니다. 결제수단과 정산 정보는 실제 판매 기능을 열 때 결제사를 통해 별도로 받습니다.</p>
+      </aside>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
+    const supabaseClient = window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+      : null;
+
+    const signedOutView = document.getElementById('signed-out-view');
+    const accountPanel = document.getElementById('account-panel');
+    const recoveryPanel = document.getElementById('recovery-panel');
+    const loginTab = document.getElementById('login-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const loginPanel = document.getElementById('login-panel');
+    const signupPanel = document.getElementById('signup-panel');
+
+    function setStatus(element, message, isError = false) {
+      if (!element) return;
+      element.textContent = message;
+      element.classList.toggle('is-error', isError);
+    }
+
+    function setBusy(form, busy) {
+      form.querySelectorAll('button, input').forEach((element) => {
+        element.disabled = busy;
+      });
+    }
+
+    function activateTab(tabName) {
+      const isLogin = tabName === 'login';
+      loginTab.classList.toggle('is-active', isLogin);
+      signupTab.classList.toggle('is-active', !isLogin);
+      loginTab.setAttribute('aria-selected', String(isLogin));
+      signupTab.setAttribute('aria-selected', String(!isLogin));
+      loginPanel.classList.toggle('is-active', isLogin);
+      signupPanel.classList.toggle('is-active', !isLogin);
+    }
+
+    loginTab.addEventListener('click', () => activateTab('login'));
+    signupTab.addEventListener('click', () => activateTab('signup'));
+
+    async function loadAccount(user) {
+      if (!user) {
+        signedOutView.hidden = false;
+        accountPanel.classList.remove('is-active');
+        recoveryPanel.classList.remove('is-active');
+        return;
+      }
+
+      signedOutView.hidden = true;
+      recoveryPanel.classList.remove('is-active');
+      accountPanel.classList.add('is-active');
+      document.getElementById('account-email').textContent = user.email || '-';
+
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('display_name, verification_status')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        setStatus(document.getElementById('account-status'), '회원 정보를 불러오지 못했습니다. 관리자에게 문의해 주세요.', true);
+        console.error(profileError);
+      }
+
+      document.getElementById('account-display-name').textContent = profile?.display_name || user.user_metadata?.display_name || '-';
+
+      const { data: verification, error: verificationError } = await supabaseClient
+        .from('teacher_verifications')
+        .select('status, submitted_at')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (verificationError) console.error(verificationError);
+
+      const status = verification?.status || profile?.verification_status || 'not_submitted';
+      const labels = {
+        not_submitted: '미제출',
+        pending: '확인 중',
+        verified: '인증 완료',
+        rejected: '다시 제출 필요'
+      };
+      const badge = document.getElementById('verification-badge');
+      badge.textContent = labels[status] || '미제출';
+      badge.className = `badge${status === 'verified' ? ' is-verified' : ''}${status === 'rejected' ? ' is-rejected' : ''}`;
+      document.getElementById('verification-box').hidden = status === 'verified';
+    }
+
+    document.getElementById('signup-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('signup-status');
+      setStatus(statusElement, '');
+
+      if (!supabaseClient) {
+        setStatus(statusElement, '회원 시스템을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.', true);
+        return;
+      }
+
+      const password = document.getElementById('signup-password').value;
+      const passwordConfirm = document.getElementById('signup-password-confirm').value;
+      if (password !== passwordConfirm) {
+        setStatus(statusElement, '비밀번호가 서로 다릅니다.', true);
+        return;
+      }
+
+      setBusy(form, true);
+      setStatus(statusElement, '교사 계정을 만드는 중입니다...');
+      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: document.getElementById('signup-email').value.trim(),
+        password,
+        options: {
+          emailRedirectTo: redirectTo,
+          data: {
+            full_name: document.getElementById('signup-name').value.trim(),
+            display_name: document.getElementById('signup-display-name').value.trim()
+          }
+        }
+      });
+      setBusy(form, false);
+
+      if (error) {
+        setStatus(statusElement, error.message || '가입에 실패했습니다.', true);
+        return;
+      }
+
+      form.reset();
+      if (data.session) {
+        setStatus(statusElement, '가입되었습니다. 교원자격증을 제출해 주세요.');
+        await loadAccount(data.user);
+      } else {
+        setStatus(statusElement, '확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 로그인해 주세요.');
+      }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('login-status');
+      if (!supabaseClient) {
+        setStatus(statusElement, '회원 시스템을 불러오지 못했습니다.', true);
+        return;
+      }
+
+      setBusy(form, true);
+      setStatus(statusElement, '로그인하는 중입니다...');
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: document.getElementById('login-email').value.trim(),
+        password: document.getElementById('login-password').value
+      });
+      setBusy(form, false);
+
+      if (error) {
+        setStatus(statusElement, '이메일 또는 비밀번호를 확인해 주세요.', true);
+        return;
+      }
+      form.reset();
+      setStatus(statusElement, '');
+      await loadAccount(data.user);
+    });
+
+    document.getElementById('reset-password-button').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value.trim();
+      const statusElement = document.getElementById('login-status');
+      if (!email) {
+        setStatus(statusElement, '먼저 이메일을 입력해 주세요.', true);
+        return;
+      }
+      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
+      setStatus(statusElement, error ? '재설정 메일을 보내지 못했습니다.' : '비밀번호 재설정 메일을 보냈습니다.', Boolean(error));
+    });
+
+    document.getElementById('verification-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('verification-status');
+      const file = document.getElementById('certificate-file').files[0];
+      if (!file) return;
+
+      if (file.size > 10 * 1024 * 1024) {
+        setStatus(statusElement, '파일은 10MB 이하만 제출할 수 있습니다.', true);
+        return;
+      }
+
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        setStatus(statusElement, 'PDF, JPG, PNG 파일만 제출할 수 있습니다.', true);
+        return;
+      }
+
+      setBusy(form, true);
+      setStatus(statusElement, '자격증을 안전하게 제출하는 중입니다...');
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !userData.user) {
+        setBusy(form, false);
+        setStatus(statusElement, '로그인이 만료되었습니다. 다시 로그인해 주세요.', true);
+        return;
+      }
+
+      const filePath = `${userData.user.id}/teacher-certificate`;
+      const uploadResult = await supabaseClient.storage
+        .from('teacher-certificates')
+        .upload(filePath, file, { upsert: true, contentType: file.type });
+
+      if (uploadResult.error) {
+        setBusy(form, false);
+        setStatus(statusElement, '자격증 파일을 제출하지 못했습니다.', true);
+        console.error(uploadResult.error);
+        return;
+      }
+
+      const { error: verificationError } = await supabaseClient
+        .from('teacher_verifications')
+        .upsert({
+          user_id: userData.user.id,
+          file_path: filePath,
+          original_file_name: file.name,
+          status: 'pending',
+          submitted_at: new Date().toISOString(),
+          reviewed_at: null,
+          review_note: null
+        }, { onConflict: 'user_id' });
+
+      setBusy(form, false);
+      if (verificationError) {
+        setStatus(statusElement, '파일은 저장됐지만 인증 신청을 완료하지 못했습니다. 관리자에게 문의해 주세요.', true);
+        console.error(verificationError);
+        return;
+      }
+
+      form.reset();
+      setStatus(statusElement, '제출되었습니다. 확인이 끝나면 인증 상태가 바뀝니다.');
+      await loadAccount(userData.user);
+    });
+
+    document.getElementById('logout-button').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      await loadAccount(null);
+      activateTab('login');
+    });
+
+    document.getElementById('recovery-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('recovery-status');
+      const password = document.getElementById('recovery-password').value;
+      const passwordConfirm = document.getElementById('recovery-password-confirm').value;
+
+      if (password !== passwordConfirm) {
+        setStatus(statusElement, '비밀번호가 서로 다릅니다.', true);
+        return;
+      }
+
+      setBusy(form, true);
+      const { error } = await supabaseClient.auth.updateUser({ password });
+      setBusy(form, false);
+      if (error) {
+        setStatus(statusElement, '비밀번호를 변경하지 못했습니다. 재설정 링크를 다시 요청해 주세요.', true);
+        return;
+      }
+
+      form.reset();
+      setStatus(statusElement, '새 비밀번호가 저장되었습니다.');
+      const { data } = await supabaseClient.auth.getUser();
+      window.setTimeout(() => loadAccount(data.user || null), 700);
+    });
+
+    async function initializeAuth() {
+      if (!supabaseClient) {
+        setStatus(document.getElementById('login-status'), '회원 시스템을 불러오지 못했습니다.', true);
+        return;
+      }
+      const { data } = await supabaseClient.auth.getSession();
+      await loadAccount(data.session?.user || null);
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          signedOutView.hidden = true;
+          accountPanel.classList.remove('is-active');
+          recoveryPanel.classList.add('is-active');
+          return;
+        }
+        window.setTimeout(() => loadAccount(session?.user || null), 0);
+      });
+    }
+
+    initializeAuth();
+  </script>
+</body>
+</html>
