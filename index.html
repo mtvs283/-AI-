@@ -406,6 +406,39 @@
       border-bottom: 1px solid rgba(86, 67, 47, .08);
     }
 
+    .membership-gate,
+    .membership-access-note {
+      margin: 14px 0;
+      padding: 20px 22px;
+      border: 1px solid rgba(86, 67, 47, .16);
+      background: rgba(255, 255, 255, .72);
+      color: #574d42;
+      line-height: 1.7;
+    }
+
+    .membership-gate h3 {
+      margin: 0 0 8px;
+      color: #211407;
+    }
+
+    .membership-gate p,
+    .membership-access-note p { margin: 0; }
+
+    .membership-gate .mini-button {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 14px;
+      text-decoration: none;
+    }
+
+    .membership-access-note.is-teacher {
+      border-color: rgba(46, 107, 70, .28);
+      background: rgba(226, 241, 231, .78);
+      color: #26583a;
+    }
+
+    [hidden] { display: none !important; }
+
     .feature-tab {
       min-height: 46px;
       padding: 10px 16px;
@@ -879,7 +912,7 @@
         <a href="#partnership">기관 제휴</a>
       </div>
       <div class="actions">
-        <a class="account-link" href="./account.html">교사 로그인</a>
+        <a class="account-link" id="site-account-link" href="./account.html">로그인 · 회원가입</a>
         <a class="cta" href="./board.html">문의하기</a>
       </div>
     </nav>
@@ -942,8 +975,15 @@
     <section class="platform-sub" id="onmaeum-sub" aria-label="온마음 한국어 하위 공간">
       <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
 
+      <div class="membership-gate" id="membership-gate">
+        <h3>회원 전용 교사 협업 공간입니다</h3>
+        <p>로그인하면 자료와 요청 목록을 볼 수 있습니다. 일반 회원은 열람만 가능하며, 자료 등록·파일 이용·글쓰기는 교사 인증이 완료된 회원만 사용할 수 있습니다.</p>
+        <a class="mini-button" href="./account.html">로그인 또는 회원가입</a>
+      </div>
 
-      <div class="feature-tabs" aria-label="온마음 한국어 기능">
+      <div class="membership-access-note" id="membership-access-note" hidden aria-live="polite"></div>
+
+      <div class="feature-tabs" id="member-feature-tabs" aria-label="온마음 한국어 기능" hidden>
         <button class="feature-tab" type="button" id="request-board-toggle">
           <strong>수업자료 요청</strong>
           <span>필요한 수업 자료를 요청해 보세요.</span>
@@ -964,7 +1004,7 @@
             <p>필요한 수업자료를 양식에 맞춰 남겨 주세요.</p>
           </div>
         </div>
-        <form class="form-grid" id="material-request-form">
+        <form class="form-grid" id="material-request-form" hidden>
           <div class="form-field">
             <label for="target-class">수업 대상</label>
             <input id="target-class" type="text" placeholder="초등 다문화 / 중학생 / 성인 초급" required />
@@ -1006,7 +1046,7 @@
             <h4 id="shared-preview-title">자료공유</h4>
             <p>선생님들과 함께 수업 자료를 올리고 나누는 공간입니다.</p>
           </div>
-          <button class="mini-button secondary" type="button" id="share-form-toggle">자료 올리기</button>
+          <button class="mini-button secondary" type="button" id="share-form-toggle" hidden>자료 올리기</button>
         </div>
 
         <form class="share-form" id="shared-material-form">
@@ -1067,7 +1107,7 @@
             <h4 id="worry-board-title">수업 고민 나눔</h4>
             <p>수업 중 어려웠던 표현, 상황, 학습자 반응을 게시판처럼 나누는 공간입니다.</p>
           </div>
-          <button class="mini-button secondary" type="button" id="worry-form-toggle">글쓰기</button>
+          <button class="mini-button secondary" type="button" id="worry-form-toggle" hidden>글쓰기</button>
         </div>
 
         <form class="share-form" id="worry-post-form">
@@ -1193,6 +1233,92 @@
     const shareForm = document.getElementById('shared-material-form');
     const shareStatus = document.getElementById('share-status');
     const sharedMaterialList = document.getElementById('shared-material-list');
+    const siteAccountLink = document.getElementById('site-account-link');
+    const membershipGate = document.getElementById('membership-gate');
+    const membershipAccessNote = document.getElementById('membership-access-note');
+    const memberFeatureTabs = document.getElementById('member-feature-tabs');
+
+    let currentSiteUser = null;
+    let currentSiteProfile = null;
+    let isVerifiedTeacher = false;
+
+    function setProtectedListMessage(message) {
+      if (sharedMaterialList) sharedMaterialList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+      const materialRequestList = document.getElementById('material-request-list');
+      if (materialRequestList) materialRequestList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+      const worryPostList = document.getElementById('worry-post-list');
+      if (worryPostList) worryPostList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+    }
+
+    function requireVerifiedTeacher(statusElement, message = '교사 인증이 완료된 회원만 사용할 수 있습니다.') {
+      if (isVerifiedTeacher) return true;
+      if (statusElement) {
+        statusElement.classList.add('is-error');
+        statusElement.textContent = currentSiteUser ? message : '로그인 후 이용해 주세요.';
+      }
+      return false;
+    }
+
+    function applyMembershipAccess() {
+      const isSignedIn = Boolean(currentSiteUser);
+      if (siteAccountLink) {
+        siteAccountLink.textContent = !isSignedIn
+          ? '로그인 · 회원가입'
+          : isVerifiedTeacher ? '교사 회원 · 내 계정' : '일반 회원 · 내 계정';
+      }
+      if (membershipGate) membershipGate.hidden = isSignedIn;
+      if (memberFeatureTabs) memberFeatureTabs.hidden = !isSignedIn;
+
+      if (membershipAccessNote) {
+        membershipAccessNote.hidden = !isSignedIn;
+        membershipAccessNote.classList.toggle('is-teacher', isVerifiedTeacher);
+        membershipAccessNote.innerHTML = isVerifiedTeacher
+          ? '<p><strong>교사 인증 완료</strong> · 자료 열람·등록·파일 이용과 게시판 글쓰기를 사용할 수 있습니다.</p>'
+          : '<p><strong>일반 회원</strong> · 자료와 게시글은 열람만 가능합니다. 글쓰기와 파일 이용은 교사 인증 후 사용할 수 있습니다.</p>';
+      }
+
+      if (!isSignedIn) {
+        subBoards.forEach((board) => board.classList.remove('is-active'));
+        setProtectedListMessage('로그인 후 목록을 볼 수 있습니다.');
+        return;
+      }
+
+      if (requestForm) requestForm.hidden = !isVerifiedTeacher;
+      if (shareFormToggle) shareFormToggle.hidden = !isVerifiedTeacher;
+      if (worryFormToggle) worryFormToggle.hidden = !isVerifiedTeacher;
+      if (!isVerifiedTeacher) {
+        if (shareForm) shareForm.classList.remove('is-open');
+        if (worryForm) worryForm.classList.remove('is-open');
+      }
+    }
+
+    async function initializeSiteMembership() {
+      if (!supabaseClient) {
+        setProtectedListMessage('회원 시스템을 불러오지 못했습니다.');
+        return;
+      }
+
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      currentSiteUser = sessionData.session?.user || null;
+      currentSiteProfile = null;
+      isVerifiedTeacher = false;
+
+      if (currentSiteUser) {
+        const { data: profile, error } = await supabaseClient
+          .from('profiles')
+          .select('membership_type, verification_status')
+          .eq('id', currentSiteUser.id)
+          .maybeSingle();
+        if (error) console.error(error);
+        currentSiteProfile = profile || null;
+        isVerifiedTeacher = profile?.membership_type === 'teacher' && profile?.verification_status === 'verified';
+      }
+
+      applyMembershipAccess();
+      if (currentSiteUser) {
+        await Promise.all([loadSharedMaterials(), loadMaterialRequests(), loadWorryPosts()]);
+      }
+    }
 
     if (onmaeumToggle && platforms && platformTitle) {
       onmaeumToggle.addEventListener('click', () => {
@@ -1244,6 +1370,10 @@
     const subBoards = [requestBoard, shareBoard, worryBoard].filter(Boolean);
 
     function showOnmaeumBoard(targetBoard, title) {
+      if (!currentSiteUser) {
+        if (membershipGate) membershipGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       subBoards.forEach((board) => board.classList.remove('is-active'));
       targetBoard.classList.add('is-active');
       targetBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1262,6 +1392,11 @@
     }
     async function loadSharedMaterials() {
       if (!sharedMaterialList) return;
+
+      if (!currentSiteUser) {
+        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 자료 목록을 볼 수 있습니다.</td></tr>';
+        return;
+      }
 
       if (!supabaseClient) {
         sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료공유 DB 연결 대기 중입니다. 인터넷 연결 후 새로고침해 주세요.</td></tr>';
@@ -1287,9 +1422,11 @@
 
       sharedMaterialList.innerHTML = data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
-        const fileLink = item.file_path ? `<button class="file-link" type="button" data-file-path="${item.file_path}">파일 열기</button>` : '파일 없음';
+        const fileLink = item.file_path
+          ? (isVerifiedTeacher ? `<button class="file-link" type="button" data-file-path="${escapeHtml(item.file_path)}">파일 열기</button>` : '교사 인증 후 파일 이용')
+          : '파일 없음';
         const note = item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
-        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${item.title}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${item.category || '자료'}</td><td>${createdAt}</td></tr>`;
+        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${escapeHtml(item.category || '자료')}</td><td>${createdAt}</td></tr>`;
       }).join('');
     }
 
@@ -1297,6 +1434,8 @@
       shareForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         shareStatus.classList.remove('is-error');
+
+        if (!requireVerifiedTeacher(shareStatus, '자료 등록은 교사 인증이 완료된 회원만 가능합니다.')) return;
 
         if (!supabaseClient) {
           shareStatus.classList.add('is-error');
@@ -1356,6 +1495,10 @@
       sharedMaterialList.addEventListener('click', async (event) => {
         const linkButton = event.target.closest('.file-link');
         if (!linkButton || !supabaseClient) return;
+        if (!isVerifiedTeacher) {
+          alert('파일 이용은 교사 인증이 완료된 회원만 가능합니다.');
+          return;
+        }
 
         const filePath = linkButton.dataset.filePath;
         linkButton.textContent = '링크 생성 중...';
@@ -1398,6 +1541,10 @@
 
     async function loadMaterialRequests() {
       if (!requestList) return;
+      if (!currentSiteUser) {
+        requestList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 요청 목록을 볼 수 있습니다.</td></tr>';
+        return;
+      }
       if (!supabaseClient) {
         requestList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다. 새로고침해 주세요.</td></tr>';
         return;
@@ -1430,6 +1577,8 @@
         event.preventDefault();
         if (!requestStatus) return;
         requestStatus.classList.remove('is-error');
+
+        if (!requireVerifiedTeacher(requestStatus, '수업자료 요청은 교사 인증이 완료된 회원만 가능합니다.')) return;
 
         if (!supabaseClient) {
           requestStatus.classList.add('is-error');
@@ -1498,6 +1647,10 @@
 
     async function loadWorryPosts() {
       if (!worryList) return;
+      if (!currentSiteUser) {
+        worryList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 고민 글을 볼 수 있습니다.</td></tr>';
+        return;
+      }
       if (!supabaseClient) {
         worryList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다.</td></tr>';
         return;
@@ -1530,11 +1683,11 @@
             <td colspan="4">
               <p class="post-body">${escapeHtml(item.content)}</p>
               <ul class="comments-list" id="comments-${item.id}"><li class="comments-empty">댓글을 불러오는 중...</li></ul>
-              <form class="comment-form" data-post-id="${item.id}">
+              ${isVerifiedTeacher ? `<form class="comment-form" data-post-id="${item.id}">
                 <input class="comment-author" type="text" placeholder="닉네임" required />
                 <input class="comment-text" type="text" placeholder="댓글 남기기" required />
                 <button class="mini-button" type="submit">등록</button>
-              </form>
+              </form>` : '<p class="comments-empty">댓글 작성은 교사 인증 후 가능합니다.</p>'}
             </td>
           </tr>
         `;
@@ -1544,6 +1697,10 @@
     async function loadComments(postId) {
       const ul = document.getElementById(`comments-${postId}`);
       if (!ul || !supabaseClient) return;
+      if (!currentSiteUser) {
+        ul.innerHTML = '<li class="comments-empty">로그인 후 댓글을 볼 수 있습니다.</li>';
+        return;
+      }
       const { data, error } = await supabaseClient
         .from('worry_comments')
         .select('*')
@@ -1587,6 +1744,10 @@
         if (!form) return;
         event.preventDefault();
         if (!supabaseClient) return;
+        if (!isVerifiedTeacher) {
+          alert('댓글 작성은 교사 인증이 완료된 회원만 가능합니다.');
+          return;
+        }
 
         const postId = form.dataset.postId;
         const authorEl = form.querySelector('.comment-author');
@@ -1615,6 +1776,8 @@
         event.preventDefault();
         if (!worryStatus) return;
         worryStatus.classList.remove('is-error');
+
+        if (!requireVerifiedTeacher(worryStatus, '고민 글 작성은 교사 인증이 완료된 회원만 가능합니다.')) return;
 
         if (!supabaseClient) {
           worryStatus.classList.add('is-error');
@@ -1647,9 +1810,12 @@
       });
     }
 
-    loadSharedMaterials();
-    loadMaterialRequests();
-    loadWorryPosts();
+    initializeSiteMembership();
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange(() => {
+        window.setTimeout(initializeSiteMembership, 0);
+      });
+    }
   </script>
 </body>
 </html>
