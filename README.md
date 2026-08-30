@@ -6,6 +6,10 @@
 - admin.html
 - board.html
 - jamo-demo.html
+- favicon.ico
+- favicon.png
+- favicon-32.png
+- apple-touch-icon.png
 - audio/jamo/
 - logo.png
 - hero-bg.png
