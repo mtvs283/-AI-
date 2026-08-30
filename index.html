@@ -278,11 +278,11 @@
 
     .content-section {
       display: flex;
-      min-height: 0;
+      min-height: 100vh;
       scroll-margin-top: 110px;
       flex-direction: column;
       justify-content: center;
-      padding: 88px min(8vw, 120px);
+      padding: 110px min(8vw, 120px);
       background: #f5f1e9;
       border-top: 1px solid rgba(86, 67, 47, .13);
     }
@@ -293,6 +293,14 @@
       margin: 0 0 34px;
       font-size: clamp(30px, 3vw, 48px);
       color: #2c1d10;
+    }
+
+
+    #platform-title {
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 2.6vw, 36px);
+      letter-spacing: -0.01em;
     }
     .cards {
       display: grid;
@@ -320,239 +328,6 @@
       margin: 0;
       color: #574d42;
       line-height: 1.75;
-    }
-
-    .card {
-      transition: transform .22s ease, background .22s ease, border-color .22s ease;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, .78);
-      border-color: rgba(86, 67, 47, .22);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal.is-in {
-      opacity: 1;
-      transform: none;
-    }
-    .reveal-delay { transition-delay: .12s; }
-    .reveal-delay-2 { transition-delay: .22s; }
-
-    .feature-split {
-      display: grid;
-      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-      gap: 28px;
-      align-items: start;
-    }
-    .feature-copy {
-      display: grid;
-      gap: 14px;
-    }
-    .feature-copy .card { min-height: 0; }
-    .feature-stage {
-      padding: 18px;
-      background: rgba(255, 255, 255, .62);
-      border: 1px solid rgba(86, 67, 47, .12);
-    }
-    .stage-kicker {
-      margin: 0 0 6px;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .16em;
-      color: #8a5b25;
-    }
-    .feature-stage h3 {
-      margin: 0 0 8px;
-      font-size: 22px;
-      color: #15100b;
-    }
-    .feature-stage p {
-      margin: 0 0 14px;
-      color: #574d42;
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .feature-stage iframe {
-      display: block;
-      width: 100%;
-      height: 520px;
-      border: 0;
-      background: #111;
-    }
-
-    .screen-section {
-      min-height: 100svh;
-      scroll-margin-top: 0;
-      padding-top: 82px;
-      padding-bottom: 28px;
-      justify-content: flex-start;
-    }
-    .screen-board {
-      display: grid;
-      grid-template-columns: minmax(240px, 0.86fr) minmax(0, 1.14fr);
-      gap: 28px 48px;
-      align-items: start;
-      width: 100%;
-      flex: 1;
-      min-height: 0;
-    }
-    .screen-board.is-stage {
-      grid-template-columns: minmax(260px, 1fr) minmax(300px, 360px);
-    }
-    .screen-section h2 {
-      margin: 0 0 56px;
-      line-height: 1.15;
-    }
-    .screen-lead {
-      margin: 0 0 22px;
-      font-size: 15px;
-      font-weight: 700;
-      color: #8a5b25;
-      line-height: 1.45;
-    }
-    .screen-point {
-      padding: 14px 0 14px 16px;
-      border-left: 2px solid #d0aa72;
-    }
-    .screen-point + .screen-point {
-      margin-top: 10px;
-    }
-    .screen-point h3 {
-      margin: 0 0 6px;
-      font-size: 19px;
-      color: #15100b;
-    }
-    .screen-point p {
-      margin: 0;
-      color: #574d42;
-      line-height: 1.65;
-      font-size: 14px;
-    }
-    .screen-blurb {
-      margin: 0;
-      color: #574d42;
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .screen-stage {
-      min-height: 0;
-      overflow: hidden;
-      background: #111;
-      border: 1px solid rgba(86, 67, 47, .12);
-    }
-    .screen-stage iframe {
-      display: block;
-      width: 100%;
-      height: min(58vh, 520px);
-      border: 0;
-      background: #111;
-    }
-    .screen-stage .stage-link {
-      display: block;
-      padding: 10px 14px;
-      margin: 0;
-      background: rgba(246, 242, 235, .94);
-      color: #7b4c18;
-      font-weight: 700;
-      font-size: 13px;
-      text-decoration: none;
-    }
-    .platform-picks {
-      display: grid;
-      gap: 12px;
-    }
-    .platform-pick {
-      width: 100%;
-      margin: 0;
-      padding: 18px 20px;
-      font: inherit;
-      color: inherit;
-      text-align: left;
-      cursor: pointer;
-      background: rgba(255, 255, 255, .58);
-      border: 1px solid rgba(86, 67, 47, .12);
-      transition: transform 160ms ease-out, background .2s ease, border-color .2s ease;
-    }
-    .platform-pick:hover,
-    .platform-pick:focus-visible {
-      background: rgba(255, 255, 255, .84);
-      border-color: rgba(86, 67, 47, .28);
-      outline: none;
-    }
-    .platform-pick:active {
-      transform: scale(0.98);
-    }
-    .platform-pick .pick-kicker {
-      display: block;
-      margin: 0 0 4px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #8a5b25;
-    }
-    .platform-pick h3 {
-      margin: 0 0 6px;
-      font-size: 20px;
-      color: #15100b;
-    }
-    .platform-pick p {
-      margin: 0;
-      color: #574d42;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .platform-pick.is-static {
-      cursor: default;
-    }
-    .platform-pick.is-static:hover,
-    .platform-pick.is-static:active {
-      transform: none;
-    }
-    .philosophy-media {
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      min-height: 0;
-    }
-    .philosophy-crop {
-      --sx: 547;
-      --sy: 96;
-      --sw: 825;
-      --sh: 887;
-      --vw: 1920;
-      --vh: 1080;
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 825 / 887;
-      width: min(100%, calc((100svh - 180px) * 825 / 887));
-      max-height: calc(100svh - 180px);
-      background: #f6f3ee;
-      border: 1px solid rgba(86, 67, 47, .12);
-    }
-    .philosophy-crop video {
-      position: absolute;
-      width: calc(var(--vw) / var(--sw) * 100%);
-      height: calc(var(--vh) / var(--sh) * 100%);
-      left: calc(var(--sx) / var(--sw) * -100%);
-      top: calc(var(--sy) / var(--sh) * -100%);
-      max-height: none;
-      object-fit: fill;
-      background: #f6f3ee;
-    }
-    .feature-stage .stage-link {
-      display: inline-block;
-      margin-top: 12px;
-      color: #7b4c18;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal, .card, .platform-card-button { transition: none; transform: none; }
-      .reveal { opacity: 1; }
     }
 
     .platform-card-button {
@@ -596,9 +371,6 @@
     #platforms.is-detail {
       justify-content: flex-start;
       min-height: 0;
-      scroll-margin-top: 110px;
-      padding-top: 108px;
-      padding-bottom: 48px;
     }
 
     #platforms.is-detail #platform-title {
@@ -1173,15 +945,7 @@
       .cards,
       .platform-sub .cards { grid-template-columns: 1fr; }
       .feature-tabs { grid-template-columns: 1fr; }
-      .content-section { min-height: 0; scroll-margin-top: 76px; padding: 76px 28px; }
-      .feature-split { grid-template-columns: 1fr; }
-      .feature-stage iframe { height: 460px; }
-      .screen-section { min-height: 0; scroll-margin-top: 76px; padding-top: 92px; padding-bottom: 40px; }
-      .screen-board { grid-template-columns: 1fr; min-height: 0; gap: 20px; }
-      .screen-board.is-stage { grid-template-columns: 1fr; }
-      .philosophy-media { order: -1; }
-      .philosophy-crop { width: min(100%, calc(42vh * 825 / 887)); max-height: 42vh; }
-      .screen-stage iframe { height: 42vh; max-height: none; }
+      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
     }
   </style>
 </head>
@@ -1226,55 +990,41 @@
     <a class="scroll" href="#philosophy">SCROLL</a>
   </main>
 
-  <section class="content-section screen-section" id="philosophy">
-    <div class="screen-board">
-      <div class="screen-copy reveal">
-        <h2>교육 철학</h2>
-        <p class="screen-lead">획이 움직이면 발음이 보입니다</p>
-        <article class="screen-point">
-          <h3>배움은 연결입니다</h3>
-          <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>기술보다 사람입니다</h3>
-          <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
-        </article>
-      </div>
-      <figure class="philosophy-media reveal reveal-delay">
-        <div class="philosophy-crop">
-          <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
-        </div>
-      </figure>
+  <section class="content-section" id="philosophy">
+    <h2>교육 철학</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>배움은 연결입니다</h3>
+        <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
+      </article>
+      <article class="card">
+        <h3>기술보다 사람입니다</h3>
+        <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
+      </article>
+      <article class="card">
+        <h3>한국어를 보이게 합니다</h3>
+        <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
+      </article>
     </div>
   </section>
 
-  <section class="content-section screen-section" id="platforms">
-    <div class="screen-board platform-main">
-      <div class="screen-copy reveal">
-        <h2 id="platform-title">플랫폼</h2>
-        <p class="screen-lead">학습자와 교사가 나뉩니다</p>
-        <article class="screen-point">
-          <h3>역할이 다릅니다</h3>
-          <p>광개토는 학습자, 온마음은 인증 교사와 기관입니다. 수업 자료는 온마음에서, 자모 쓰기 앱은 광개토에서 이어집니다.</p>
-        </article>
-      </div>
-      <div class="platform-picks reveal reveal-delay">
-        <button class="platform-pick" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
-          <span class="pick-kicker">학습자</span>
-          <h3>광개토</h3>
-          <p>발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
-        </button>
-        <button class="platform-pick" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
-          <span class="pick-kicker">교사</span>
-          <h3>온마음 한국어</h3>
-          <p>콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
-        </button>
-        <article class="platform-pick is-static">
-          <span class="pick-kicker">연구</span>
-          <h3>AI 콘텐츠 연구소</h3>
-          <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
-        </article>
-      </div>
+  <section class="content-section" id="platforms">
+    <h2 id="platform-title">플랫폼</h2>
+    <div class="cards platform-main">
+      <button class="card platform-card-button" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
+        <h3>광개토</h3>
+        <p>학습자용 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
+      </button>
+
+      <button class="card platform-card-button" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
+        <h3>온마음 한국어</h3>
+        <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
+      </button>
+
+      <article class="card">
+        <h3>AI 콘텐츠 연구소</h3>
+        <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
+      </article>
     </div>
 
     <section class="platform-sub" id="gwanggaeto-sub" aria-label="광개토 소개">
@@ -1515,73 +1265,57 @@
     </section>
   </section>
 
-  <section class="content-section screen-section" id="research">
-    <div class="screen-board is-stage">
-      <div class="screen-copy reveal">
-        <h2>연구개발</h2>
-        <p class="screen-lead">보고 움직이며 익힙니다</p>
-        <article class="screen-point">
-          <h3>AI 챗봇</h3>
-          <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>발음 시각화</h3>
-          <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
-        </article>
-      </div>
-      <div class="screen-stage reveal reveal-delay">
-        <iframe src="https://korean-game-samples.vercel.app/tetris/" title="한국어 학습 테트리스 샘플" loading="lazy"></iframe>
-        <a class="stage-link" href="https://korean-game-samples.vercel.app/tetris/" target="_blank" rel="noopener">새 창에서 플레이</a>
-      </div>
+  <section class="content-section" id="research">
+    <h2>연구개발</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>AI 챗봇</h3>
+        <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
+      </article>
+      <article class="card">
+        <h3>발음 시각화</h3>
+        <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
+      </article>
+      <article class="card">
+        <h3>교육용 게임</h3>
+        <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임을 개발합니다.</p>
+      </article>
     </div>
   </section>
 
-  <section class="content-section screen-section" id="training">
-    <div class="screen-board is-stage">
-      <div class="screen-copy reveal">
-        <h2>교육연수</h2>
-        <p class="screen-lead">영상·게임으로 직관적으로</p>
-        <article class="screen-point">
-          <h3>ChatGPT</h3>
-          <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>Canva</h3>
-          <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>AI 콘텐츠</h3>
-          <p>학습자가 직관적으로 익힐 수 있는 영상·게임 자료를 개발합니다.</p>
-        </article>
-      </div>
-      <div class="screen-stage reveal reveal-delay">
-        <iframe src="https://korean-game-samples.vercel.app/galaga/" title="한국어 학습 갤러그 샘플" loading="lazy"></iframe>
-        <a class="stage-link" href="https://korean-game-samples.vercel.app/galaga/" target="_blank" rel="noopener">새 창에서 플레이</a>
-      </div>
+  <section class="content-section" id="training">
+    <h2>교육연수</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>ChatGPT</h3>
+        <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
+      </article>
+      <article class="card">
+        <h3>Canva</h3>
+        <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
+      </article>
+      <article class="card">
+        <h3>AI 콘텐츠</h3>
+        <p>영상, 게임 등 학습자가 직관적으로 익힐 수 있는 자료를 개발합니다.</p>
+      </article>
     </div>
   </section>
 
-  <section class="content-section screen-section" id="partnership">
-    <div class="screen-board">
-      <div class="screen-copy reveal">
-        <h2>기관 제휴</h2>
-        <p class="screen-lead">현장 교육에 맞춰 넣습니다</p>
-        <p class="screen-blurb">한국어 교육 콘텐츠와 AI 학습 시스템을 기관 유형에 맞게 제공합니다.</p>
-      </div>
-      <div class="screen-copy reveal reveal-delay">
-        <article class="screen-point">
-          <h3>대안언어학원</h3>
-          <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>이민·다문화 기관</h3>
-          <p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p>
-        </article>
-        <article class="screen-point">
-          <h3>기업 교육</h3>
-          <p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p>
-        </article>
-      </div>
+  <section class="content-section" id="partnership">
+    <h2>기관 제휴</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>대안언어학원</h3>
+        <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
+      </article>
+      <article class="card">
+        <h3>이민·다문화 기관</h3>
+        <p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p>
+      </article>
+      <article class="card">
+        <h3>기업 교육</h3>
+        <p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p>
+      </article>
     </div>
   </section>
 
@@ -2290,20 +2024,6 @@
       supabaseClient.auth.onAuthStateChange(() => {
         window.setTimeout(initializeSiteMembership, 0);
       });
-    }
-
-    const revealItems = document.querySelectorAll('.reveal');
-    if (revealItems.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-in');
-          revealObserver.unobserve(entry.target);
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-      revealItems.forEach((el) => revealObserver.observe(el));
-    } else {
-      revealItems.forEach((el) => el.classList.add('is-in'));
     }
   </script>
 </body>
