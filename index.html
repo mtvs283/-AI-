@@ -385,14 +385,87 @@
       line-height: 1.7;
       font-size: 15px;
     }
-    .feature-stage iframe,
-    .feature-stage video {
+    .feature-stage iframe {
       display: block;
       width: 100%;
       height: 520px;
       border: 0;
       background: #111;
-      object-fit: contain;
+    }
+
+    .philosophy-section {
+      min-height: 100svh;
+      scroll-margin-top: 0;
+      padding-top: 82px;
+      padding-bottom: 28px;
+      justify-content: center;
+    }
+    .philosophy-board {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.86fr) minmax(0, 1.14fr);
+      gap: 28px 48px;
+      align-items: center;
+      width: 100%;
+      min-height: calc(100svh - 110px);
+    }
+    .philosophy-section h2 {
+      margin: 0 0 8px;
+    }
+    .philosophy-lead {
+      margin: 0 0 22px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #8a5b25;
+      line-height: 1.45;
+    }
+    .philosophy-point {
+      padding: 14px 0 14px 16px;
+      border-left: 2px solid #d0aa72;
+    }
+    .philosophy-point + .philosophy-point {
+      margin-top: 10px;
+    }
+    .philosophy-point h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      color: #15100b;
+    }
+    .philosophy-point p {
+      margin: 0;
+      color: #574d42;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+    .philosophy-media {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      min-height: 0;
+    }
+    .philosophy-crop {
+      --sx: 547;
+      --sy: 96;
+      --sw: 825;
+      --sh: 887;
+      --vw: 1920;
+      --vh: 1080;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 825 / 887;
+      width: min(100%, calc((100svh - 140px) * 825 / 887));
+      max-height: calc(100svh - 140px);
+      background: #f6f3ee;
+      border: 1px solid rgba(86, 67, 47, .12);
+    }
+    .philosophy-crop video {
+      position: absolute;
+      width: calc(var(--vw) / var(--sw) * 100%);
+      height: calc(var(--vh) / var(--sh) * 100%);
+      left: calc(var(--sx) / var(--sw) * -100%);
+      top: calc(var(--sy) / var(--sh) * -100%);
+      max-height: none;
+      object-fit: fill;
+      background: #f6f3ee;
     }
     .feature-stage .stage-link {
       display: inline-block;
@@ -1024,6 +1097,10 @@
       .content-section { min-height: 0; scroll-margin-top: 76px; padding: 76px 28px; }
       .feature-split { grid-template-columns: 1fr; }
       .feature-stage iframe { height: 460px; }
+      .philosophy-section { min-height: 0; scroll-margin-top: 76px; padding-top: 92px; padding-bottom: 40px; }
+      .philosophy-board { grid-template-columns: 1fr; min-height: 0; gap: 20px; }
+      .philosophy-media { order: -1; }
+      .philosophy-crop { width: min(100%, calc(42vh * 825 / 887)); max-height: 42vh; }
     }
   </style>
 </head>
@@ -1068,25 +1145,25 @@
     <a class="scroll" href="#philosophy">SCROLL</a>
   </main>
 
-  <section class="content-section" id="philosophy">
-    <h2 class="reveal">교육 철학</h2>
-    <div class="feature-split">
-      <div class="feature-copy reveal">
-        <article class="card">
+  <section class="content-section philosophy-section" id="philosophy">
+    <div class="philosophy-board">
+      <div class="philosophy-copy reveal">
+        <h2>교육 철학</h2>
+        <p class="philosophy-lead">획이 움직이면 발음이 보입니다</p>
+        <article class="philosophy-point">
           <h3>배움은 연결입니다</h3>
           <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
         </article>
-        <article class="card">
+        <article class="philosophy-point">
           <h3>기술보다 사람입니다</h3>
           <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
         </article>
       </div>
-      <div class="feature-stage reveal reveal-delay">
-        <p class="stage-kicker">한국어를 보이게 합니다</p>
-        <h3>획이 움직이면 발음이 보입니다</h3>
-        <p>발음, 문법, 대화, 문화를 그림과 움직임으로 익힙니다. 온마음코리아 히어로에 쓰던 모음 데모입니다.</p>
-        <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
-      </div>
+      <figure class="philosophy-media reveal reveal-delay">
+        <div class="philosophy-crop">
+          <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
+        </div>
+      </figure>
     </div>
   </section>
 
