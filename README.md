@@ -3,6 +3,8 @@
 업로드 파일:
 - index.html
 - account.html
+- admin.html
+- board.html
 - logo.png
 - hero-bg.png
 - README.md
@@ -12,6 +14,7 @@
 - `onmaeum-platform-access-control.sql`은 교사 협업 공간의 표와 파일 저장소에 회원 등급별 접근 정책을 적용합니다.
 - `onmaeum-recruitment-notices.sql`은 한국어강사 모집 공고 표와 동기화 함수를 만듭니다. 실행 후 파일 안의 주석 INSERT로 동기화 키를 따로 넣습니다.
 - `onmaeum-admin-role.sql`은 회원 로그인을 관리자 권한으로 씁니다. 실행 후 주석 UPDATE로 관리자 이메일을 지정합니다. `board.html`의 관리자 비밀번호 창은 쓰지 않습니다.
+- `onmaeum-admin-teacher-review.sql`은 관리자가 `admin.html`에서 교사 자격 서류를 보고 승인·거절할 수 있게 합니다.
 - `account.html`에서 이메일 회원가입, 로그인, 교원자격증 또는 교원자격확인서 한 파일 제출을 처리합니다.
 - 가입할 때 일반 회원 또는 교사 회원을 선택합니다.
 - `requested_membership_type`에는 선택·신청 유형을, `membership_type`에는 실제 승인된 현재 등급을 각각 저장합니다.
