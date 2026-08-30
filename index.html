@@ -278,11 +278,11 @@
 
     .content-section {
       display: flex;
-      min-height: 100vh;
+      min-height: 0;
       scroll-margin-top: 110px;
       flex-direction: column;
       justify-content: center;
-      padding: 110px min(8vw, 120px);
+      padding: 88px min(8vw, 120px);
       background: #f5f1e9;
       border-top: 1px solid rgba(86, 67, 47, .13);
     }
@@ -328,6 +328,80 @@
       margin: 0;
       color: #574d42;
       line-height: 1.75;
+    }
+
+    .card {
+      transition: transform .22s ease, background .22s ease, border-color .22s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, .78);
+      border-color: rgba(86, 67, 47, .22);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.is-in {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay { transition-delay: .12s; }
+    .reveal-delay-2 { transition-delay: .22s; }
+
+    .feature-split {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .feature-copy {
+      display: grid;
+      gap: 14px;
+    }
+    .feature-copy .card { min-height: 0; }
+    .feature-stage {
+      padding: 18px;
+      background: rgba(255, 255, 255, .62);
+      border: 1px solid rgba(86, 67, 47, .12);
+    }
+    .stage-kicker {
+      margin: 0 0 6px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      color: #8a5b25;
+    }
+    .feature-stage h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: #15100b;
+    }
+    .feature-stage p {
+      margin: 0 0 14px;
+      color: #574d42;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .feature-stage iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: 0;
+      background: #111;
+    }
+    .feature-stage .stage-link {
+      display: inline-block;
+      margin-top: 12px;
+      color: #7b4c18;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .card, .platform-card-button { transition: none; transform: none; }
+      .reveal { opacity: 1; }
     }
 
     .platform-card-button {
@@ -945,7 +1019,9 @@
       .cards,
       .platform-sub .cards { grid-template-columns: 1fr; }
       .feature-tabs { grid-template-columns: 1fr; }
-      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
+      .content-section { min-height: 0; scroll-margin-top: 76px; padding: 76px 28px; }
+      .feature-split { grid-template-columns: 1fr; }
+      .feature-stage iframe { height: 460px; }
     }
   </style>
 </head>
@@ -991,26 +1067,30 @@
   </main>
 
   <section class="content-section" id="philosophy">
-    <h2>교육 철학</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>배움은 연결입니다</h3>
-        <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
-      </article>
-      <article class="card">
-        <h3>기술보다 사람입니다</h3>
-        <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
-      </article>
-      <article class="card">
-        <h3>한국어를 보이게 합니다</h3>
-        <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
-      </article>
+    <h2 class="reveal">교육 철학</h2>
+    <div class="feature-split">
+      <div class="feature-copy reveal">
+        <article class="card">
+          <h3>배움은 연결입니다</h3>
+          <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
+        </article>
+        <article class="card">
+          <h3>기술보다 사람입니다</h3>
+          <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
+        </article>
+      </div>
+      <div class="feature-stage reveal reveal-delay">
+        <p class="stage-kicker">한국어를 보이게 합니다</p>
+        <h3>획이 움직이면 발음이 보입니다</h3>
+        <p>발음, 문법, 대화, 문화를 그림과 움직임으로 익힙니다. 아래는 천지인 모음 획순입니다.</p>
+        <iframe src="./jamo-demo.html" title="천지인 모음 획순 데모" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="platforms">
-    <h2 id="platform-title">플랫폼</h2>
-    <div class="cards platform-main">
+    <h2 id="platform-title" class="reveal">플랫폼</h2>
+    <div class="cards platform-main reveal reveal-delay">
       <button class="card platform-card-button" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
         <h3>광개토</h3>
         <p>학습자용 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
@@ -1266,44 +1346,54 @@
   </section>
 
   <section class="content-section" id="research">
-    <h2>연구개발</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>AI 챗봇</h3>
-        <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
-      </article>
-      <article class="card">
-        <h3>발음 시각화</h3>
-        <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
-      </article>
-      <article class="card">
-        <h3>교육용 게임</h3>
-        <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임을 개발합니다.</p>
-      </article>
+    <h2 class="reveal">연구개발</h2>
+    <div class="feature-split">
+      <div class="feature-copy reveal">
+        <article class="card">
+          <h3>AI 챗봇</h3>
+          <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
+        </article>
+        <article class="card">
+          <h3>발음 시각화</h3>
+          <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
+        </article>
+      </div>
+      <div class="feature-stage reveal reveal-delay">
+        <p class="stage-kicker">교육용 게임</p>
+        <h3>보고 움직이며 익힙니다</h3>
+        <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임입니다. 테트리스 샘플에서 그림으로 뜻을 보고 줄을 채웁니다.</p>
+        <iframe src="https://korean-game-samples.vercel.app/tetris/" title="한국어 학습 테트리스 샘플" loading="lazy"></iframe>
+        <a class="stage-link" href="https://korean-game-samples.vercel.app/tetris/" target="_blank" rel="noopener">새 창에서 플레이</a>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="training">
-    <h2>교육연수</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>ChatGPT</h3>
-        <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
-      </article>
-      <article class="card">
-        <h3>Canva</h3>
-        <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
-      </article>
-      <article class="card">
-        <h3>AI 콘텐츠</h3>
-        <p>영상, 게임 등 학습자가 직관적으로 익힐 수 있는 자료를 개발합니다.</p>
-      </article>
+    <h2 class="reveal">교육연수</h2>
+    <div class="feature-split">
+      <div class="feature-copy reveal">
+        <article class="card">
+          <h3>ChatGPT</h3>
+          <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
+        </article>
+        <article class="card">
+          <h3>Canva</h3>
+          <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
+        </article>
+      </div>
+      <div class="feature-stage reveal reveal-delay">
+        <p class="stage-kicker">AI 콘텐츠</p>
+        <h3>영상·게임으로 직관적으로</h3>
+        <p>영상, 게임 등 학습자가 직관적으로 익힐 수 있는 자료를 개발합니다. 갤러그 샘플은 문장을 보고 조각을 잡아 빈칸을 채웁니다.</p>
+        <iframe src="https://korean-game-samples.vercel.app/galaga/" title="한국어 학습 갤러그 샘플" loading="lazy"></iframe>
+        <a class="stage-link" href="https://korean-game-samples.vercel.app/galaga/" target="_blank" rel="noopener">새 창에서 플레이</a>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="partnership">
-    <h2>기관 제휴</h2>
-    <div class="cards">
+    <h2 class="reveal">기관 제휴</h2>
+    <div class="cards reveal reveal-delay">
       <article class="card">
         <h3>대안언어학원</h3>
         <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
@@ -2024,6 +2114,20 @@
       supabaseClient.auth.onAuthStateChange(() => {
         window.setTimeout(initializeSiteMembership, 0);
       });
+    }
+
+    const revealItems = document.querySelectorAll('.reveal');
+    if (revealItems.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      revealItems.forEach((el) => revealObserver.observe(el));
+    } else {
+      revealItems.forEach((el) => el.classList.add('is-in'));
     }
   </script>
 </body>
