@@ -1,5 +1,5 @@
--- 온마음 문의 게시판 (약방 수파베이스에 설치)
--- 실행: GitHub로 연 약방 프로젝트 → SQL Editor → 이 파일 전체 붙여넣기 → Run
+-- 온마음 홈페이지 문의 게시판 (기관·교사 상대). 회원용 Supabase에만 설치합니다.
+-- 광개토 홈페이지용 약방 프로젝트에는 넣지 않습니다.
 
 create extension if not exists pgcrypto with schema extensions;
 
@@ -25,21 +25,46 @@ create table if not exists public.onmaeum_inquiry_settings (
 alter table public.onmaeum_inquiries enable row level security;
 alter table public.onmaeum_inquiry_settings enable row level security;
 
-create or replace function public.onmaeum_is_admin(p_password text)
+create or replace function public.onmaeum_is_admin(p_password text default null)
 returns boolean
-language sql
+language plpgsql
 stable
 security definer
 set search_path = public, extensions
 as $$
-  select coalesce(
-    (
-      select extensions.crypt(p_password, s.admin_password_hash) = s.admin_password_hash
-      from public.onmaeum_inquiry_settings s
-      where s.id = 1
-    ),
-    false
-  );
+declare
+  ok boolean := false;
+begin
+  if auth.uid() is not null then
+    begin
+      select exists (
+        select 1
+        from public.profiles
+        where id = auth.uid()
+          and is_admin is true
+      ) into ok;
+      if ok then
+        return true;
+      end if;
+    exception
+      when undefined_table then
+        null;
+      when undefined_column then
+        null;
+    end;
+  end if;
+
+  if p_password is null or length(trim(p_password)) = 0 then
+    return false;
+  end if;
+
+  select extensions.crypt(p_password, s.admin_password_hash) = s.admin_password_hash
+  into ok
+  from public.onmaeum_inquiry_settings s
+  where s.id = 1;
+
+  return coalesce(ok, false);
+end;
 $$;
 
 create or replace function public.onmaeum_list_inquiries()
@@ -96,7 +121,23 @@ begin
     raise exception '글을 찾을 수 없습니다.';
   end if;
 
-  admin := public.onmaeum_is_admin(p_password);
+  admin := false;
+  begin
+    if auth.uid() is not null then
+      select exists (
+        select 1 from public.profiles
+        where id = auth.uid() and is_admin is true
+      ) into admin;
+    end if;
+  exception
+    when undefined_table then
+      admin := false;
+    when undefined_column then
+      admin := false;
+  end;
+  if not coalesce(admin, false) then
+    admin := public.onmaeum_is_admin(p_password);
+  end if;
 
   if r.is_secret and not admin then
     if r.password_hash is null

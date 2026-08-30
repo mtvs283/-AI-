@@ -360,6 +360,15 @@
       display: block;
     }
 
+    #platforms.is-detail {
+      justify-content: flex-start;
+      min-height: 0;
+    }
+
+    #platforms.is-detail #platform-title {
+      display: none;
+    }
+
     .platform-sub h3 {
       margin: 0 0 18px;
       font-size: 24px;
@@ -396,14 +405,9 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      margin-bottom: 12px;
-      position: sticky;
-      top: 90px;
-      z-index: 15;
-      background: rgba(245, 241, 233, .92);
-      backdrop-filter: blur(8px);
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(86, 67, 47, .08);
+      margin-bottom: 18px;
+      scroll-margin-top: 110px;
+      padding: 0;
     }
 
     .membership-gate,
@@ -742,6 +746,7 @@
 
     .board-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       background: rgba(255, 255, 255, .46);
     }
@@ -782,6 +787,20 @@
       text-align: center;
     }
 
+    .go-link {
+      color: #5c4033;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .go-link:hover,
+    .go-link:focus-visible {
+      color: #7b4c18;
+      text-decoration: underline;
+      outline: none;
+    }
+
     .sub-board {
       display: none;
       scroll-margin-top: 110px;
@@ -789,28 +808,20 @@
 
     .sub-board.is-active {
       display: block;
-      max-height: calc(100vh - 220px);
-      overflow-y: auto;
-      padding-right: 6px;
     }
 
-    /* 게시판 표 헤더는 스크롤해도 위에 붙어 있게 */
     .sub-board .board-table thead th {
-      position: sticky;
-      top: 0;
       background: rgba(245, 241, 233, .96);
-      backdrop-filter: blur(4px);
-      z-index: 2;
     }
 
-    /* board-header(제목+설명+버튼)도 스크롤 시 위에 붙어 있게 */
     .sub-board .board-header {
-      position: sticky;
-      top: 0;
-      background: rgba(255, 255, 255, .94);
-      backdrop-filter: blur(4px);
-      z-index: 3;
-      padding-top: 6px;
+      position: relative;
+      overflow: hidden;
+      padding-top: 0;
+    }
+
+    .sub-board .board-header h4 {
+      display: none;
     }
 
     .request-form-shell {
@@ -890,6 +901,7 @@
       .buttons { flex-wrap: wrap; }
       .cards,
       .platform-sub .cards { grid-template-columns: 1fr; }
+      .feature-tabs { grid-template-columns: 1fr; }
       .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
     }
   </style>
@@ -977,7 +989,7 @@
 
       <div class="membership-gate" id="membership-gate">
         <h3>회원 전용 교사 협업 공간입니다</h3>
-        <p>로그인하면 자료와 요청 목록을 볼 수 있습니다. 일반 회원은 열람만 가능하며, 자료 등록·파일 이용·글쓰기는 교사 인증이 완료된 회원만 사용할 수 있습니다.</p>
+        <p>로그인하면 자료, 요청, 모집 공고 목록을 볼 수 있습니다. 일반 회원은 열람만 가능하며, 자료 등록·파일 이용·글쓰기는 교사 인증이 완료된 회원만 사용할 수 있습니다.</p>
         <a class="mini-button" href="./account.html">로그인 또는 회원가입</a>
       </div>
 
@@ -995,6 +1007,10 @@
         <button class="feature-tab" type="button" id="worry-board-toggle">
           <strong>수업 고민 나눔</strong>
           <span>수업의 어려움을 함께 풀어가요.</span>
+        </button>
+        <button class="feature-tab" type="button" id="notice-board-toggle">
+          <strong>공지사항</strong>
+          <span>진행 중인 한국어강사 모집 공고를 모아요.</span>
         </button>
       </div>
       <section class="request-form-shell sub-board" id="request-board" aria-labelledby="request-board-title">
@@ -1043,7 +1059,7 @@
       <section class="shared-preview board-shell sub-board" id="share-board" aria-labelledby="shared-preview-title">
         <div class="board-header">
           <div>
-            <h4 id="shared-preview-title">자료공유</h4>
+            <h4 id="shared-preview-title">자료 공유</h4>
             <p>선생님들과 함께 수업 자료를 올리고 나누는 공간입니다.</p>
           </div>
           <button class="mini-button secondary" type="button" id="share-form-toggle" hidden>자료 올리기</button>
@@ -1098,9 +1114,6 @@
           </tbody>
         </table>
       </section>
-    </section>
-  </section>
-
       <section class="request-form-shell sub-board" id="worry-board" aria-labelledby="worry-board-title">
         <div class="board-header">
           <div>
@@ -1158,6 +1171,30 @@
           </tbody>
         </table>
       </section>
+      <section class="request-form-shell sub-board" id="notice-board" aria-labelledby="notice-board-title">
+        <div class="board-header">
+          <div>
+            <h4 id="notice-board-title">공지사항</h4>
+            <p>한국어강사 모집 공고만 모읍니다. 원문 대신 링크와 마감일만 보여 주고, 모집기간이 지난 공고는 목록에서 빼집니다.</p>
+          </div>
+        </div>
+        <table class="board-table" aria-label="한국어강사 모집 공고 목록">
+          <thead>
+            <tr>
+              <th class="num-col">번호</th>
+              <th>공고</th>
+              <th class="date-col">마감</th>
+              <th class="type-col">링크</th>
+            </tr>
+          </thead>
+          <tbody id="recruitment-notice-list">
+            <tr>
+              <td colspan="4" class="board-empty">공고를 불러오는 중입니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
   </section>
 
   <section class="content-section" id="research">
@@ -1241,6 +1278,7 @@
     let currentSiteUser = null;
     let currentSiteProfile = null;
     let isVerifiedTeacher = false;
+    let isSiteAdmin = false;
 
     function setProtectedListMessage(message) {
       if (sharedMaterialList) sharedMaterialList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
@@ -1248,6 +1286,8 @@
       if (materialRequestList) materialRequestList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
       const worryPostList = document.getElementById('worry-post-list');
       if (worryPostList) worryPostList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+      const recruitmentNoticeList = document.getElementById('recruitment-notice-list');
+      if (recruitmentNoticeList) recruitmentNoticeList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
     }
 
     function requireVerifiedTeacher(statusElement, message = '교사 인증이 완료된 회원만 사용할 수 있습니다.') {
@@ -1264,6 +1304,7 @@
       if (siteAccountLink) {
         siteAccountLink.textContent = !isSignedIn
           ? '로그인 · 회원가입'
+          : isSiteAdmin ? '관리자 · 내 계정'
           : isVerifiedTeacher ? '교사 회원 · 내 계정' : '일반 회원 · 내 계정';
       }
       if (membershipGate) membershipGate.hidden = isSignedIn;
@@ -1279,6 +1320,7 @@
 
       if (!isSignedIn) {
         subBoards.forEach((board) => board.classList.remove('is-active'));
+        document.querySelectorAll('#member-feature-tabs .feature-tab').forEach((tab) => tab.classList.remove('is-active'));
         setProtectedListMessage('로그인 후 목록을 볼 수 있습니다.');
         return;
       }
@@ -1302,28 +1344,38 @@
       currentSiteUser = sessionData.session?.user || null;
       currentSiteProfile = null;
       isVerifiedTeacher = false;
+      isSiteAdmin = false;
 
       if (currentSiteUser) {
-        const { data: profile, error } = await supabaseClient
+        let { data: profile, error } = await supabaseClient
           .from('profiles')
-          .select('membership_type, verification_status')
+          .select('membership_type, verification_status, is_admin')
           .eq('id', currentSiteUser.id)
           .maybeSingle();
-        if (error) console.error(error);
+        if (error) {
+          const retry = await supabaseClient
+            .from('profiles')
+            .select('membership_type, verification_status')
+            .eq('id', currentSiteUser.id)
+            .maybeSingle();
+          profile = retry.data;
+          if (retry.error) console.error(error, retry.error);
+        }
         currentSiteProfile = profile || null;
         isVerifiedTeacher = profile?.membership_type === 'teacher' && profile?.verification_status === 'verified';
+        isSiteAdmin = profile?.is_admin === true;
       }
 
       applyMembershipAccess();
       if (currentSiteUser) {
-        await Promise.all([loadSharedMaterials(), loadMaterialRequests(), loadWorryPosts()]);
+        await Promise.all([loadSharedMaterials(), loadMaterialRequests(), loadWorryPosts(), loadRecruitmentNotices()]);
       }
     }
 
     if (onmaeumToggle && platforms && platformTitle) {
       onmaeumToggle.addEventListener('click', () => {
         platforms.classList.add('is-detail');
-        platformTitle.textContent = '자료공유';
+        platformTitle.textContent = '플랫폼';
         onmaeumToggle.setAttribute('aria-expanded', 'true');
         platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
@@ -1365,30 +1417,39 @@
 
     const requestBoardToggle = document.getElementById('request-board-toggle');
     const worryBoardToggle = document.getElementById('worry-board-toggle');
+    const noticeBoardToggle = document.getElementById('notice-board-toggle');
     const requestBoard = document.getElementById('request-board');
     const worryBoard = document.getElementById('worry-board');
-    const subBoards = [requestBoard, shareBoard, worryBoard].filter(Boolean);
+    const noticeBoard = document.getElementById('notice-board');
+    const subBoards = [requestBoard, shareBoard, worryBoard, noticeBoard].filter(Boolean);
+    const featureTabs = document.querySelectorAll('#member-feature-tabs .feature-tab');
 
-    function showOnmaeumBoard(targetBoard, title) {
+    function showOnmaeumBoard(targetBoard, tabButton) {
       if (!currentSiteUser) {
         if (membershipGate) membershipGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
       subBoards.forEach((board) => board.classList.remove('is-active'));
+      featureTabs.forEach((tab) => tab.classList.toggle('is-active', tab === tabButton));
       targetBoard.classList.add('is-active');
-      targetBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const tabs = document.getElementById('member-feature-tabs');
+      if (tabs) tabs.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     if (requestBoardToggle && requestBoard) {
-      requestBoardToggle.addEventListener('click', () => showOnmaeumBoard(requestBoard, '수업자료 요청'));
+      requestBoardToggle.addEventListener('click', () => showOnmaeumBoard(requestBoard, requestBoardToggle));
     }
 
     if (shareBoardToggle && shareBoard) {
-      shareBoardToggle.addEventListener('click', () => showOnmaeumBoard(shareBoard, '자료공유'));
+      shareBoardToggle.addEventListener('click', () => showOnmaeumBoard(shareBoard, shareBoardToggle));
     }
 
     if (worryBoardToggle && worryBoard) {
-      worryBoardToggle.addEventListener('click', () => showOnmaeumBoard(worryBoard, '수업 고민 나눔'));
+      worryBoardToggle.addEventListener('click', () => showOnmaeumBoard(worryBoard, worryBoardToggle));
+    }
+
+    if (noticeBoardToggle && noticeBoard) {
+      noticeBoardToggle.addEventListener('click', () => showOnmaeumBoard(noticeBoard, noticeBoardToggle));
     }
     async function loadSharedMaterials() {
       if (!sharedMaterialList) return;
@@ -1691,6 +1752,60 @@
             </td>
           </tr>
         `;
+      }).join('');
+    }
+
+    function todayInSeoul() {
+      return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+    }
+
+    function formatNoticeDeadline(deadline) {
+      if (!deadline) return '공고문 확인';
+      const date = new Date(`${deadline}T00:00:00+09:00`);
+      if (Number.isNaN(date.getTime())) return '공고문 확인';
+      return date.toLocaleDateString('ko-KR');
+    }
+
+    async function loadRecruitmentNotices() {
+      const noticeList = document.getElementById('recruitment-notice-list');
+      if (!noticeList) return;
+      if (!currentSiteUser) {
+        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 공고 목록을 볼 수 있습니다.</td></tr>';
+        return;
+      }
+      if (!supabaseClient) {
+        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다.</td></tr>';
+        return;
+      }
+
+      const today = todayInSeoul();
+      const { data, error } = await supabaseClient
+        .from('recruitment_notices')
+        .select('id, source_url, organization, position, region, deadline')
+        .or(`deadline.is.null,deadline.gte.${today}`)
+        .order('deadline', { ascending: true, nullsFirst: false })
+        .order('organization', { ascending: true })
+        .limit(80);
+
+      if (error) {
+        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">공고를 불러오지 못했습니다. 공고 표가 준비됐는지 확인해 주세요.</td></tr>';
+        console.error(error);
+        return;
+      }
+      if (!data.length) {
+        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">진행 중인 한국어강사 모집 공고가 없습니다.</td></tr>';
+        return;
+      }
+
+      noticeList.innerHTML = data.map((item, index) => {
+        const place = [item.organization, item.region].filter(Boolean).join(' · ');
+        const url = escapeHtml(item.source_url);
+        return `<tr>
+          <td>${data.length - index}</td>
+          <td class="board-title-cell"><strong>${escapeHtml(item.position)}</strong><div class="board-meta">${escapeHtml(place)}</div></td>
+          <td>${escapeHtml(formatNoticeDeadline(item.deadline))}</td>
+          <td><a class="go-link" href="${url}" target="_blank" rel="noopener noreferrer">바로가기</a></td>
+        </tr>`;
       }).join('');
     }
 

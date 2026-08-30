@@ -40,6 +40,7 @@
       color: #31291f; text-decoration: none; font-weight: 700; font-size: 15px;
       border: 1px solid rgba(52,43,34,.25); padding: 10px 20px; border-radius: 3px;
     }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
 
     .wrap { max-width: 980px; margin: 0 auto; padding: 140px 24px 90px; }
 
@@ -133,20 +134,23 @@
         <div class="brand-sub">Korean Edu AI Institute</div>
       </div>
     </a>
-    <a class="home-link" href="./index.html">홈으로</a>
+    <div class="nav-actions">
+      <a class="home-link" href="./account.html" id="site-account-link">로그인</a>
+      <a class="home-link" href="./index.html">홈으로</a>
+    </div>
   </nav>
 
   <div class="wrap">
     <div class="page-head">
       <h1>문의 게시판</h1>
-      <p>기관 제휴, 교육연수, 플랫폼 도입 등 무엇이든 남겨주세요.<br>
+      <p>기관 제휴, 교육연수, 교사 협업 등 기관·교사 문의만 남겨 주세요.<br>
       연락처 등 민감한 내용이 포함된 경우 <b>비밀글</b>로 작성하시면 작성자 비밀번호 또는 관리자만 열람할 수 있습니다.</p>
     </div>
 
     <!-- 목록 -->
     <div id="listView">
       <div class="toolbar" style="display:flex;gap:10px;justify-content:flex-end;align-items:center">
-        <button class="btn ghost" id="adminBtn" onclick="toggleAdmin()">관리자</button>
+        <span class="btn primary" id="adminBadge" hidden>관리자</span>
         <button class="btn primary" onclick="showWrite()">문의 작성</button>
       </div>
       <table>
@@ -207,41 +211,51 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // 약방 수파베이스(GitHub mtvs283으로 열리는 프로젝트). anon 키만 사용.
-    const SUPABASE_URL = 'https://uytwcadtsypybispugrz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5dHdjYWR0c3lweWJpc3B1Z3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjcwNjIsImV4cCI6MjA5NzY0MzA2Mn0.0oeD6GJgryeetU4HTDqtL3XLwZvlIkrfGt7zo46vue4';
+    // 문의하기·회원 로그인 모두 온마음 Supabase. 약방 프로젝트와는 분리합니다.
+    const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
 
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const ADMIN_KEY = 'onmaeum_admin_pw';
 
     const $ = id => document.getElementById(id);
     const esc = s => (s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const fmtDate = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
-    const getAdminPw = () => sessionStorage.getItem(ADMIN_KEY);
 
-    function updateAdminBtn() {
-      const on = !!getAdminPw();
-      const btn = $('adminBtn');
-      if (!btn) return;
-      btn.textContent = on ? '관리자 모드 종료' : '관리자';
-      btn.className = on ? 'btn primary' : 'btn ghost';
+    let isSiteAdmin = false;
+
+    function isAdmin() {
+      return isSiteAdmin;
     }
 
-    async function toggleAdmin() {
-      if (getAdminPw()) {
-        sessionStorage.removeItem(ADMIN_KEY);
-        updateAdminBtn();
+    function updateAdminUi() {
+      const badge = $('adminBadge');
+      const accountLink = $('site-account-link');
+      if (badge) badge.hidden = !isSiteAdmin;
+      if (accountLink) {
+        accountLink.textContent = isSiteAdmin ? '관리자 · 내 계정' : (accountLink.dataset.signedIn || '로그인');
+      }
+    }
+
+    async function initAdminFromLogin() {
+      const accountLink = $('site-account-link');
+      isSiteAdmin = false;
+      const { data: sessionData } = await sb.auth.getSession();
+      const user = sessionData.session?.user || null;
+      if (accountLink) {
+        accountLink.dataset.signedIn = user ? '내 계정' : '로그인';
+        accountLink.textContent = user ? '내 계정' : '로그인';
+      }
+      if (!user) {
+        updateAdminUi();
         return;
       }
-      const pw = prompt('관리자 비밀번호를 입력하세요.');
-      if (pw === null || !pw) return;
-      const { data, error } = await sb.rpc('onmaeum_is_admin', { p_password: pw });
-      if (error || data !== true) {
-        alert('관리자 비밀번호가 아닙니다.');
-        return;
-      }
-      sessionStorage.setItem(ADMIN_KEY, pw);
-      updateAdminBtn();
+      const { data: profile } = await sb
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .maybeSingle();
+      isSiteAdmin = profile?.is_admin === true;
+      updateAdminUi();
     }
 
     function switchView(name) {
@@ -277,7 +291,6 @@
 
     function renderDetail(r) {
       currentInquiry = r;
-      const isAdmin = !!getAdminPw();
       $('dTitle').textContent = (r.is_secret ? '🔒 ' : '') + r.title;
       const mail = r.email
         ? ` · <a href="mailto:${esc(r.email)}" style="color:#5c4033;font-weight:700">${esc(r.email)}</a>`
@@ -287,15 +300,16 @@
       $('dAnswer').innerHTML = r.answer
         ? `<div class="answer-box"><div class="a-label">연구개발원 답변${r.answered_at ? ' · ' + fmtDate(r.answered_at) : ''}</div><div class="a-body">${esc(r.answer)}</div></div>`
         : '';
-      $('dReply').style.display = isAdmin ? 'block' : 'none';
+      $('dReply').style.display = isAdmin() ? 'block' : 'none';
       $('dReplyText').value = '';
       $('replyMsg').textContent = '';
       $('replyMsg').className = 'msg';
     }
     async function openDetail(id, isSecret) {
-      let pw = getAdminPw();
-      if (isSecret && !pw) {
-        pw = prompt('비밀글입니다. 작성자 비밀번호 또는 관리자 비밀번호를 입력하세요.');
+      await initAdminFromLogin();
+      let pw = null;
+      if (isSecret && !isAdmin()) {
+        pw = prompt('비밀글입니다. 작성 때 정한 비밀번호를 입력하세요.');
         if (pw === null) return;
       }
       const { data, error } = await sb.rpc('onmaeum_get_inquiry', { p_id: id, p_password: pw });
@@ -310,14 +324,13 @@
       const msg = $('replyMsg');
       msg.className = 'msg'; msg.textContent = '';
       const answer = $('dReplyText').value.trim();
-      const pw = getAdminPw();
-      if (!pw) { msg.className = 'msg err'; msg.textContent = '관리자 모드에서만 답변할 수 있습니다.'; return; }
+      if (!isAdmin()) { msg.className = 'msg err'; msg.textContent = '관리자 로그인 후 답변할 수 있습니다.'; return; }
       if (!currentInquiry) { msg.className = 'msg err'; msg.textContent = '글을 다시 열어주세요.'; return; }
       if (!answer) { msg.className = 'msg err'; msg.textContent = '답변 내용을 입력하세요.'; return; }
       $('replyBtn').disabled = true;
       const { error } = await sb.rpc('onmaeum_answer_inquiry', {
         p_id: currentInquiry.id,
-        p_password: pw,
+        p_password: null,
         p_answer: answer
       });
       $('replyBtn').disabled = false;
@@ -346,8 +359,10 @@
       showList();
     }
 
-    updateAdminBtn();
-    loadList();
+    initAdminFromLogin().then(loadList);
+    sb.auth.onAuthStateChange(() => {
+      window.setTimeout(() => { initAdminFromLogin(); }, 0);
+    });
   </script>
 </body>
 </html>

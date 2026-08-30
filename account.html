@@ -478,6 +478,7 @@
             <div class="privacy-note">주민등록번호가 표시된 경우 뒤쪽 번호는 가리고 제출해 주세요. 교사 확인에 필요하지 않은 개인정보는 제출하지 않는 것이 좋습니다.</div>
           </div>
 
+          <p class="panel-intro" id="admin-board-note" hidden><a href="./board.html">문의 게시판에서 답변하기</a></p>
           <button class="secondary-button" id="logout-button" type="button">로그아웃</button>
           <p class="status" id="account-status" aria-live="polite"></p>
         </section>
@@ -610,20 +611,33 @@
       if (headerTitle) headerTitle.lastElementChild.textContent = '내 회원 계정';
       document.getElementById('account-email').textContent = user.email || '-';
 
-      const { data: profile, error: profileError } = await supabaseClient
+      let { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
-        .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status')
+        .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status, is_admin')
         .eq('id', user.id)
         .maybeSingle();
 
       if (profileError) {
-        setStatus(document.getElementById('account-status'), '회원 정보를 불러오지 못했습니다. 관리자에게 문의해 주세요.', true);
-        console.error(profileError);
+        const retry = await supabaseClient
+          .from('profiles')
+          .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status')
+          .eq('id', user.id)
+          .maybeSingle();
+        if (retry.error) {
+          setStatus(document.getElementById('account-status'), '회원 정보를 불러오지 못했습니다. 관리자에게 문의해 주세요.', true);
+          console.error(profileError, retry.error);
+        } else {
+          profile = retry.data;
+        }
       }
 
       document.getElementById('account-display-name').textContent = profile?.display_name || user.user_metadata?.display_name || '-';
       document.getElementById('account-requested-membership-type').textContent = profile?.requested_membership_type === 'teacher' ? '교사 회원' : '일반 회원';
-      document.getElementById('account-membership-type').textContent = profile?.membership_type === 'teacher' ? '교사 회원' : '일반 회원';
+      document.getElementById('account-membership-type').textContent = profile?.is_admin
+        ? '관리자'
+        : (profile?.membership_type === 'teacher' ? '교사 회원' : '일반 회원');
+      const adminBoardNote = document.getElementById('admin-board-note');
+      if (adminBoardNote) adminBoardNote.hidden = !profile?.is_admin;
 
       const regionLabels = {
         seoul: '서울', busan: '부산', daegu: '대구', incheon: '인천', gwangju: '광주',
@@ -716,11 +730,13 @@
       updateSignupKind();
       if (data.session) {
         setStatus(statusElement, signupKind === 'teacher'
-          ? '계정이 만들어졌습니다. 로그인 후 자격증 또는 자격확인서를 제출해 주세요.'
+          ? '계정이 만들어졌습니다. 아래에서 자격증 또는 자격확인서를 제출해 주세요.'
           : '일반 회원으로 가입되었습니다. 원할 때 교사 회원 전환을 신청할 수 있습니다.');
         await loadAccount(data.user);
+      } else if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setStatus(statusElement, '이미 가입된 이메일입니다. 로그인하거나, 확인 메일을 아직 안 열었다면 메일의 링크를 눌러 주세요.', true);
       } else {
-        setStatus(statusElement, '확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 로그인해 주세요.');
+        setStatus(statusElement, '확인 메일을 보냈습니다. 지메일함(스팸함 포함)의 링크를 누른 뒤에야 로그인됩니다.');
       }
     });
 
@@ -742,7 +758,12 @@
       setBusy(form, false);
 
       if (error) {
-        setStatus(statusElement, '이메일 또는 비밀번호를 확인해 주세요.', true);
+        const code = error.code || '';
+        const raw = (error.message || '').toLowerCase();
+        const message = (code === 'email_not_confirmed' || raw.includes('email not confirmed'))
+          ? '가입은 됐습니다. 지메일함(스팸함 포함)에서 확인 링크를 누른 뒤 다시 로그인해 주세요.'
+          : '이메일 또는 비밀번호가 맞지 않습니다. 방금 가입했다면 확인 메일을 먼저 열어 주세요.';
+        setStatus(statusElement, message, true);
         return;
       }
       form.reset();
