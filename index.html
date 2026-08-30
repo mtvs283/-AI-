@@ -390,7 +390,7 @@
       scroll-margin-top: 0;
       padding-top: 82px;
       padding-bottom: 28px;
-      justify-content: center;
+      justify-content: flex-start;
     }
     .screen-board {
       display: grid;
@@ -398,12 +398,16 @@
       gap: 28px 48px;
       align-items: start;
       width: 100%;
+      flex: 1;
+      min-height: 0;
     }
     .screen-board.is-stage {
       grid-template-columns: minmax(260px, 1fr) minmax(300px, 360px);
     }
     .screen-section h2 {
-      margin: 0 0 8px;
+      margin: 18px 0 22px;
+      width: 100%;
+      flex-shrink: 0;
     }
     .screen-lead {
       margin: 0 0 22px;
@@ -525,8 +529,8 @@
       position: relative;
       overflow: hidden;
       aspect-ratio: 825 / 887;
-      width: min(100%, calc((100svh - 140px) * 825 / 887));
-      max-height: calc(100svh - 140px);
+      width: min(100%, calc((100svh - 220px) * 825 / 887));
+      max-height: calc(100svh - 220px);
       background: #f6f3ee;
       border: 1px solid rgba(86, 67, 47, .12);
     }
@@ -1224,9 +1228,9 @@
   </main>
 
   <section class="content-section screen-section" id="philosophy">
+    <h2 class="reveal">교육 철학</h2>
     <div class="screen-board">
       <div class="screen-copy reveal">
-        <h2>교육 철학</h2>
         <p class="screen-lead">획이 움직이면 발음이 보입니다</p>
         <article class="screen-point">
           <h3>배움은 연결입니다</h3>
@@ -1246,9 +1250,9 @@
   </section>
 
   <section class="content-section screen-section" id="platforms">
+    <h2 id="platform-title" class="reveal">플랫폼</h2>
     <div class="screen-board platform-main">
       <div class="screen-copy reveal">
-        <h2 id="platform-title">플랫폼</h2>
         <p class="screen-lead">학습자와 교사가 나뉩니다</p>
         <article class="screen-point">
           <h3>역할이 다릅니다</h3>
@@ -1513,9 +1517,9 @@
   </section>
 
   <section class="content-section screen-section" id="research">
+    <h2 class="reveal">연구개발</h2>
     <div class="screen-board is-stage">
       <div class="screen-copy reveal">
-        <h2>연구개발</h2>
         <p class="screen-lead">보고 움직이며 익힙니다</p>
         <article class="screen-point">
           <h3>AI 챗봇</h3>
@@ -1534,9 +1538,9 @@
   </section>
 
   <section class="content-section screen-section" id="training">
+    <h2 class="reveal">교육연수</h2>
     <div class="screen-board is-stage">
       <div class="screen-copy reveal">
-        <h2>교육연수</h2>
         <p class="screen-lead">영상·게임으로 직관적으로</p>
         <article class="screen-point">
           <h3>ChatGPT</h3>
@@ -1559,9 +1563,9 @@
   </section>
 
   <section class="content-section screen-section" id="partnership">
+    <h2 class="reveal">기관 제휴</h2>
     <div class="screen-board">
       <div class="screen-copy reveal">
-        <h2>기관 제휴</h2>
         <p class="screen-lead">현장 교육에 맞춰 넣습니다</p>
         <p class="screen-blurb">한국어 교육 콘텐츠와 AI 학습 시스템을 기관 유형에 맞게 제공합니다.</p>
       </div>
