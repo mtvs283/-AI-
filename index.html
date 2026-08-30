@@ -278,11 +278,11 @@
 
     .content-section {
       display: flex;
-      min-height: 100vh;
-      scroll-margin-top: 110px;
+      min-height: 100svh;
+      scroll-margin-top: 0;
       flex-direction: column;
-      justify-content: center;
-      padding: 110px min(8vw, 120px);
+      justify-content: flex-start;
+      padding: 96px min(8vw, 120px) 36px;
       background: #f5f1e9;
       border-top: 1px solid rgba(86, 67, 47, .13);
     }
@@ -290,9 +290,49 @@
     .content-section:nth-of-type(even) { background: #ebe4d8; }
 
     .content-section h2 {
-      margin: 0 0 34px;
+      margin: 0 0 56px;
       font-size: clamp(30px, 3vw, 48px);
+      line-height: 1.15;
       color: #2c1d10;
+    }
+
+    .split-board {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.22fr);
+      grid-template-rows: minmax(calc(100svh - 140px), auto);
+      gap: 24px 40px;
+      align-items: start;
+      width: 100%;
+    }
+    .split-board:not(:has(.split-stage)) {
+      grid-template-columns: minmax(240px, 420px);
+      grid-template-rows: none;
+    }
+    .split-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .split-stack .card {
+      min-height: 0;
+    }
+    .split-stage {
+      height: calc(100svh - 140px);
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(86, 67, 47, .12);
+    }
+    .split-stage video,
+    .split-stage iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #111;
+    }
+    .split-stage video {
+      object-fit: cover;
+      object-position: 50% 42%;
     }
 
 
@@ -371,6 +411,8 @@
     #platforms.is-detail {
       justify-content: flex-start;
       min-height: 0;
+      scroll-margin-top: 96px;
+      padding-top: 96px;
     }
 
     #platforms.is-detail #platform-title {
@@ -945,7 +987,19 @@
       .cards,
       .platform-sub .cards { grid-template-columns: 1fr; }
       .feature-tabs { grid-template-columns: 1fr; }
-      .content-section { min-height: 100vh; scroll-margin-top: 76px; padding: 76px 28px; }
+      .content-section { min-height: 0; scroll-margin-top: 76px; padding: 92px 28px 40px; }
+      .split-board,
+      .split-board:not(:has(.split-stage)) {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        gap: 20px;
+      }
+      .split-stage {
+        min-height: 42vh;
+        height: auto;
+      }
+      .split-stage video,
+      .split-stage iframe { height: 42vh; }
     }
   </style>
 </head>
@@ -991,40 +1045,52 @@
   </main>
 
   <section class="content-section" id="philosophy">
-    <h2>교육 철학</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>배움은 연결입니다</h3>
-        <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
-      </article>
-      <article class="card">
-        <h3>기술보다 사람입니다</h3>
-        <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
-      </article>
-      <article class="card">
-        <h3>한국어를 보이게 합니다</h3>
-        <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
-      </article>
+    <div class="split-board">
+      <div class="split-copy">
+        <h2>교육 철학</h2>
+        <div class="split-stack">
+          <article class="card">
+            <h3>배움은 연결입니다</h3>
+            <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
+          </article>
+          <article class="card">
+            <h3>기술보다 사람입니다</h3>
+            <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
+          </article>
+          <article class="card">
+            <h3>한국어를 보이게 합니다</h3>
+            <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
+          </article>
+        </div>
+      </div>
+      <div class="split-stage">
+        <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="platforms">
-    <h2 id="platform-title">플랫폼</h2>
-    <div class="cards platform-main">
-      <button class="card platform-card-button" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
-        <h3>광개토</h3>
-        <p>학습자용 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
-      </button>
-
-      <button class="card platform-card-button" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
-        <h3>온마음 한국어</h3>
-        <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
-      </button>
-
-      <article class="card">
-        <h3>AI 콘텐츠 연구소</h3>
-        <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
-      </article>
+    <div class="split-board platform-main">
+      <div class="split-copy">
+        <h2 id="platform-title">플랫폼</h2>
+        <div class="split-stack">
+          <button class="card platform-card-button" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
+            <h3>광개토</h3>
+            <p>학습자용 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
+          </button>
+          <button class="card platform-card-button" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
+            <h3>온마음 한국어</h3>
+            <p>한국어 교사를 위한 협업 플랫폼입니다. 콘텐츠 제작, 자료 공유, 프로젝트 관리를 지원합니다.</p>
+          </button>
+          <article class="card">
+            <h3>AI 콘텐츠 연구소</h3>
+            <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
+          </article>
+        </div>
+      </div>
+      <div class="split-stage">
+        <iframe src="./jamo-demo.html" title="천지인 모음 획순 데모" loading="lazy"></iframe>
+      </div>
     </div>
 
     <section class="platform-sub" id="gwanggaeto-sub" aria-label="광개토 소개">
@@ -1266,56 +1332,74 @@
   </section>
 
   <section class="content-section" id="research">
-    <h2>연구개발</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>AI 챗봇</h3>
-        <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
-      </article>
-      <article class="card">
-        <h3>발음 시각화</h3>
-        <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
-      </article>
-      <article class="card">
-        <h3>교육용 게임</h3>
-        <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임을 개발합니다.</p>
-      </article>
+    <div class="split-board">
+      <div class="split-copy">
+        <h2>연구개발</h2>
+        <div class="split-stack">
+          <article class="card">
+            <h3>AI 챗봇</h3>
+            <p>단원별 어휘·문법·대화를 기반으로 맞춤형 한국어 학습 대화를 설계합니다.</p>
+          </article>
+          <article class="card">
+            <h3>발음 시각화</h3>
+            <p>자음, 모음, 받침, 억양의 원리를 그림과 애니메이션으로 설명합니다.</p>
+          </article>
+          <article class="card">
+            <h3>교육용 게임</h3>
+            <p>성인 학습자도 몰입할 수 있는 생활 중심 한국어 학습 게임을 개발합니다.</p>
+          </article>
+        </div>
+      </div>
+      <div class="split-stage">
+        <iframe src="https://korean-game-samples.vercel.app/tetris/" title="한국어 학습 테트리스 샘플" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="training">
-    <h2>교육연수</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>ChatGPT</h3>
-        <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
-      </article>
-      <article class="card">
-        <h3>Canva</h3>
-        <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
-      </article>
-      <article class="card">
-        <h3>AI 콘텐츠</h3>
-        <p>영상, 게임 등 학습자가 직관적으로 익힐 수 있는 자료를 개발합니다.</p>
-      </article>
+    <div class="split-board">
+      <div class="split-copy">
+        <h2>교육연수</h2>
+        <div class="split-stack">
+          <article class="card">
+            <h3>ChatGPT</h3>
+            <p>교안, 활동지, 평가 문항, 학습 상담 자료 제작에 AI를 활용합니다.</p>
+          </article>
+          <article class="card">
+            <h3>Canva</h3>
+            <p>카드뉴스, PPT, 교재, 홍보물을 빠르게 제작하는 실전 연수를 제공합니다.</p>
+          </article>
+          <article class="card">
+            <h3>AI 콘텐츠</h3>
+            <p>영상, 게임 등 학습자가 직관적으로 익힐 수 있는 자료를 개발합니다.</p>
+          </article>
+        </div>
+      </div>
+      <div class="split-stage">
+        <iframe src="https://korean-game-samples.vercel.app/galaga/" title="한국어 학습 갤러그 샘플" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
   <section class="content-section" id="partnership">
-    <h2>기관 제휴</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>대안언어학원</h3>
-        <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
-      </article>
-      <article class="card">
-        <h3>이민·다문화 기관</h3>
-        <p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p>
-      </article>
-      <article class="card">
-        <h3>기업 교육</h3>
-        <p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p>
-      </article>
+    <div class="split-board">
+      <div class="split-copy">
+        <h2>기관 제휴</h2>
+        <div class="split-stack">
+          <article class="card">
+            <h3>대안언어학원</h3>
+            <p>한국어 교육 콘텐츠와 AI 학습 시스템을 기관 교육에 맞게 제공합니다.</p>
+          </article>
+          <article class="card">
+            <h3>이민·다문화 기관</h3>
+            <p>생활 한국어, 지역사회 한국어, 결혼이민자 교육 콘텐츠를 지원합니다.</p>
+          </article>
+          <article class="card">
+            <h3>기업 교육</h3>
+            <p>외국인 근로자와 글로벌 인재를 위한 직무 한국어 교육을 설계합니다.</p>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
