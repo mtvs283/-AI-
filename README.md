@@ -5,6 +5,8 @@
 - account.html
 - admin.html
 - board.html
+- jamo-demo.html
+- audio/jamo/
 - logo.png
 - hero-bg.png
 - README.md
@@ -12,6 +14,7 @@
 교사 회원 기능:
 - `onmaeum-membership.sql`을 Supabase SQL Editor에서 먼저 실행합니다.
 - `onmaeum-platform-access-control.sql`은 교사 협업 공간의 표와 파일 저장소에 회원 등급별 접근 정책을 적용합니다.
+- `onmaeum-shared-materials-preview.sql`은 자료공유 목록에서 설명·파일 경로를 인증 교사만 받게 합니다.
 - `onmaeum-recruitment-notices.sql`은 한국어강사 모집 공고 표와 동기화 함수를 만듭니다. 실행 후 파일 안의 주석 INSERT로 동기화 키를 따로 넣습니다.
 - `onmaeum-admin-role.sql`은 회원 로그인을 관리자 권한으로 씁니다. 실행 후 주석 UPDATE로 관리자 이메일을 지정합니다. `board.html`의 관리자 비밀번호 창은 쓰지 않습니다.
 - `onmaeum-admin-teacher-review.sql`은 관리자가 `admin.html`에서 교사 자격 서류를 보고 승인·거절할 수 있게 합니다.
@@ -26,7 +29,7 @@
 
 교사 협업 공간 접근 범위:
 - 비로그인 방문자: 홈페이지·기관 소개·공개 문의 이용, 교사 협업 자료 목록 접근 불가
-- 일반 회원: 수업자료 요청·자료공유·수업 고민·강사 모집 공고 목록 열람 가능, 등록·댓글·파일 이용 불가
+- 일반 회원: 수업자료 요청·자료공유·수업 고민·강사 모집 공고 목록 열람 가능. 자료공유는 제목·종류·날짜만 보이고 설명·파일은 불가. 등록·댓글·파일 이용 불가
 - 인증 완료 교사 회원: 목록 열람, 요청·자료·고민·댓글 등록, 수업자료 파일 업로드·이용 가능
 - 교사로 가입했더라도 `verification_status = 'verified'`가 되기 전에는 일반 회원과 같은 범위만 이용합니다.
 - 화면 표시와 별개로 Supabase RLS와 권한 정책에서 같은 규칙을 강제합니다.

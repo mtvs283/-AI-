@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>자모 획순 데모</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #f6f3ee; color: #211b15; font-family: 'Noto Sans KR', system-ui, sans-serif; }
+    .wrap { padding: 16px; max-width: 680px; margin: 0 auto; }
+    .panel { background: #fff; border: 1px solid #e5e0d6; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .label { margin: 0 0 6px; font-size: 12px; color: #9a8f80; }
+    .grid6 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+    .grid6:last-child { margin-bottom: 0; }
+    .vowel-btn {
+      padding: 8px 0; border-radius: 8px; font-size: 20px; border: 1px solid #e5e0d6;
+      background: #fff; cursor: pointer; font-family: inherit;
+    }
+    .vowel-btn.is-on { border: 2px solid #e67a3a; color: #e67a3a; background: #fff4ec; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stroke-box { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .dirs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .chip { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .dir { font-size: 12px; color: #9a8f80; }
+    .speed-row, .speed-ends { display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: #9a8f80; }
+    input[type="range"] { width: 100%; }
+    .replay {
+      width: 100%; padding: 8px; border: 1px solid #e5e0d6; border-radius: 8px;
+      background: #fff; cursor: pointer; font-family: inherit;
+    }
+    .sound-row { display: flex; align-items: center; gap: 12px; }
+    .big { font-size: 44px; font-weight: 600; line-height: 1; }
+    .roman { margin: 0; font-size: 20px; font-weight: 600; }
+    .eng { margin: 4px 0 0; font-size: 12px; color: #9a8f80; }
+    .spk {
+      width: 32px; height: 32px; border-radius: 50%; border: 1px solid #d5cfc4;
+      background: #faf8f4; cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
+    }
+    .combo { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .ghost { font-size: 30px; color: #b8aea0; }
+    .plus { font-size: 20px; color: #d5cfc4; }
+    .cur { font-size: 30px; color: #e67a3a; }
+    .combo-out { font-size: 36px; font-weight: 600; opacity: 0; transition: opacity .5s; }
+    .combo-out.is-on { opacity: 1; }
+    .word { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .word b { font-size: 20px; font-weight: 600; }
+    .word span { font-size: 12px; color: #9a8f80; margin-left: 8px; }
+    @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <p class="label">기본 모음</p>
+      <div class="grid6" id="basic-vowels"></div>
+      <p class="label">복합 모음</p>
+      <div class="grid6" id="compound-vowels"></div>
+    </div>
+    <div class="cols">
+      <div class="panel stroke-box">
+        <p class="label" style="align-self:flex-start">획순</p>
+        <svg id="stroke-svg" viewBox="0 0 120 140" width="140" height="140" overflow="visible"></svg>
+        <div class="dirs" id="stroke-dirs"></div>
+        <div style="width:100%">
+          <div class="speed-row"><span>속도</span><span id="speed-label">보통</span></div>
+          <input id="speed" type="range" min="1" max="5" step="1" value="3" />
+          <div class="speed-ends"><span>느리게</span><span>빠르게</span></div>
+        </div>
+        <button class="replay" type="button" id="replay">다시 보기</button>
+      </div>
+      <div>
+        <div class="panel">
+          <p class="label">발음</p>
+          <div class="sound-row">
+            <span class="big" id="cur-glyph">ㅏ</span>
+            <div style="flex:1">
+              <p class="roman" id="cur-roman">a</p>
+              <p class="eng" id="cur-eng">father의 a</p>
+            </div>
+            <button class="spk" type="button" id="speak-sound" aria-label="발음 듣기"></button>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="label">조합</p>
+          <div class="combo">
+            <span class="ghost">ㅇ</span>
+            <span class="plus">+</span>
+            <span class="cur" id="combo-vowel">ㅏ</span>
+            <span class="plus">=</span>
+            <span class="combo-out" id="combo-out">아</span>
+            <button class="spk" type="button" id="speak-combo" aria-label="조합 듣기"></button>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="label">단어 예시</p>
+          <div id="words"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const BG = ['#FAECE7', '#E6F1FB', '#E1F5EE'];
+    const TC = ['#993C1D', '#185FA5', '#0F6E56'];
+    const VD = {
+      'ㅏ': { sound: '아', roman: 'a', eng: 'father의 a', paths: [{ d: 'M 60 15 L 60 125', c: '#D85A30', dir: '아래로' }, { d: 'M 60 55 L 95 55', c: '#185FA5', dir: '오른쪽으로' }], combo: '아', words: [{ kr: '아기', en: 'baby' }, { kr: '아빠', en: 'dad' }] },
+      'ㅓ': { sound: '어', roman: 'eo', eng: 'sun의 u', paths: [{ d: 'M 60 15 L 60 125', c: '#D85A30', dir: '아래로' }, { d: 'M 25 55 L 60 55', c: '#185FA5', dir: '오른쪽으로' }], combo: '어', words: [{ kr: '어머니', en: 'mother' }, { kr: '언어', en: 'language' }] },
+      'ㅗ': { sound: '오', roman: 'o', eng: 'note의 o', paths: [{ d: 'M 60 15 L 60 72', c: '#D85A30', dir: '아래로' }, { d: 'M 15 72 L 105 72', c: '#185FA5', dir: '오른쪽으로' }], combo: '오', words: [{ kr: '오빠', en: 'older brother' }, { kr: '오리', en: 'duck' }] },
+      'ㅜ': { sound: '우', roman: 'u', eng: 'food의 oo', paths: [{ d: 'M 15 50 L 105 50', c: '#D85A30', dir: '오른쪽으로' }, { d: 'M 60 50 L 60 125', c: '#185FA5', dir: '아래로' }], combo: '우', words: [{ kr: '우유', en: 'milk' }, { kr: '우리', en: 'we/our' }] },
+      'ㅡ': { sound: '으', roman: 'eu', eng: 'hmm의 uh', paths: [{ d: 'M 10 70 L 110 70', c: '#D85A30', dir: '오른쪽으로' }], combo: '으', words: [{ kr: '은행', en: 'bank' }, { kr: '으뜸', en: 'the best' }] },
+      'ㅣ': { sound: '이', roman: 'i', eng: 'see의 ee', paths: [{ d: 'M 60 15 L 60 125', c: '#D85A30', dir: '아래로' }], combo: '이', words: [{ kr: '이름', en: 'name' }, { kr: '이야기', en: 'story' }] },
+      'ㅐ': { sound: '애', roman: 'ae', eng: 'cat의 a', paths: [{ d: 'M 35 15 L 35 125', c: '#D85A30', dir: '아래로' }, { d: 'M 35 55 L 78 55', c: '#185FA5', dir: '오른쪽으로' }, { d: 'M 85 15 L 85 125', c: '#1D9E75', dir: '아래로' }], combo: '애', words: [{ kr: '개', en: 'dog' }, { kr: '애기', en: 'baby (informal)' }] },
+      'ㅔ': { sound: '에', roman: 'e', eng: 'bed의 e', paths: [{ d: 'M 10 55 L 45 55', c: '#D85A30', dir: '오른쪽으로' }, { d: 'M 45 15 L 45 125', c: '#185FA5', dir: '아래로' }, { d: 'M 90 15 L 90 125', c: '#1D9E75', dir: '아래로' }], combo: '에', words: [{ kr: '에너지', en: 'energy' }, { kr: '에어컨', en: 'A/C' }] },
+      'ㅑ': { sound: '야', roman: 'ya', eng: 'yard의 ya', paths: [{ d: 'M 60 15 L 60 125', c: '#D85A30', dir: '아래로' }, { d: 'M 60 42 L 95 42', c: '#185FA5', dir: '오른쪽으로' }, { d: 'M 60 75 L 95 75', c: '#1D9E75', dir: '오른쪽으로' }], combo: '야', words: [{ kr: '야구', en: 'baseball' }, { kr: '야채', en: 'vegetables' }] },
+      'ㅕ': { sound: '여', roman: 'yeo', eng: 'yaw의 yo', paths: [{ d: 'M 25 42 L 60 42', c: '#D85A30', dir: '오른쪽으로' }, { d: 'M 25 75 L 60 75', c: '#185FA5', dir: '오른쪽으로' }, { d: 'M 60 15 L 60 125', c: '#1D9E75', dir: '아래로' }], combo: '여', words: [{ kr: '여자', en: 'woman' }, { kr: '여름', en: 'summer' }] },
+      'ㅛ': { sound: '요', roman: 'yo', eng: 'yoga의 yo', paths: [{ d: 'M 38 15 L 38 68', c: '#D85A30', dir: '아래로' }, { d: 'M 82 15 L 82 68', c: '#185FA5', dir: '아래로' }, { d: 'M 15 68 L 105 68', c: '#1D9E75', dir: '오른쪽으로' }], combo: '요', words: [{ kr: '요리', en: 'cooking' }, { kr: '요일', en: 'day of week' }] },
+      'ㅠ': { sound: '유', roman: 'yu', eng: 'you의 you', paths: [{ d: 'M 15 50 L 105 50', c: '#D85A30', dir: '오른쪽으로' }, { d: 'M 38 50 L 38 125', c: '#185FA5', dir: '아래로' }, { d: 'M 82 50 L 82 125', c: '#1D9E75', dir: '아래로' }], combo: '유', words: [{ kr: '유리', en: 'glass' }, { kr: '유명', en: 'famous' }] }
+    };
+    const BASIC = ['ㅏ', 'ㅓ', 'ㅗ', 'ㅜ', 'ㅡ', 'ㅣ'];
+    const COMPOUND = ['ㅐ', 'ㅔ', 'ㅑ', 'ㅕ', 'ㅛ', 'ㅠ'];
+    const SP = { 1: { l: '매우 느림', d: 1800 }, 2: { l: '느리게', d: 1100 }, 3: { l: '보통', d: 600 }, 4: { l: '빠르게', d: 320 }, 5: { l: '매우 빠름', d: 160 } };
+    const AZURE_SOUND = {
+      '아': './audio/jamo/a.wav', '어': './audio/jamo/eo.wav', '오': './audio/jamo/o.wav', '우': './audio/jamo/u.wav',
+      '으': './audio/jamo/eu.wav', '이': './audio/jamo/i.wav', '애': './audio/jamo/ae.wav', '에': './audio/jamo/e.wav',
+      '야': './audio/jamo/ya.wav', '여': './audio/jamo/yeo.wav', '요': './audio/jamo/yo.wav', '유': './audio/jamo/yu.wav'
+    };
+    const AZURE_WORD = {
+      '아기': './audio/jamo/words/agi.wav', '어머니': './audio/jamo/words/eomeoni.wav', '오빠': './audio/jamo/words/oppa.wav',
+      '오리': './audio/jamo/words/ori.wav', '우유': './audio/jamo/words/uyu.wav', '우리': './audio/jamo/words/uri.wav',
+      '은행': './audio/jamo/words/eunhaeng.wav', '으뜸': './audio/jamo/words/eutteum.wav', '이름': './audio/jamo/words/ireum.wav',
+      '이야기': './audio/jamo/words/iyagi.wav', '개': './audio/jamo/words/gae.wav', '에너지': './audio/jamo/words/eneoji.wav',
+      '에어컨': './audio/jamo/words/eeokeon.wav', '야구': './audio/jamo/words/yagu.wav', '야채': './audio/jamo/words/yachae.wav',
+      '여자': './audio/jamo/words/yeoja.wav', '요리': './audio/jamo/words/yori.wav', '요일': './audio/jamo/words/yoil.wav',
+      '유리': './audio/jamo/words/yuri.wav'
+    };
+    const speakerSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+
+    let cur = 'ㅏ';
+    let speed = 3;
+    let tok = 0;
+    let playing = null;
+
+    function speakKo(text) {
+      const url = AZURE_SOUND[text] || AZURE_WORD[text];
+      if (!url) return;
+      if (playing) {
+        playing.pause();
+        playing.currentTime = 0;
+      }
+      playing = new Audio(url);
+      playing.play();
+    }
+
+    function wait(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function playAnim() {
+      const t = ++tok;
+      document.getElementById('combo-out').classList.remove('is-on');
+      await wait(70);
+      if (t !== tok) return;
+      const paths = document.querySelectorAll('#stroke-svg path');
+      paths.forEach((p) => {
+        const len = p.getTotalLength();
+        p.style.transition = 'none';
+        p.style.strokeDasharray = String(len);
+        p.style.strokeDashoffset = String(len);
+      });
+      await wait(30);
+      const dur = SP[speed].d;
+      for (let i = 0; i < paths.length; i += 1) {
+        if (t !== tok) return;
+        const p = paths[i];
+        await new Promise((resolve) => {
+          p.style.transition = `stroke-dashoffset ${dur}ms ease-in-out`;
+          p.style.strokeDashoffset = '0';
+          setTimeout(resolve, dur + 80);
+        });
+        if (i < paths.length - 1) await wait(60);
+      }
+      if (t !== tok) return;
+      await wait(200);
+      document.getElementById('combo-out').classList.add('is-on');
+    }
+
+    function renderVowels(id, list) {
+      const box = document.getElementById(id);
+      box.innerHTML = list.map((v) => `<button class="vowel-btn${v === cur ? ' is-on' : ''}" type="button" data-v="${v}">${v}</button>`).join('');
+    }
+
+    function render() {
+      const d = VD[cur];
+      renderVowels('basic-vowels', BASIC);
+      renderVowels('compound-vowels', COMPOUND);
+      document.getElementById('stroke-svg').innerHTML = d.paths.map((p) =>
+        `<path d="${p.d}" stroke="${p.c}" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>`
+      ).join('');
+      document.getElementById('stroke-dirs').innerHTML = d.paths.map((p, i) =>
+        `<span class="chip" style="background:${BG[i]};color:${TC[i]}">획 ${i + 1}</span><span class="dir">${p.dir}</span>`
+      ).join('');
+      document.getElementById('cur-glyph').textContent = cur;
+      document.getElementById('cur-roman').textContent = d.roman;
+      document.getElementById('cur-eng').textContent = d.eng;
+      document.getElementById('combo-vowel').textContent = cur;
+      document.getElementById('combo-out').textContent = d.combo;
+      document.getElementById('combo-out').classList.remove('is-on');
+      document.getElementById('words').innerHTML = d.words.map((w) =>
+        `<div class="word"><div><b>${w.kr}</b><span>${w.en}</span></div><button class="spk" type="button" data-say="${w.kr}" aria-label="${w.kr} 듣기"></button></div>`
+      ).join('');
+      document.querySelectorAll('.spk').forEach((btn) => { btn.innerHTML = speakerSvg; });
+    }
+
+    document.getElementById('basic-vowels').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-v]');
+      if (!btn) return;
+      cur = btn.getAttribute('data-v');
+      render();
+      playAnim();
+    });
+    document.getElementById('compound-vowels').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-v]');
+      if (!btn) return;
+      cur = btn.getAttribute('data-v');
+      render();
+      playAnim();
+    });
+    document.getElementById('speed').addEventListener('input', (event) => {
+      speed = Number(event.target.value);
+      document.getElementById('speed-label').textContent = SP[speed].l;
+    });
+    document.getElementById('replay').addEventListener('click', () => playAnim());
+    document.getElementById('speak-sound').addEventListener('click', () => speakKo(VD[cur].sound));
+    document.getElementById('speak-combo').addEventListener('click', () => speakKo(VD[cur].combo));
+    document.getElementById('words').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-say]');
+      if (btn) speakKo(btn.getAttribute('data-say'));
+    });
+
+    render();
+    playAnim();
+  </script>
+</body>
+</html>

@@ -357,6 +357,10 @@
     }
 
     #platforms.is-detail .platform-sub {
+      display: none;
+    }
+
+    #platforms.is-detail .platform-sub.is-open {
       display: block;
     }
 
@@ -373,6 +377,41 @@
       margin: 0 0 18px;
       font-size: 24px;
       color: #2c1d10;
+    }
+
+    .platform-intro {
+      margin: 0 0 22px;
+      max-width: 46rem;
+      color: #574d42;
+      line-height: 1.8;
+    }
+
+    .jamo-demo-shell {
+      margin-top: 28px;
+      padding: 18px;
+      background: rgba(255, 255, 255, .62);
+      border: 1px solid rgba(86, 67, 47, .12);
+    }
+
+    .jamo-demo-shell h4 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      color: #15100b;
+    }
+
+    .jamo-demo-shell p {
+      margin: 0 0 14px;
+      color: #574d42;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .jamo-demo-shell iframe {
+      display: block;
+      width: 100%;
+      min-height: 720px;
+      border: 0;
+      background: #f6f3ee;
     }
 
     .platform-sub .cards {
@@ -968,10 +1007,10 @@
   <section class="content-section" id="platforms">
     <h2 id="platform-title">플랫폼</h2>
     <div class="cards platform-main">
-      <article class="card">
+      <button class="card platform-card-button" type="button" id="gwanggaeto-toggle" aria-expanded="false" aria-controls="gwanggaeto-sub">
         <h3>광개토</h3>
-        <p>AI 기반 글로벌 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습을 제공합니다.</p>
-      </article>
+        <p>학습자용 한국어 학습 플랫폼입니다. 발음, 문법, 대화, 게임형 학습과 자모 쓰기 데모를 볼 수 있습니다.</p>
+      </button>
 
       <button class="card platform-card-button" type="button" id="onmaeum-toggle" aria-expanded="false" aria-controls="onmaeum-sub">
         <h3>온마음 한국어</h3>
@@ -983,6 +1022,31 @@
         <p>교재, 챗봇, 쇼츠, 수업 자료, 발음 시각화 콘텐츠를 연구·개발합니다.</p>
       </article>
     </div>
+
+    <section class="platform-sub" id="gwanggaeto-sub" aria-label="광개토 소개">
+      <button class="platform-back" type="button">← 플랫폼으로 돌아가기</button>
+      <h3>광개토</h3>
+      <p class="platform-intro">학습자가 쓰는 한국어 학습 플랫폼입니다. 수업 자료는 온마음 한국어에서 다루고, 광개토에서는 학습과 자모 쓰기 앱을 둡니다. 아래는 온마음코리아1에 있던 천지인 모음 획순 데모입니다.</p>
+      <div class="cards">
+        <article class="card">
+          <h4>학습 플랫폼</h4>
+          <p>발음, 문법, 대화, 게임형 학습으로 한국어를 익힙니다. 실제 학습 기능은 광개토에서 이용합니다.</p>
+        </article>
+        <article class="card">
+          <h4>자모 스트로크 앱</h4>
+          <p>한글 자모를 획순에 따라 쓰는 학습 앱입니다. 본 앱은 광개토에 있고, 여기서는 모음 데모를 바로 볼 수 있습니다.</p>
+        </article>
+        <article class="card">
+          <h4>온마음과의 역할</h4>
+          <p>광개토는 학습자, 온마음은 인증 교사·기관입니다. 강의용 PPT와 학생용 PDF는 온마음 자료 공간에서 다룹니다.</p>
+        </article>
+      </div>
+      <div class="jamo-demo-shell">
+        <h4>천지인 모음 데모</h4>
+        <p>모음을 고르면 획이 그려집니다. 본 자모 앱은 광개토에서 이어집니다.</p>
+        <iframe src="./jamo-demo.html" title="천지인 모음 획순 데모" loading="lazy"></iframe>
+      </div>
+    </section>
 
     <section class="platform-sub" id="onmaeum-sub" aria-label="온마음 한국어 하위 공간">
       <button class="platform-back" type="button" id="platform-back">← 플랫폼으로 돌아가기</button>
@@ -1263,7 +1327,10 @@
     const platforms = document.getElementById('platforms');
     const platformTitle = document.getElementById('platform-title');
     const onmaeumToggle = document.getElementById('onmaeum-toggle');
-    const platformBack = document.getElementById('platform-back');
+    const onmaeumSub = document.getElementById('onmaeum-sub');
+    const gwanggaetoToggle = document.getElementById('gwanggaeto-toggle');
+    const gwanggaetoSub = document.getElementById('gwanggaeto-sub');
+    const platformBackButtons = document.querySelectorAll('.platform-back');
     const shareBoardToggle = document.getElementById('share-board-toggle');
     const shareBoard = document.getElementById('share-board');
     const shareFormToggle = document.getElementById('share-form-toggle');
@@ -1315,7 +1382,7 @@
         membershipAccessNote.classList.toggle('is-teacher', isVerifiedTeacher);
         membershipAccessNote.innerHTML = isVerifiedTeacher
           ? '<p><strong>교사 인증 완료</strong> · 자료 열람·등록·파일 이용과 게시판 글쓰기를 사용할 수 있습니다.</p>'
-          : '<p><strong>일반 회원</strong> · 자료와 게시글은 열람만 가능합니다. 글쓰기와 파일 이용은 교사 인증 후 사용할 수 있습니다.</p>';
+          : '<p><strong>일반 회원</strong> · 자료 제목 목록은 볼 수 있습니다. 설명·파일과 글쓰기는 교사 인증 후 이용할 수 있습니다.</p>';
       }
 
       if (!isSignedIn) {
@@ -1372,31 +1439,40 @@
       }
     }
 
-    if (onmaeumToggle && platforms && platformTitle) {
-      onmaeumToggle.addEventListener('click', () => {
-        platforms.classList.add('is-detail');
-        platformTitle.textContent = '플랫폼';
-        onmaeumToggle.setAttribute('aria-expanded', 'true');
-        platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    function closePlatformDetail() {
+      if (platforms) platforms.classList.remove('is-detail');
+      if (platformTitle) platformTitle.textContent = '플랫폼';
+      document.querySelectorAll('.platform-sub').forEach((sub) => sub.classList.remove('is-open'));
+      if (onmaeumToggle) onmaeumToggle.setAttribute('aria-expanded', 'false');
+      if (gwanggaetoToggle) gwanggaetoToggle.setAttribute('aria-expanded', 'false');
     }
 
-    if (platformBack && platforms && platformTitle && onmaeumToggle) {
-      platformBack.addEventListener('click', () => {
-        platforms.classList.remove('is-detail');
-        platformTitle.textContent = '플랫폼';
-        onmaeumToggle.setAttribute('aria-expanded', 'false');
-        platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    function openPlatformDetail(subEl, toggleBtn) {
+      if (!platforms || !subEl) return;
+      platforms.classList.add('is-detail');
+      if (platformTitle) platformTitle.textContent = '플랫폼';
+      document.querySelectorAll('.platform-sub').forEach((sub) => sub.classList.toggle('is-open', sub === subEl));
+      if (onmaeumToggle) onmaeumToggle.setAttribute('aria-expanded', toggleBtn === onmaeumToggle ? 'true' : 'false');
+      if (gwanggaetoToggle) gwanggaetoToggle.setAttribute('aria-expanded', toggleBtn === gwanggaetoToggle ? 'true' : 'false');
+      platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    if (onmaeumToggle) {
+      onmaeumToggle.addEventListener('click', () => openPlatformDetail(onmaeumSub, onmaeumToggle));
+    }
+    if (gwanggaetoToggle) {
+      gwanggaetoToggle.addEventListener('click', () => openPlatformDetail(gwanggaetoSub, gwanggaetoToggle));
+    }
+    platformBackButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        closePlatformDetail();
+        if (platforms) platforms.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
 
     // nav의 "플랫폼" 메뉴 클릭 시 항상 메인(카드 3개) 화면으로 리셋
     document.querySelectorAll('a[href="#platforms"]').forEach((link) => {
-      link.addEventListener('click', () => {
-        if (platforms) platforms.classList.remove('is-detail');
-        if (platformTitle) platformTitle.textContent = '플랫폼';
-        if (onmaeumToggle) onmaeumToggle.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', () => closePlatformDetail());
     });
 
     if (shareFormToggle && shareForm) {
@@ -1464,11 +1540,23 @@
         return;
       }
 
-      const { data, error } = await supabaseClient
-        .from('shared_materials')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(12);
+      let data = null;
+      let error = null;
+      const listed = await supabaseClient.rpc('onmaeum_list_shared_materials');
+      if (listed.error) {
+        const columns = isVerifiedTeacher
+          ? 'title, category, note, file_path, file_name, created_at'
+          : 'title, category, created_at';
+        const fallback = await supabaseClient
+          .from('shared_materials')
+          .select(columns)
+          .order('created_at', { ascending: false })
+          .limit(12);
+        data = fallback.data;
+        error = fallback.error;
+      } else {
+        data = listed.data;
+      }
 
       if (error) {
         sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.</td></tr>';
@@ -1483,10 +1571,12 @@
 
       sharedMaterialList.innerHTML = data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
-        const fileLink = item.file_path
-          ? (isVerifiedTeacher ? `<button class="file-link" type="button" data-file-path="${escapeHtml(item.file_path)}">파일 열기</button>` : '교사 인증 후 파일 이용')
-          : '파일 없음';
-        const note = item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
+        const fileLink = isVerifiedTeacher
+          ? (item.file_path
+            ? `<button class="file-link" type="button" data-file-path="${escapeHtml(item.file_path)}">파일 열기</button>`
+            : '파일 없음')
+          : '교사 인증 후 내용·파일 이용';
+        const note = isVerifiedTeacher && item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
         return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${escapeHtml(item.category || '자료')}</td><td>${createdAt}</td></tr>`;
       }).join('');
     }
