@@ -385,12 +385,14 @@
       line-height: 1.7;
       font-size: 15px;
     }
-    .feature-stage iframe {
+    .feature-stage iframe,
+    .feature-stage video {
       display: block;
       width: 100%;
       height: 520px;
       border: 0;
       background: #111;
+      object-fit: contain;
     }
     .feature-stage .stage-link {
       display: inline-block;
@@ -1082,8 +1084,8 @@
       <div class="feature-stage reveal reveal-delay">
         <p class="stage-kicker">한국어를 보이게 합니다</p>
         <h3>획이 움직이면 발음이 보입니다</h3>
-        <p>발음, 문법, 대화, 문화를 그림과 움직임으로 익힙니다. 아래는 천지인 모음 획순입니다.</p>
-        <iframe src="./jamo-demo.html" title="천지인 모음 획순 데모" loading="lazy"></iframe>
+        <p>발음, 문법, 대화, 문화를 그림과 움직임으로 익힙니다. 온마음코리아 히어로에 쓰던 모음 데모입니다.</p>
+        <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
       </div>
     </div>
   </section>

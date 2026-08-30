@@ -11,6 +11,7 @@
 - favicon-32.png
 - apple-touch-icon.png
 - audio/jamo/
+- videos/vowel_demo.mp4
 - logo.png
 - hero-bg.png
 - README.md
