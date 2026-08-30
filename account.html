@@ -240,6 +240,44 @@
       .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .summary-row { flex-direction: column; gap: 5px; }
       footer { padding: 18px; }
+      .region-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .region-hint {
+      display: block;
+      font-weight: 400;
+      font-size: .82rem;
+      line-height: 1.5;
+      opacity: .72;
+      margin-top: 2px;
+    }
+    .region-picker {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .region-picker label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 4px;
+      border: 1px solid rgba(60, 46, 30, .22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .6);
+      font-size: .9rem;
+      font-weight: 400;
+      cursor: pointer;
+      user-select: none;
+      transition: background .12s, border-color .12s;
+    }
+    .region-picker label:hover { background: rgba(255, 255, 255, .95); }
+    .region-picker input { margin: 0; accent-color: #6b4f2a; }
+    .region-picker label:has(input:checked) {
+      background: rgba(107, 79, 42, .12);
+      border-color: rgba(107, 79, 42, .55);
+      font-weight: 600;
     }
   </style>
 </head>
@@ -341,29 +379,9 @@
                   <label for="signup-email">이메일</label>
                   <input id="signup-email" type="email" autocomplete="email" required />
                 </div>
-                <div class="field teacher-signup-field" hidden>
-                  <label for="signup-region">주 활동 지역</label>
-                  <select id="signup-region">
-                    <option value="">선택해 주세요</option>
-                    <option value="seoul">서울</option>
-                    <option value="busan">부산</option>
-                    <option value="daegu">대구</option>
-                    <option value="incheon">인천</option>
-                    <option value="gwangju">광주</option>
-                    <option value="daejeon">대전</option>
-                    <option value="ulsan">울산</option>
-                    <option value="sejong">세종</option>
-                    <option value="gyeonggi">경기</option>
-                    <option value="gangwon">강원</option>
-                    <option value="chungbuk">충북</option>
-                    <option value="chungnam">충남</option>
-                    <option value="jeonbuk">전북</option>
-                    <option value="jeonnam">전남</option>
-                    <option value="gyeongbuk">경북</option>
-                    <option value="gyeongnam">경남</option>
-                    <option value="jeju">제주</option>
-                    <option value="overseas">해외</option>
-                  </select>
+                <div class="field full teacher-signup-field" hidden>
+                  <label>주 활동 지역 <span class="region-hint">여러 곳을 고를 수 있어요. 출퇴근 가능한 인접 지역도 함께 골라 두시면 공고를 더 많이 보실 수 있습니다.</span></label>
+                  <div class="region-picker" id="signup-regions" role="group" aria-label="주 활동 지역"></div>
                 </div>
                 <div class="field teacher-signup-field" hidden>
                   <label for="signup-workplace-type">주 근무 유형</label>
@@ -413,34 +431,24 @@
             <div class="summary-row"><span>교사 인증</span><strong><span class="badge" id="verification-badge">미제출</span></strong></div>
           </div>
 
+          <div class="verification-box" id="region-edit-box" hidden>
+            <h3>활동 지역</h3>
+            <p>공고 알림은 여기 골라 두신 지역을 기준으로 갑니다. 출퇴근 가능한 인접 지역까지 함께 골라 두시면 더 많은 공고를 받으실 수 있습니다. 온라인 수업을 하신다면 온라인도 함께 골라 주세요.</p>
+            <form id="region-edit-form">
+              <div class="region-picker" id="profile-regions" role="group" aria-label="활동 지역"></div>
+              <button class="primary-button" type="submit" style="margin-top:16px;">활동 지역 저장하기</button>
+              <p class="status" id="region-edit-status" aria-live="polite"></p>
+            </form>
+          </div>
+
           <div class="verification-box" id="verification-box">
             <h3>교사 회원 신청</h3>
             <p>가입할 때 교사 회원을 선택했거나 일반 회원에서 전환하려면, 활동 정보와 교원자격증 또는 교원자격확인서 중 하나를 제출해 주세요. 관리자 확인이 끝나면 교사 권한이 적용됩니다.</p>
             <form id="verification-form">
               <div class="form-grid">
-                <div class="field">
-                  <label for="verification-region">주 활동 지역</label>
-                  <select id="verification-region" required>
-                    <option value="">선택해 주세요</option>
-                    <option value="seoul">서울</option>
-                    <option value="busan">부산</option>
-                    <option value="daegu">대구</option>
-                    <option value="incheon">인천</option>
-                    <option value="gwangju">광주</option>
-                    <option value="daejeon">대전</option>
-                    <option value="ulsan">울산</option>
-                    <option value="sejong">세종</option>
-                    <option value="gyeonggi">경기</option>
-                    <option value="gangwon">강원</option>
-                    <option value="chungbuk">충북</option>
-                    <option value="chungnam">충남</option>
-                    <option value="jeonbuk">전북</option>
-                    <option value="jeonnam">전남</option>
-                    <option value="gyeongbuk">경북</option>
-                    <option value="gyeongnam">경남</option>
-                    <option value="jeju">제주</option>
-                    <option value="overseas">해외</option>
-                  </select>
+                <div class="field full">
+                  <label>주 활동 지역 <span class="region-hint">여러 곳을 고를 수 있어요. 출퇴근 가능한 인접 지역도 함께 골라 두시면 공고를 더 많이 보실 수 있습니다.</span></label>
+                  <div class="region-picker" id="verification-regions" role="group" aria-label="주 활동 지역"></div>
                 </div>
                 <div class="field">
                   <label for="verification-workplace-type">주 근무 유형</label>
@@ -532,6 +540,57 @@
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
       : null;
 
+    const REGION_LABELS = {
+      seoul: '서울', busan: '부산', daegu: '대구', incheon: '인천', gwangju: '광주',
+      daejeon: '대전', ulsan: '울산', sejong: '세종', gyeonggi: '경기', gangwon: '강원',
+      chungbuk: '충북', chungnam: '충남', jeonbuk: '전북', jeonnam: '전남',
+      gyeongbuk: '경북', gyeongnam: '경남', jeju: '제주',
+      online: '온라인', overseas: '해외', not_set: '미입력'
+    };
+    const REGION_CODES = [
+      'seoul', 'busan', 'daegu', 'incheon', 'gwangju', 'daejeon',
+      'ulsan', 'sejong', 'gyeonggi', 'gangwon', 'chungbuk', 'chungnam',
+      'jeonbuk', 'jeonnam', 'gyeongbuk', 'gyeongnam', 'jeju',
+      'online', 'overseas'
+    ];
+
+    function renderRegionPicker(containerId) {
+      const box = document.getElementById(containerId);
+      if (!box || box.dataset.rendered === 'true') return;
+      box.innerHTML = REGION_CODES.map((code) => `
+        <label><input type="checkbox" value="${code}" /><span>${REGION_LABELS[code]}</span></label>
+      `).join('');
+      box.dataset.rendered = 'true';
+    }
+
+    function getRegionPicker(containerId) {
+      const box = document.getElementById(containerId);
+      if (!box) return [];
+      return Array.from(box.querySelectorAll('input:checked')).map((input) => input.value);
+    }
+
+    function setRegionPicker(containerId, codes) {
+      renderRegionPicker(containerId);
+      const box = document.getElementById(containerId);
+      if (!box) return;
+      const wanted = new Set(codes || []);
+      box.querySelectorAll('input').forEach((input) => {
+        input.checked = wanted.has(input.value);
+      });
+    }
+
+    function getSavedRegions(profile) {
+      const list = Array.isArray(profile?.activity_regions) ? profile.activity_regions : [];
+      const cleaned = list.filter((code) => code && code !== 'not_set');
+      if (cleaned.length) return cleaned;
+      const legacy = profile?.activity_region;
+      return legacy && legacy !== 'not_set' ? [legacy] : [];
+    }
+
+    renderRegionPicker('signup-regions');
+    renderRegionPicker('verification-regions');
+    renderRegionPicker('profile-regions');
+
     const signedOutView = document.getElementById('signed-out-view');
     const accountPanel = document.getElementById('account-panel');
     const recoveryPanel = document.getElementById('recovery-panel');
@@ -587,7 +646,6 @@
     function updateSignupKind() {
       const isTeacher = signupMemberKind.value === 'teacher';
       teacherSignupFields.forEach((field) => { field.hidden = !isTeacher; });
-      document.getElementById('signup-region').required = isTeacher;
       document.getElementById('signup-workplace-type').required = isTeacher;
       kindOptions.forEach((option) => {
         option.classList.toggle('is-active', (option.dataset.kind === 'teacher') === isTeacher);
@@ -620,14 +678,14 @@
 
       let { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
-        .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status, is_admin')
+        .select('display_name, requested_membership_type, membership_type, activity_region, activity_regions, workplace_type, verification_status, is_admin')
         .eq('id', user.id)
         .maybeSingle();
 
       if (profileError) {
         const retry = await supabaseClient
           .from('profiles')
-          .select('display_name, requested_membership_type, membership_type, activity_region, workplace_type, verification_status')
+          .select('display_name, requested_membership_type, membership_type, activity_region, activity_regions, workplace_type, verification_status')
           .eq('id', user.id)
           .maybeSingle();
         if (retry.error) {
@@ -646,12 +704,7 @@
       const adminBoardNote = document.getElementById('admin-board-note');
       if (adminBoardNote) adminBoardNote.hidden = !profile?.is_admin;
 
-      const regionLabels = {
-        seoul: '서울', busan: '부산', daegu: '대구', incheon: '인천', gwangju: '광주',
-        daejeon: '대전', ulsan: '울산', sejong: '세종', gyeonggi: '경기', gangwon: '강원',
-        chungbuk: '충북', chungnam: '충남', jeonbuk: '전북', jeonnam: '전남',
-        gyeongbuk: '경북', gyeongnam: '경남', jeju: '제주', overseas: '해외', not_set: '미입력'
-      };
+      const regionLabels = REGION_LABELS;
       const workplaceLabels = {
         center: '다문화·외국인지원센터',
         university_language_institute: '대학교 부설 어학당',
@@ -664,9 +717,13 @@
         other: '기타',
         not_set: '미입력'
       };
-      document.getElementById('account-region').textContent = regionLabels[profile?.activity_region] || '-';
+      const savedRegions = getSavedRegions(profile);
+      document.getElementById('account-region').textContent = savedRegions.length
+        ? savedRegions.map((code) => regionLabels[code] || code).join(', ')
+        : '-';
       document.getElementById('account-workplace-type').textContent = workplaceLabels[profile?.workplace_type] || '-';
-      document.getElementById('verification-region').value = profile?.activity_region === 'not_set' ? '' : (profile?.activity_region || '');
+      setRegionPicker('verification-regions', savedRegions);
+      setRegionPicker('profile-regions', savedRegions);
       document.getElementById('verification-workplace-type').value = profile?.workplace_type === 'not_set' ? '' : (profile?.workplace_type || '');
 
       const { data: verification, error: verificationError } = await supabaseClient
@@ -687,8 +744,46 @@
       const badge = document.getElementById('verification-badge');
       badge.textContent = labels[status] || '미제출';
       badge.className = `badge${status === 'verified' ? ' is-verified' : ''}${status === 'rejected' ? ' is-rejected' : ''}`;
-      document.getElementById('verification-box').hidden = status === 'verified' && profile?.membership_type === 'teacher';
+      const isVerifiedTeacher = status === 'verified' && profile?.membership_type === 'teacher';
+      document.getElementById('verification-box').hidden = isVerifiedTeacher;
+      document.getElementById('region-edit-box').hidden = !isVerifiedTeacher;
     }
+
+    document.getElementById('region-edit-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('region-edit-status');
+      const regions = getRegionPicker('profile-regions');
+      if (regions.length === 0) {
+        setStatus(statusElement, '활동 지역을 한 곳 이상 골라 주세요.', true);
+        return;
+      }
+
+      setBusy(form, true);
+      setStatus(statusElement, '활동 지역을 저장하는 중입니다...');
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !userData.user) {
+        setBusy(form, false);
+        setStatus(statusElement, '로그인이 만료되었습니다. 다시 로그인해 주세요.', true);
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ activity_region: regions[0], activity_regions: regions })
+        .eq('id', userData.user.id);
+
+      setBusy(form, false);
+      if (error) {
+        setStatus(statusElement, '활동 지역을 저장하지 못했습니다.', true);
+        console.error(error);
+        return;
+      }
+
+      document.getElementById('account-region').textContent =
+        regions.map((code) => REGION_LABELS[code] || code).join(', ');
+      setStatus(statusElement, '활동 지역을 저장했습니다.');
+    });
 
     document.getElementById('signup-form').addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -709,6 +804,12 @@
         return;
       }
 
+      const signupRegions = getRegionPicker('signup-regions');
+      if (signupKind === 'teacher' && signupRegions.length === 0) {
+        setStatus(statusElement, '주 활동 지역을 한 곳 이상 골라 주세요.', true);
+        return;
+      }
+
       setBusy(form, true);
       setStatus(statusElement, '회원 계정을 만드는 중입니다...');
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
@@ -721,7 +822,8 @@
             full_name: document.getElementById('signup-name').value.trim(),
             display_name: document.getElementById('signup-display-name').value.trim(),
             signup_intent: signupKind,
-            activity_region: signupKind === 'teacher' ? document.getElementById('signup-region').value : 'not_set',
+            activity_region: signupKind === 'teacher' ? signupRegions[0] : 'not_set',
+            activity_regions: signupKind === 'teacher' ? signupRegions : [],
             workplace_type: signupKind === 'teacher' ? document.getElementById('signup-workplace-type').value : 'not_set'
           }
         }
@@ -796,7 +898,8 @@
       const statusElement = document.getElementById('verification-status');
       const file = document.getElementById('certificate-file').files[0];
       const documentType = document.getElementById('document-type').value;
-      const activityRegion = document.getElementById('verification-region').value;
+      const activityRegions = getRegionPicker('verification-regions');
+      const activityRegion = activityRegions[0] || '';
       const workplaceType = document.getElementById('verification-workplace-type').value;
       if (!activityRegion || !workplaceType || !documentType || !file) {
         setStatus(statusElement, '활동 정보와 서류 종류를 선택하고 파일 한 개를 제출해 주세요.', true);
@@ -825,7 +928,7 @@
 
       const { error: profileUpdateError } = await supabaseClient
         .from('profiles')
-        .update({ requested_membership_type: 'teacher', activity_region: activityRegion, workplace_type: workplaceType })
+        .update({ requested_membership_type: 'teacher', activity_region: activityRegion, activity_regions: activityRegions, workplace_type: workplaceType })
         .eq('id', userData.user.id);
 
       if (profileUpdateError) {

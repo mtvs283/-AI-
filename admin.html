@@ -195,8 +195,15 @@
       seoul: '서울', busan: '부산', daegu: '대구', incheon: '인천', gwangju: '광주',
       daejeon: '대전', ulsan: '울산', sejong: '세종', gyeonggi: '경기', gangwon: '강원',
       chungbuk: '충북', chungnam: '충남', jeonbuk: '전북', jeonnam: '전남',
-      gyeongbuk: '경북', gyeongnam: '경남', jeju: '제주', overseas: '해외', not_set: '미입력'
+      gyeongbuk: '경북', gyeongnam: '경남', jeju: '제주',
+      online: '온라인', overseas: '해외', not_set: '미입력'
     };
+    function formatRegions(row) {
+      const list = Array.isArray(row.activity_regions) ? row.activity_regions.filter(Boolean) : [];
+      const codes = list.length ? list : (row.activity_region ? [row.activity_region] : []);
+      if (!codes.length) return '-';
+      return codes.map((code) => regionLabels[code] || code).join(', ');
+    }
     const workplaceLabels = {
       center: '다문화·외국인지원센터',
       university_language_institute: '대학교 부설 어학당',
@@ -271,7 +278,7 @@
                 <div class="meta">
                   <div>이름: ${escapeHtml(row.full_name || '-')}</div>
                   <div>활동 이름: ${escapeHtml(row.display_name || '-')}</div>
-                  <div>지역: ${escapeHtml(regionLabels[row.activity_region] || row.activity_region || '-')}</div>
+                  <div>지역: ${escapeHtml(formatRegions(row))}</div>
                   <div>근무 유형: ${escapeHtml(workplaceLabels[row.workplace_type] || row.workplace_type || '-')}</div>
                   <div>파일: ${escapeHtml(row.original_file_name || '-')}</div>
                   ${row.review_note ? `<div>메모: ${escapeHtml(row.review_note)}</div>` : ''}
