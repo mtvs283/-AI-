@@ -322,17 +322,43 @@
       background: #111;
       border: 1px solid rgba(86, 67, 47, .12);
     }
-    .split-stage video,
-    .split-stage iframe {
+    .split-stage.is-paper {
+      background: #f3eee6;
+    }
+    .split-stage > video,
+    .split-stage > iframe {
       display: block;
       width: 100%;
       height: 100%;
       border: 0;
       background: #111;
     }
-    .split-stage video {
+    .split-stage > video {
       object-fit: cover;
       object-position: 50% 42%;
+    }
+    .video-crop {
+      --sx: 547;
+      --sy: 96;
+      --sw: 825;
+      --sh: 887;
+      --vw: 1920;
+      --vh: 1080;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background: #f3eee6;
+    }
+    .video-crop video {
+      position: absolute;
+      width: calc(var(--vw) / var(--sw) * 100%);
+      height: calc(var(--vh) / var(--sh) * 100%);
+      left: calc(var(--sx) / var(--sw) * -100%);
+      top: calc(var(--sy) / var(--sh) * -100%);
+      max-height: none;
+      object-fit: fill;
+      background: #f3eee6;
     }
 
 
@@ -998,8 +1024,9 @@
         min-height: 42vh;
         height: auto;
       }
-      .split-stage video,
-      .split-stage iframe { height: 42vh; }
+      .split-stage.is-paper { height: 42vh; }
+      .split-stage > video,
+      .split-stage > iframe { height: 42vh; }
     }
   </style>
 </head>
@@ -1063,8 +1090,10 @@
           </article>
         </div>
       </div>
-      <div class="split-stage">
-        <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
+      <div class="split-stage is-paper">
+        <div class="video-crop">
+          <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
+        </div>
       </div>
     </div>
   </section>
