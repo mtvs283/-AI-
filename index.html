@@ -360,6 +360,55 @@
       object-fit: fill;
       background: #f3eee6;
     }
+    .philosophy-hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background: #efe8dc;
+    }
+    .philosophy-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .philosophy-bg .video-crop {
+      position: absolute;
+      top: 50%;
+      left: 58%;
+      aspect-ratio: 825 / 887;
+      height: 108%;
+      width: auto;
+      min-width: 62%;
+      transform: translate(-50%, -50%);
+      background: #efe8dc;
+    }
+    .philosophy-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        rgba(245, 241, 233, .94) 0%,
+        rgba(245, 241, 233, .82) 32%,
+        rgba(245, 241, 233, .32) 56%,
+        rgba(245, 241, 233, .08) 76%,
+        transparent 100%
+      );
+    }
+    .philosophy-fg {
+      position: relative;
+      z-index: 2;
+      width: min(420px, 100%);
+    }
+    .philosophy-fg .card {
+      background: rgba(255, 255, 255, .82);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .philosophy-bg video { visibility: hidden; }
+    }
 
 
     #platform-title {
@@ -1024,9 +1073,15 @@
         min-height: 42vh;
         height: auto;
       }
-      .split-stage.is-paper { height: 42vh; }
-      .split-stage > video,
-      .split-stage > iframe { height: 42vh; }
+      .philosophy-bg .video-crop {
+        left: 50%;
+        height: 100%;
+        min-width: 100%;
+      }
+      .philosophy-scrim {
+        background: linear-gradient(180deg, rgba(245,241,233,.92) 0%, rgba(245,241,233,.78) 52%, rgba(245,241,233,.5) 100%);
+      }
+      .philosophy-fg { width: 100%; }
     }
   </style>
 </head>
@@ -1071,29 +1126,28 @@
     <a class="scroll" href="#philosophy">SCROLL</a>
   </main>
 
-  <section class="content-section" id="philosophy">
-    <div class="split-board">
-      <div class="split-copy">
-        <h2>교육 철학</h2>
-        <div class="split-stack">
-          <article class="card">
-            <h3>배움은 연결입니다</h3>
-            <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
-          </article>
-          <article class="card">
-            <h3>기술보다 사람입니다</h3>
-            <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
-          </article>
-          <article class="card">
-            <h3>한국어를 보이게 합니다</h3>
-            <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
-          </article>
-        </div>
+  <section class="content-section philosophy-hero" id="philosophy">
+    <div class="philosophy-bg" aria-hidden="true">
+      <div class="video-crop">
+        <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline></video>
       </div>
-      <div class="split-stage is-paper">
-        <div class="video-crop">
-          <video src="./videos/vowel_demo.mp4" autoplay muted loop playsinline title="모음 획순 데모 영상"></video>
-        </div>
+    </div>
+    <div class="philosophy-scrim" aria-hidden="true"></div>
+    <div class="philosophy-fg">
+      <h2>교육 철학</h2>
+      <div class="split-stack">
+        <article class="card">
+          <h3>배움은 연결입니다</h3>
+          <p>교실의 경계를 넘어 사람과 사람, 사람과 AI를 연결하는 한국어 교육을 지향합니다.</p>
+        </article>
+        <article class="card">
+          <h3>기술보다 사람입니다</h3>
+          <p>AI는 교사를 대체하지 않습니다. 교사의 가능성을 넓히는 교육 도구입니다.</p>
+        </article>
+        <article class="card">
+          <h3>한국어를 보이게 합니다</h3>
+          <p>발음, 문법, 대화, 문화 콘텐츠를 시각화하여 학습자가 쉽게 이해하도록 돕습니다.</p>
+        </article>
       </div>
     </div>
   </section>
