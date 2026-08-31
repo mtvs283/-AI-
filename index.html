@@ -874,6 +874,26 @@
       outline: none;
     }
 
+    .board-meta-sep { color: rgba(86, 67, 47, .38); }
+
+    .danger-link {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #a53a2a;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .danger-link:hover,
+    .danger-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    .danger-link:disabled { opacity: .55; cursor: default; text-decoration: none; }
+
     .board-shell {
       margin-top: 10px;
       padding: 24px 28px;
@@ -1718,8 +1738,8 @@
       const listed = await supabaseClient.rpc('onmaeum_list_shared_materials');
       if (listed.error) {
         const columns = isVerifiedTeacher
-          ? 'title, category, note, file_path, file_name, created_at'
-          : 'title, category, created_at';
+          ? 'id, title, category, note, file_path, file_name, created_at'
+          : 'id, title, category, created_at';
         const fallback = await supabaseClient
           .from('shared_materials')
           .select(columns)
@@ -1750,8 +1770,46 @@
             : '파일 없음')
           : '교사 인증 후 내용·파일 이용';
         const note = isVerifiedTeacher && item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
-        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}</div></td><td>${escapeHtml(item.category || '자료')}</td><td>${createdAt}</td></tr>`;
+        const removeBtn = isSiteAdmin && item.id
+          ? ` <span class="board-meta-sep">·</span> <button class="danger-link" type="button" data-delete-material="${escapeHtml(String(item.id))}" data-delete-title="${escapeHtml(item.title)}" data-delete-path="${escapeHtml(item.file_path || '')}">삭제</button>`
+          : '';
+        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}${removeBtn}</div></td><td>${escapeHtml(item.category || '자료')}</td><td>${createdAt}</td></tr>`;
       }).join('');
+    }
+
+    if (sharedMaterialList) {
+      sharedMaterialList.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-delete-material]');
+        if (!button) return;
+        if (!isSiteAdmin || !supabaseClient) return;
+
+        const id = button.dataset.deleteMaterial;
+        const title = button.dataset.deleteTitle || '이 자료';
+        const filePath = button.dataset.deletePath || '';
+        if (!window.confirm(`"${title}"을(를) 삭제할까요?\n\n올린 파일도 함께 지워지고, 되돌릴 수 없습니다.`)) return;
+
+        button.disabled = true;
+        button.textContent = '삭제 중...';
+
+        if (filePath) {
+          const removed = await supabaseClient.storage.from('teaching-materials').remove([filePath]);
+          if (removed.error) console.error(removed.error);
+        }
+
+        const { error } = await supabaseClient.from('shared_materials').delete().eq('id', id);
+        if (error) {
+          button.disabled = false;
+          button.textContent = '삭제';
+          shareStatus.classList.add('is-error');
+          shareStatus.textContent = '자료를 삭제하지 못했습니다.';
+          console.error(error);
+          return;
+        }
+
+        shareStatus.classList.remove('is-error');
+        shareStatus.textContent = '자료를 삭제했습니다.';
+        await loadSharedMaterials();
+      });
     }
 
     if (shareForm) {
