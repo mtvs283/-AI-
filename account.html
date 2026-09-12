@@ -482,6 +482,16 @@
             </form>
           </div>
 
+          <div class="verification-box" id="recruitment-email-box">
+            <h3>활동지역 구인공고 알림</h3>
+            <p>교사 인증이 완료되면 선택한 활동지역의 새 한국어강사 모집 공고를 이메일로 받습니다. 새 공고는 약 5분 단위로 모아 보내며, 이미 받은 공고는 다시 보내지 않습니다.</p>
+            <form id="recruitment-email-form">
+              <label class="check-row"><input type="checkbox" id="recruitment-email-enabled" disabled /><span>활동지역에 맞는 새 구인공고를 이메일로 받기</span></label>
+              <button class="primary-button" type="submit" id="recruitment-email-save" disabled>알림 설정 저장하기</button>
+              <p class="status" id="recruitment-email-status" aria-live="polite"></p>
+            </form>
+          </div>
+
           <div class="verification-box" id="verification-box">
             <h3>교사 회원 신청</h3>
             <p>가입할 때 교사 회원을 선택했거나 일반 회원에서 전환하려면, 활동 정보와 교원자격증 또는 교원자격확인서 중 하나를 제출해 주세요. 관리자 확인이 끝나면 교사 권한이 적용됩니다.</p>
@@ -719,7 +729,7 @@
 
       let { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
-        .select('display_name, requested_membership_type, membership_type, activity_region, activity_regions, workplace_type, verification_status, is_admin')
+        .select('display_name, requested_membership_type, membership_type, activity_region, activity_regions, workplace_type, verification_status, is_admin, recruitment_email_enabled')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -738,6 +748,12 @@
       }
 
       document.getElementById('account-display-name').textContent = profile?.display_name || user.user_metadata?.display_name || '-';
+      const emailPreference = document.getElementById('recruitment-email-enabled');
+      const hasEmailPreference = typeof profile?.recruitment_email_enabled === 'boolean';
+      emailPreference.checked = profile?.recruitment_email_enabled === true;
+      emailPreference.disabled = !hasEmailPreference;
+      document.getElementById('recruitment-email-save').disabled = !hasEmailPreference;
+      if (!hasEmailPreference) setStatus(document.getElementById('recruitment-email-status'), '알림 설정을 불러오지 못했습니다. 새로고침해 주세요.', true);
       document.getElementById('account-requested-membership-type').textContent = profile?.requested_membership_type === 'teacher' ? '교사 회원' : '일반 회원';
       document.getElementById('account-membership-type').textContent = profile?.is_admin
         ? '관리자'
@@ -824,6 +840,29 @@
       document.getElementById('account-region').textContent =
         regions.map((code) => REGION_LABELS[code] || code).join(', ');
       setStatus(statusElement, '활동 지역을 저장했습니다.');
+    });
+
+    document.getElementById('recruitment-email-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const statusElement = document.getElementById('recruitment-email-status');
+      const enabled = document.getElementById('recruitment-email-enabled').checked;
+      setBusy(form, true);
+      const { data, error: authError } = await supabaseClient.auth.getUser();
+      if (authError || !data?.user) {
+        setBusy(form, false);
+        setStatus(statusElement, '다시 로그인한 뒤 설정을 저장해 주세요.', true);
+        return;
+      }
+      const { data: saved, error } = await supabaseClient.from('profiles')
+        .update({ recruitment_email_enabled: enabled }).eq('id', data.user.id)
+        .select('recruitment_email_enabled').single();
+      setBusy(form, false);
+      if (error || saved?.recruitment_email_enabled !== enabled) {
+        setStatus(statusElement, '알림 설정을 저장하지 못했습니다. 다시 시도해 주세요.', true);
+        return;
+      }
+      setStatus(statusElement, enabled ? '새 구인공고 알림을 받도록 저장했습니다.' : '구인공고 알림을 껐습니다. 이미 발송 중인 메일은 도착할 수 있습니다.');
     });
 
     document.getElementById('signup-form').addEventListener('submit', async (event) => {
