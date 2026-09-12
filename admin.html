@@ -251,6 +251,23 @@
       return filter === 'all' ? rows : rows.filter((row) => row.status === 'pending');
     }
 
+    const approvalEmailLabels = {
+      queued: '승인 메일 발송 요청 중',
+      accepted: '승인 메일: 발송 서비스 접수 완료',
+      failed: '승인은 완료됐지만 메일 발송에 실패했습니다. Resend 발송 내역을 확인해 주세요.',
+      unknown: '승인 메일 결과 확인이 필요합니다. Resend 발송 내역을 확인해 주세요.',
+      not_requested: '승인 메일 발송 기록 없음',
+      unavailable: '승인 메일 상태를 확인하지 못했습니다.'
+    };
+
+    async function refreshApprovalEmail(row) {
+      const { data, error } = await supabaseClient.rpc('onmaeum_admin_approval_email_status', {
+        p_user_id: row.user_id
+      });
+      row.approvalEmail = error ? 'unavailable' : data;
+      return row.approvalEmail;
+    }
+
     function renderList() {
       const visible = visibleRows();
       if (!visible.length) {
@@ -281,6 +298,7 @@
                   <div>지역: ${escapeHtml(formatRegions(row))}</div>
                   <div>근무 유형: ${escapeHtml(workplaceLabels[row.workplace_type] || row.workplace_type || '-')}</div>
                   <div>파일: ${escapeHtml(row.original_file_name || '-')}</div>
+                  ${row.status === 'verified' ? `<div>${escapeHtml(approvalEmailLabels[row.approvalEmail] || '승인 메일 상태 확인 중')}</div>` : ''}
                   ${row.review_note ? `<div>메모: ${escapeHtml(row.review_note)}</div>` : ''}
                 </div>
                 <div class="actions">
@@ -314,6 +332,8 @@
       rows = data || [];
       if (openId && !rows.some((row) => row.user_id === openId)) openId = null;
       renderList();
+      await Promise.all(rows.filter((row) => row.status === 'verified').map(refreshApprovalEmail));
+      renderList();
     }
 
     async function openCertificate(filePath) {
@@ -344,8 +364,24 @@
         setListStatus(error.message || `${action}하지 못했습니다.`, true);
         return;
       }
-      setListStatus(approve ? '교사 회원으로 승인했습니다.' : '신청을 거절했습니다.');
       await loadList();
+      if (!approve) {
+        setListStatus('신청을 거절했습니다.');
+        return;
+      }
+      const row = rows.find((item) => item.user_id === userId);
+      if (!row) {
+        setListStatus('승인은 완료됐습니다. 목록을 새로고침해 메일 상태를 확인해 주세요.');
+        return;
+      }
+      setListStatus('교사 회원으로 승인했습니다. 안내 메일 발송 상태를 확인합니다.');
+      for (let attempt = 0; row.approvalEmail === 'queued' && attempt < 8; attempt += 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await refreshApprovalEmail(row);
+      }
+      renderList();
+      setListStatus('교사 회원으로 승인했습니다. ' + (approvalEmailLabels[row.approvalEmail] || approvalEmailLabels.unknown),
+        ['failed', 'unknown', 'unavailable', 'not_requested'].includes(row.approvalEmail));
     }
 
     document.querySelectorAll('.chip').forEach((button) => {

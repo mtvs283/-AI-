@@ -23,6 +23,10 @@
 - `onmaeum-recruitment-notices.sql`은 한국어강사 모집 공고 표와 동기화 함수를 만듭니다. 실행 후 파일 안의 주석 INSERT로 동기화 키를 따로 넣습니다.
 - `onmaeum-admin-role.sql`은 회원 로그인을 관리자 권한으로 씁니다. 실행 후 주석 UPDATE로 관리자 이메일을 지정합니다. `board.html`의 관리자 비밀번호 창은 쓰지 않습니다.
 - `onmaeum-admin-teacher-review.sql`은 관리자가 `admin.html`에서 교사 자격 서류를 보고 승인·거절할 수 있게 합니다.
+- `onmaeum-teacher-approval-email.sql`은 교사 승인 상태로 바뀔 때 Resend로 안내 메일을 요청합니다. Supabase Vault에 `onmaeum_resend_api_key`를 저장한 다음 실행합니다. 키 값은 소스나 SQL 편집기에 넣지 않습니다.
+- 승인 메일은 `noreply@onmaeumkr.com`에서 발송하며 로그인 링크를 포함합니다. 이미 승인된 신청을 다시 승인하거나 거절할 때는 발송하지 않습니다. 과거 승인 건에도 소급 발송하지 않습니다.
+- 관리자 화면의 전체 목록에서 신청을 펼치면 메일 상태를 볼 수 있습니다. `접수 완료`는 Resend API의 성공 응답이며 수신함 도착 보장은 아닙니다. 실패·확인 필요 상태는 Resend Emails/Logs에서 확인합니다. 자동 재시도는 하지 않습니다.
+- 키 누락이나 발송 요청 저장 오류는 승인을 중단합니다. 비동기 발송 실패가 나중에 발생해도 이미 완료된 승인을 취소하지 않습니다. 발송 요청은 `private.teacher_approval_emails`에 기록되며 API 키와 이메일 본문은 이 기록에 저장하지 않습니다. pg_net 응답은 보존 시간이 있으므로 결과를 오래 지나 조회하면 `확인 필요`로 나올 수 있습니다.
 - `account.html`에서 이메일 회원가입, 로그인, 교원자격증 또는 교원자격확인서 한 파일 제출을 처리합니다.
 - 가입할 때 일반 회원 또는 교사 회원을 선택합니다.
 - `requested_membership_type`에는 선택·신청 유형을, `membership_type`에는 실제 승인된 현재 등급을 각각 저장합니다.
