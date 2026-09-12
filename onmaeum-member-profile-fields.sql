@@ -9,6 +9,9 @@ alter table public.profiles
   add column if not exists activity_region text not null default 'not_set',
   add column if not exists workplace_type text not null default 'not_set';
 
+alter table public.profiles
+  add column if not exists naver_teacher_cafe_nickname text;
+
 alter table public.teacher_verifications
   add column if not exists document_type text not null default 'teacher_certificate';
 
@@ -63,11 +66,16 @@ security definer
 set search_path = ''
 as $$
 begin
-  insert into public.profiles (id, full_name, display_name, requested_membership_type, activity_region, workplace_type)
+  if nullif(trim(new.raw_user_meta_data ->> 'naver_teacher_cafe_nickname'), '') is null then
+    raise exception '네이버 교원카페 닉네임을 입력해 주세요.';
+  end if;
+
+  insert into public.profiles (id, full_name, display_name, naver_teacher_cafe_nickname, requested_membership_type, activity_region, workplace_type)
   values (
     new.id,
     left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'full_name'), ''), '이름 미입력'), 60),
     left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40),
+    left(trim(new.raw_user_meta_data ->> 'naver_teacher_cafe_nickname'), 50),
     case when new.raw_user_meta_data ->> 'signup_intent' = 'teacher' then 'teacher' else 'general' end,
     coalesce(nullif(trim(new.raw_user_meta_data ->> 'activity_region'), ''), 'not_set'),
     coalesce(nullif(trim(new.raw_user_meta_data ->> 'workplace_type'), ''), 'not_set')

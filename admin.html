@@ -301,6 +301,7 @@
                 <div class="meta">
                   <div>이름: ${escapeHtml(row.full_name || '-')}</div>
                   <div>활동 이름: ${escapeHtml(row.display_name || '-')}</div>
+                  <div>네이버 교원카페 닉네임: ${escapeHtml(row.naver_teacher_cafe_nickname || '미입력')}</div>
                   <div>지역: ${escapeHtml(formatRegions(row))}</div>
                   <div>근무 유형: ${escapeHtml(workplaceLabels[row.workplace_type] || row.workplace_type || '-')}</div>
                   <div>파일: ${escapeHtml(row.original_file_name || '-')}</div>

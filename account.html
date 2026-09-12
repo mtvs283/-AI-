@@ -420,6 +420,11 @@
                   <label for="signup-email">이메일</label>
                   <input id="signup-email" type="email" autocomplete="email" required />
                 </div>
+                <div class="field full">
+                  <label for="signup-naver-teacher-cafe-nickname">네이버 교원카페 닉네임</label>
+                  <input id="signup-naver-teacher-cafe-nickname" type="text" maxlength="50" required />
+                  <p class="hint">가입 확인을 위해 교원카페에서 사용 중인 닉네임을 정확히 입력해 주세요.</p>
+                </div>
                 <div class="field full teacher-signup-field" hidden>
                   <label>주 활동 지역 <span class="region-hint">여러 곳을 고를 수 있어요. 출퇴근 가능한 인접 지역도 함께 골라 두시면 공고를 더 많이 보실 수 있습니다.</span></label>
                   <div class="region-picker" id="signup-regions" role="group" aria-label="주 활동 지역"></div>
@@ -451,7 +456,7 @@
               </div>
               <label class="check-row">
                 <input id="signup-consent" type="checkbox" required />
-                <span>회원 운영을 위해 이메일, 이름, 활동 이름과 선택한 가입 유형의 정보를 처리하는 것에 동의합니다.</span>
+                <span>회원 운영과 가입 확인을 위해 이메일, 이름, 활동 이름, 네이버 교원카페 닉네임과 선택한 가입 유형의 정보를 처리하는 것에 동의합니다.</span>
               </label>
               <button class="primary-button" type="submit">회원가입하고 이메일 확인하기</button>
               <p class="status" id="signup-status" aria-live="polite"></p>
@@ -901,6 +906,7 @@
           data: {
             full_name: document.getElementById('signup-name').value.trim(),
             display_name: document.getElementById('signup-display-name').value.trim(),
+            naver_teacher_cafe_nickname: document.getElementById('signup-naver-teacher-cafe-nickname').value.trim(),
             signup_intent: signupKind,
             activity_region: signupKind === 'teacher' ? signupRegions[0] : 'not_set',
             activity_regions: signupKind === 'teacher' ? signupRegions : [],

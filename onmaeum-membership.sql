@@ -10,6 +10,7 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null,
   display_name text not null,
+  naver_teacher_cafe_nickname text,
   requested_membership_type text not null default 'general'
     check (requested_membership_type in ('general', 'teacher')),
   membership_type text not null default 'general'
@@ -102,11 +103,16 @@ security definer
 set search_path = ''
 as $$
 begin
-  insert into public.profiles (id, full_name, display_name, requested_membership_type, activity_region, workplace_type)
+  if nullif(trim(new.raw_user_meta_data ->> 'naver_teacher_cafe_nickname'), '') is null then
+    raise exception '네이버 교원카페 닉네임을 입력해 주세요.';
+  end if;
+
+  insert into public.profiles (id, full_name, display_name, naver_teacher_cafe_nickname, requested_membership_type, activity_region, workplace_type)
   values (
     new.id,
     left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'full_name'), ''), '이름 미입력'), 60),
     left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40),
+    left(trim(new.raw_user_meta_data ->> 'naver_teacher_cafe_nickname'), 50),
     case when new.raw_user_meta_data ->> 'signup_intent' = 'teacher' then 'teacher' else 'general' end,
     coalesce(nullif(trim(new.raw_user_meta_data ->> 'activity_region'), ''), 'not_set'),
     coalesce(nullif(trim(new.raw_user_meta_data ->> 'workplace_type'), ''), 'not_set')
@@ -122,11 +128,12 @@ create trigger on_auth_user_created_onmaeum
   for each row execute procedure private.handle_new_onmaeum_user();
 
 -- 회원 기능을 붙이기 전에 만들어진 기존 Auth 사용자가 있다면 프로필을 보완합니다.
-insert into public.profiles (id, full_name, display_name, requested_membership_type, activity_region, workplace_type)
+insert into public.profiles (id, full_name, display_name, naver_teacher_cafe_nickname, requested_membership_type, activity_region, workplace_type)
 select
   u.id,
   left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'full_name'), ''), '이름 미입력'), 60),
   left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'display_name'), ''), '새 선생님'), 40),
+  left(nullif(trim(u.raw_user_meta_data ->> 'naver_teacher_cafe_nickname'), ''), 50),
   case when u.raw_user_meta_data ->> 'signup_intent' = 'teacher' then 'teacher' else 'general' end,
   coalesce(nullif(trim(u.raw_user_meta_data ->> 'activity_region'), ''), 'not_set'),
   coalesce(nullif(trim(u.raw_user_meta_data ->> 'workplace_type'), ''), 'not_set')
