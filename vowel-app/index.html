@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>한글 모음 획순 학습</title>
+<link rel="icon" type="image/png" href="favicon.png"/>
+<link rel="stylesheet" href="style.css?v=20260525-vowel-svg-90"/>
+<script>
+if(new URLSearchParams(location.search).get('page')==='basic'){
+  document.documentElement.classList.add('embed-basic');
+}
+</script>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="title">
+      <img class="company-logo" src="images/company-logo.png" alt="온마음 한국어 로고"/>
+      <h1>한글 모음 획순 배우기</h1>
+      <p>천 · 지 · 인 원리 · 기본/획추가/결합/이중모음</p>
+    </div>
+    <div class="toolbar">
+      <label for="nativeLang" class="toolbar-label">사용언어</label>
+      <select id="nativeLang" class="select" onchange="setLanguage()"></select>
+    </div>
+  </header>
+
+  <section id="stepScreen" class="card step-card"><div id="basicGrid" class="step-list"></div></section>
+
+
+
+  <section id="principleScreen" class="principle-screen hidden">
+    <div class="learn-nav principle-nav"><button class="step-nav-btn" type="button" onclick="showHomeScreen()">첫 페이지로</button><button class="next-step-btn" type="button" onclick="pick('ㅏ',null)"><img src="images/company-logo.png" alt="온마음 한국어 로고"/>STEP 1로</button></div>
+    <section class="card cheonjiin-page">
+      <div class="cheonjiin-page-copy">
+        <button class="principle-step-pill" type="button" onclick="showPrincipleStep()">STEP 0</button>
+        <h2>천지인 원리</h2>
+        <p>하늘의 해가 사람과 땅 사이를 이동하며 모음을 만듭니다.</p>
+        <div class="cheonjiin-page-list">
+          <span><b>ㅣ</b> 사람</span>
+          <span><b>ㅡ</b> 땅</span>
+          <span><b>·</b> 하늘</span>
+        </div>
+      </div>
+      <div id="cheonjiinPageArt" class="cheonjiin-page-art"></div>
+    </section>
+        <div class="cheonjiin-sheet-note">
+      <img src="images/teacher-logo.png" alt="TK쌤 로고"/>
+      <p>자음은 혀로 막거나 입을 닫아서 공기의 흐름을 방해 하지만 모음은 입모양과 혀의 위치변화로만 소리냅니다.</p>
+    </div>
+</section>
+
+  <section id="learnScreen" class="learn-screen hidden">
+    <div class="learn-nav"><button class="step-nav-btn" type="button" onclick="showHomeScreen()">첫 페이지로</button><div id="learnVowelNav" class="learn-vowel-nav"></div><div class="step-move-group"><button id="prevStepBtn" class="step-move-btn prev" type="button" onclick="goPrevStep()">이전 단계로</button><button id="nextStepBtn" class="step-move-btn next" type="button" onclick="goNextStep()"><img src="images/company-logo.png" alt="온마음 한국어 로고"/>다음 단계로</button></div></div>
+
+  <section class="main-grid">
+    <div class="card panel animation-panel">
+      <p class="section-title">획순 애니메이션</p>
+      <div class="svg-wrap">
+        <svg id="svgArea" viewBox="0 0 120 140" aria-label="모음 획순 애니메이션"></svg>
+        <div class="coach-tip"><span class="coach-bubble">천천히 따라 써 보세요.</span><img class="coach-logo" src="images/teacher-logo.png" alt="TK쌤 로고"/></div>
+      </div>
+      <div id="strokeLabels" class="labels"></div>
+      <div class="stroke-controls">
+        <div class="stroke-speed">
+          <div class="stroke-speed-head">
+            <span class="stroke-speed-label">속도</span>
+            <span id="speedLabel">보통</span>
+          </div>
+          <input type="range" id="speedSlider" min="1" max="5" value="3" step="1"/>
+        </div>
+        <button type="button" class="btn stroke-replay-btn" id="replayStrokeBtn">다시 보기</button>
+      </div>
+
+    </div>
+
+    <div class="card panel info-panel">
+      <p class="section-title">모음 이름과 소리</p>
+      <div class="info-head"><div id="dChar" class="big-char"></div><div class="info-texts"><div id="dRoman" class="name"></div><div id="dEng" class="sound"></div><div id="stepFeature" class="pill">기본 모음</div></div></div>
+      <div class="listen-grid"><button class="listen-card" id="spkMain" onclick="spkCur()" title="발음 듣기"><span class="listen-label">발음 듣기</span><strong id="phonemeListenText">ㅏ</strong></button></div>
+      <p class="section-title mt">발음 설명</p>
+      <div class="desc-box"><img class="desc-logo" src="images/teacher-logo.png" alt="TK쌤 로고"/><div class="desc-copy"><div id="explainKo" class="ko"></div><div id="explainLangTitle" class="meaning-title">선택 언어</div><div id="explainNative" class="other"></div></div></div>
+      <div class="btn-row lesson-control-row"><button class="btn primary" id="soundListenBtn" onclick="spkCur()">소리 듣기</button><button class="btn" id="repeatPracticeBtn" onclick="playLesson(false)">따라하기</button><button class="btn" id="analyzePracticeBtn" disabled>분석하기</button></div>
+      <div class="status lesson-audio-status" id="audioStatus">음성 파일이 없으면 브라우저 음성으로 재생돼요.</div>
+      
+    </div>
+  </section>
+
+  <section class="support-grid">
+    <div class="card support-card word-section">
+      <p class="section-title">관련 단어</p>
+      <div id="wordList" class="word-chip-row"></div>
+      <div id="wordCardWrap" class="flash-wrap"><div id="wordFlashCard" class="flash-card">
+        <div class="flash-face flash-front"><img id="wordImage" class="word-img" alt="단어 그림" style="display:none;"/><div id="wordPlaceholder" class="word-placeholder">그림</div><div class="word-inline"><div id="wordText" class="word-main"></div><button class="sbtn" id="spkWord" onclick="spkWord()" title="단어 듣기"></button></div><div id="wordShort" class="word-sub">카드를 눌러 뜻을 확인하세요.</div><div class="word-actions"><button class="word-action-btn" onclick="flipWordCard()">카드뒤집기</button></div></div>
+        <div class="flash-face flash-back"><div class="word-back-box"><div class="word-back-title">한국어</div><div id="wordMeaningKo"></div></div><div class="word-back-box"><div id="wordMeaningNativeTitle" class="word-back-title">선택 언어</div><div id="wordMeaningNative"></div></div><div class="word-back-box"><div class="word-back-title">예문</div><div id="wordExampleKo"></div><div id="wordExampleNative" class="example-other"></div></div><div class="word-actions"><button class="word-action-btn" onclick="flipWordCard()">앞면 보기</button><button class="word-action-btn" onclick="spkWord()">듣기</button></div></div>
+      </div></div>
+    </div>
+    <div class="card support-card"><p class="section-title">조합</p><div class="combo-line"><span class="combo-base">ㅇ</span><span>+</span><span id="cVowel" class="combo-vowel"></span><span>=</span><span id="cResult" class="combo-result"></span><button class="sbtn" id="spkCombo" onclick="spkCmb()" title="조합 듣기"></button></div></div>
+    <div class="card support-card"><p class="section-title">간단한 쓰기 연습</p><div class="practice-target-row"><span id="practiceTarget" class="practice-target"></span><button class="sbtn" id="spkPractice" onclick="spkCmb()" title="듣기"></button></div><input id="practiceInput" class="practice-input" maxlength="2" placeholder="여기에 따라 쓰기" oninput="checkPractice()"/><div id="practiceMsg" class="practice-answer">획순을 본 뒤 직접 입력해 보세요.</div></div>
+  </section>
+  </section>
+</div>
+<script src="app.js?v=20260525-vowel-syllable-strokes"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
