@@ -39,9 +39,9 @@ begin
     begin
       select exists (
         select 1
-        from public.profiles
-        where id = auth.uid()
-          and is_admin is true
+        from public.profiles p
+        where p.id = auth.uid()
+          and p.is_admin is true
       ) into ok;
       if ok then
         return true;
@@ -121,23 +121,9 @@ begin
     raise exception '글을 찾을 수 없습니다.';
   end if;
 
-  admin := false;
-  begin
-    if auth.uid() is not null then
-      select exists (
-        select 1 from public.profiles
-        where id = auth.uid() and is_admin is true
-      ) into admin;
-    end if;
-  exception
-    when undefined_table then
-      admin := false;
-    when undefined_column then
-      admin := false;
-  end;
-  if not coalesce(admin, false) then
-    admin := public.onmaeum_is_admin(p_password);
-  end if;
+  -- 반환 컬럼 이름 id와 profiles.id가 겹치면 모호한 참조 오류가 납니다.
+  -- 관리자 판별은 onmaeum_is_admin 한 곳에서만 합니다.
+  admin := coalesce(public.onmaeum_is_admin(p_password), false);
 
   if r.is_secret and not admin then
     if r.password_hash is null

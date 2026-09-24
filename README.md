@@ -22,6 +22,8 @@
 - `onmaeum-shared-materials-preview.sql`은 자료공유 목록에서 설명·파일 경로를 인증 교사만 받게 합니다.
 - `onmaeum-recruitment-notices.sql`은 한국어강사 모집 공고 표와 동기화 함수를 만듭니다. 실행 후 파일 안의 주석 INSERT로 동기화 키를 따로 넣습니다.
 - `onmaeum-admin-role.sql`은 회원 로그인을 관리자 권한으로 씁니다. 실행 후 주석 UPDATE로 관리자 이메일을 지정합니다. `board.html`의 관리자 비밀번호 창은 쓰지 않습니다.
+- `onmaeum-inquiry-admin-fix.sql`은 관리자로 로그인해도 비밀글이 열리지 않던 문제를 고칩니다. `onmaeum_get_inquiry`의 반환 컬럼 `id`와 `profiles.id`가 겹쳐 로그인 사용자에게만 오류가 났습니다.
+- `onmaeum-inquiry-admin-password-off.sql`은 공용 관리자 비밀번호를 없애고 회원 로그인만 관리자로 인정합니다. 위 수정 파일을 먼저 실행하고 관리자 로그인으로 비밀글이 열리는지 확인한 다음 실행합니다. 초기값 `onmaeum-admin`은 공개 저장소에 적혀 있어 그대로 두면 누구나 비밀글 본문과 작성자 이메일을 읽을 수 있습니다.
 - `onmaeum-admin-teacher-review.sql`은 관리자가 `admin.html`에서 교사 자격 서류를 보고 승인·거절할 수 있게 합니다.
 - `onmaeum-teacher-approval-email.sql`은 교사 승인 상태로 바뀔 때 Resend로 안내 메일을 요청합니다. Supabase Vault에 `onmaeum_resend_api_key`를 저장한 다음 실행합니다. 키 값은 소스나 SQL 편집기에 넣지 않습니다.
 - 승인 메일은 `noreply@onmaeumkr.com`에서 발송하며 로그인 링크를 포함합니다. 이미 승인된 신청을 다시 승인하거나 거절할 때는 발송하지 않습니다. 과거 승인 건에도 소급 발송하지 않습니다.

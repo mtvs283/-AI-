@@ -1,15 +1,12 @@
--- 회원 로그인을 관리자 권한으로 씁니다.
+-- 문의 게시판: 관리자로 로그인해도 비밀글이 열리지 않던 문제를 고칩니다.
 -- 온마음 회원용 SQL Editor에서 이 파일 전체를 실행합니다.
--- kodak2133@gmail.com이 관리자가 되고, 비밀글도 비밀번호 없이 읽습니다.
--- 문의 표가 아직 없으면 먼저 onmaeum-inquiries.sql을 실행하세요.
-
-begin;
-
-alter table public.profiles
-  add column if not exists is_admin boolean not null default false;
-
-comment on column public.profiles.is_admin is
-  '사이트 관리자. 회원 로그인만으로 문의 답변 등이 열립니다. 브라우저는 이 값을 바꿀 수 없습니다.';
+--
+-- 원인: onmaeum_get_inquiry의 반환 컬럼 이름에 id가 있어서, 함수 안의
+-- `where id = auth.uid()`에서 id가 반환 변수인지 profiles의 컬럼인지 모호해집니다.
+-- PostgreSQL은 이때 오류를 냅니다. 이 문장은 로그인한 사용자일 때만 실행되므로
+-- 비로그인 방문자는 정상이고 관리자만 실패했습니다.
+--
+-- 해결: 모호한 문장을 없애고, 관리자 판별은 onmaeum_is_admin 하나로 모읍니다.
 
 create or replace function public.onmaeum_is_admin(p_password text default null)
 returns boolean
@@ -57,18 +54,6 @@ begin
 end;
 $$;
 
-revoke all on function public.onmaeum_is_admin(text) from public;
-grant execute on function public.onmaeum_is_admin(text) to anon, authenticated;
-
-commit;
-
-update public.profiles
-set is_admin = true
-where id = (
-  select id from auth.users where lower(email) = 'kodak2133@gmail.com'
-);
-
--- 관리자는 비밀글 비밀번호 없이 본문·이메일을 읽습니다. 문의 표가 있을 때만 실행됩니다.
 create or replace function public.onmaeum_get_inquiry(p_id bigint, p_password text default null)
 returns table (
   id bigint,
@@ -89,18 +74,16 @@ set search_path = public, extensions
 as $$
 declare
   r public.onmaeum_inquiries%rowtype;
-  admin boolean;
+  site_admin boolean;
 begin
   select * into r from public.onmaeum_inquiries where onmaeum_inquiries.id = p_id;
   if not found then
     raise exception '글을 찾을 수 없습니다.';
   end if;
 
-  -- 반환 컬럼 이름 id와 profiles.id가 겹치면 모호한 참조 오류가 납니다.
-  -- 관리자 판별은 onmaeum_is_admin 한 곳에서만 합니다.
-  admin := coalesce(public.onmaeum_is_admin(p_password), false);
+  site_admin := coalesce(public.onmaeum_is_admin(p_password), false);
 
-  if r.is_secret and not admin then
+  if r.is_secret and not site_admin then
     if r.password_hash is null
        or p_password is null
        or extensions.crypt(p_password, r.password_hash) <> r.password_hash then
@@ -114,7 +97,7 @@ begin
     r.title,
     r.name,
     r.org,
-    case when admin or not r.is_secret then r.email else null end,
+    case when site_admin or not r.is_secret then r.email else null end,
     r.content,
     r.is_secret,
     r.answer,
@@ -123,4 +106,6 @@ begin
 end;
 $$;
 
+revoke all on function public.onmaeum_is_admin(text) from public;
+grant execute on function public.onmaeum_is_admin(text) to anon, authenticated;
 grant execute on function public.onmaeum_get_inquiry(bigint, text) to anon, authenticated;
