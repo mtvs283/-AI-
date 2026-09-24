@@ -331,14 +331,14 @@
       if (!currentInquiry) { msg.className = 'msg err'; msg.textContent = '글을 다시 열어주세요.'; return; }
       if (!answer) { msg.className = 'msg err'; msg.textContent = '답변 내용을 입력하세요.'; return; }
       $('replyBtn').disabled = true;
-      const { error } = await sb.rpc('onmaeum_answer_inquiry', {
+      const { data, error } = await sb.rpc('onmaeum_answer_inquiry', {
         p_id: currentInquiry.id,
         p_password: null,
         p_answer: answer
       });
       $('replyBtn').disabled = false;
       if (error) { msg.className = 'msg err'; msg.textContent = '답변 등록에 실패했습니다.'; return; }
-      const emailed = !!currentInquiry.email;
+      const emailed = data === true;
       await openDetail(currentInquiry.id, currentInquiry.is_secret);
       $('replyMsg').className = 'msg ok';
       $('replyMsg').textContent = emailed ? '답변을 등록했고, 작성자에게 메일을 보냈습니다.' : '답변을 등록했습니다.';

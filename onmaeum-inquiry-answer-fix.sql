@@ -1,6 +1,12 @@
--- 온마음 문의: 관리자 답변 저장 + 작성자에게 메일
--- 메일 키는 Vault의 onmaeum_resend_api_key를 씁니다.
--- 메일은 보조 기능이므로 발송이 실패해도 답변은 남깁니다.
+-- 문의 게시판: 관리자가 답변을 등록해도 저장되지 않던 문제를 고칩니다.
+-- 온마음 회원용 SQL Editor에서 이 파일 전체를 실행합니다.
+--
+-- 원인: onmaeum_answer_inquiry가 onmaeum_inquiry_settings.resend_api_key를 읽는데
+-- 그 컬럼은 어느 SQL에서도 만들지 않습니다. 없는 필드를 읽는 순간 함수 전체가
+-- 실패하고, 같은 트랜잭션이라 앞서 실행한 답변 저장까지 되돌아갔습니다.
+--
+-- 해결: 다른 메일 기능과 같이 Vault의 onmaeum_resend_api_key를 씁니다.
+-- 메일은 보조 기능이므로 발송에 실패해도 답변은 남깁니다.
 -- 반환값은 메일을 실제로 접수했는지를 뜻합니다.
 
 create extension if not exists pg_net with schema extensions;
