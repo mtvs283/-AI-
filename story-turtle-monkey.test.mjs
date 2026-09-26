@@ -4,6 +4,7 @@ import test from 'node:test';
 
 const dataPath = new URL('./story-turtle-monkey-data.mjs', import.meta.url);
 const pagePath = new URL('./story-turtle-monkey.html', import.meta.url);
+const homePath = new URL('./index.html', import.meta.url);
 
 test('20쪽 전체의 본문과 클릭 주석을 제공한다', async () => {
   assert.ok(existsSync(dataPath), '주석 데이터 모듈이 아직 없다');
@@ -47,4 +48,11 @@ test('동화 페이지가 인증 확인과 접근 가능한 탐색 UI를 포함�
   assert.match(html, /role="dialog"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /className\s*=\s*['"]annotation-trigger['"]/);
+});
+
+test('자료공유 목록에 필리핀 이중언어 동화를 고정 자료로 제공한다', () => {
+  const html = readFileSync(homePath, 'utf8');
+  assert.match(html, /필리핀 구전설화 이중언어 동화 \(타갈로그어\)/);
+  assert.match(html, /\.\/story-turtle-monkey\.html/);
+  assert.match(html, /이중언어 동화/);
 });

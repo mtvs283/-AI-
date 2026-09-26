@@ -1760,12 +1760,22 @@
         return;
       }
 
-      if (!data.length) {
-        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">아직 등록된 자료가 없습니다. 첫 자료를 올려 주세요.</td></tr>';
-        return;
-      }
+      data = Array.isArray(data) ? data : [];
+      const featuredStoryRow = `
+        <tr>
+          <td>${data.length + 1}</td>
+          <td class="board-title-cell">
+            <strong>필리핀 구전설화 이중언어 동화 (타갈로그어)</strong>
+            <p>한국어와 타갈로그어로 읽고, 점선으로 표시된 한국어 표현을 눌러 단어와 문법을 확인하는 인터랙티브 동화입니다.</p>
+            <div class="board-meta">
+              <a class="file-link" href="./story-turtle-monkey.html" target="_blank" rel="noopener">동화 열기</a>
+            </div>
+          </td>
+          <td>이중언어 동화</td>
+          <td>2026. 9. 27.</td>
+        </tr>`;
 
-      sharedMaterialList.innerHTML = data.map((item, index) => {
+      sharedMaterialList.innerHTML = featuredStoryRow + data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = isVerifiedTeacher
           ? (item.file_path
