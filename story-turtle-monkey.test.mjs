@@ -56,3 +56,13 @@ test('자료공유 목록에 필리핀 이중언어 동화를 고정 자료로 �
   assert.match(html, /\.\/story-turtle-monkey\.html/);
   assert.match(html, /이중언어 동화/);
 });
+
+test('데스크톱 동화 화면은 100dvh 안에 고정되고 모바일에서만 문서 스크롤을 허용한다', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  assert.match(html, /body\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(html, /main\s*\{[^}]*height:\s*calc\(100dvh - 64px\)/s);
+  assert.match(html, /#story-content\s*\{[^}]*height:\s*100%/s);
+  assert.match(html, /\.book-page\s*\{[^}]*flex:\s*1[^}]*min-height:\s*0/s);
+  assert.match(html, /\.story-nav\s*\{[^}]*flex:\s*0 0 54px/s);
+  assert.match(html, /@media \(max-width:\s*820px\)[\s\S]*body\s*\{[^}]*overflow-y:\s*auto/s);
+});
