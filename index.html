@@ -1803,7 +1803,21 @@
           <td>2026. 10. 18.</td>
         </tr>`;
 
-      sharedMaterialList.innerHTML = journeyWestOneRow + vietnamStoryRow + featuredStoryRow + data.map((item, index) => {
+      const geomungoStoryRow = `
+        <tr>
+          <td>${data.length + 4}</td>
+          <td class="board-title-cell">
+            <strong>한국어 동화(한국)- 왕산악과 거문고</strong>
+            <p>왕산악이 음악을 연주하자 검은 학이 춤추었다는 거문고 유래 전설입니다. 한국어 본문 20쪽과 문화·낱말·문법 클릭 주석을 함께 읽습니다.</p>
+            <div class="board-meta">
+              <a class="file-link" href="./왕산악과 거문고.html" target="_blank" rel="noopener">동화 열기</a>
+            </div>
+          </td>
+          <td>한국어 동화</td>
+          <td>2026. 10. 18.</td>
+        </tr>`;
+
+      sharedMaterialList.innerHTML = geomungoStoryRow + journeyWestOneRow + vietnamStoryRow + featuredStoryRow + data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = isVerifiedTeacher
           ? (item.file_path
