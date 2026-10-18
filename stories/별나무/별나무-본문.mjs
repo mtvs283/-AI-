@@ -1,0 +1,142 @@
+// 베트남 전래동화 Cây khế. 한국어 재서술 및 베트남어 번역: 자비스, 2026-10-18.
+// 판본 대조: Heritage 176, The star fruit tree, 2022-05-17.
+// https://heritagevietnamairlines.com/en/the-star-fruit-tree/
+// 형제, 아내, 세 뼘 자루, 재산 교환, 큰 자루와 바다 결말을 따름.
+// 현대 재화의 문장과 삽화는 복제하지 않음. 원어민 번역 검수 미실시.
+// TK샘의 별도 한 권 제작 요청. 제작 기준: 거북이와 원숭이, 기존 수채화.
+
+const rows = [
+['옛날 베트남의 한 마을에 형제가 살았어요. 부모님이 돌아가신 뒤에도 동생은 날마다 부지런히 일했어요. 그런데 결혼한 형은 점점 일을 동생에게 맡겼어요.', 'Ngày xưa, ở một làng nọ tại Việt Nam có hai anh em. Sau khi cha mẹ qua đời, người em vẫn chăm chỉ làm việc mỗi ngày. Nhưng sau khi lấy vợ, người anh dần giao hết công việc cho em.', [
+['형제','형제','Hai anh em trai trong cùng một gia đình.','형과 동생을 함께 이르는 말이에요.','예문 · 두 형제가 함께 살아요.'],
+['돌아가신','돌아가시다','Cách nói kính trọng của từ chết.','사람이 죽었다는 뜻을 높여서 말해요.','예문 · 할머니는 오래전에 돌아가셨어요.'],
+['부지런히','부지런히','Làm việc siêng năng, không lười biếng.','게으름을 피우지 않고 열심히 하는 모습이에요.','예문 · 아침부터 부지런히 일해요.'],
+['맡겼어요','맡기다','Giao công việc cho người khác làm.','자기가 할 일을 다른 사람이 하게 해요.','예문 · 동생에게 심부름을 맡겼어요.']]],
+['어느 날 형은 재산을 나누자고 했어요. 형은 좋은 집과 논을 모두 차지했어요. 동생 부부에게는 낡은 오두막과 별나무 한 그루만 주었어요.', 'Một hôm, người anh đòi chia gia sản. Anh giữ hết nhà đẹp và ruộng lúa. Anh chỉ cho vợ chồng người em một túp lều cũ và một cây khế.', [
+['재산','재산','Nhà cửa, đất đai, tiền bạc và những thứ mình sở hữu.','집이나 땅, 돈처럼 가지고 있는 것을 말해요.','예문 · 두 사람이 재산을 나눴어요.'],
+['논','논','Ruộng có nước dùng để trồng lúa.','벼를 기르는 농사짓는 땅이에요.','예문 · 논에서 벼가 자라요.'],
+['차지했어요','차지하다','Giành lấy hoặc giữ một thứ cho mình.','어떤 것을 자기 것으로 가져요.','예문 · 형이 넓은 방을 차지했어요.'],
+['한 그루','그루','Từ dùng để đếm cây.','나무의 수를 세는 말이에요.','예문 · 마당에 나무 한 그루가 있어요.']]],
+['동생 부부는 형을 원망하지 않았어요. 남의 집 일을 도우며 먹을 것을 구했어요. 집에 돌아오면 별나무에 물을 주고 정성껏 돌보았어요.', 'Vợ chồng người em không oán trách anh. Họ làm thuê để kiếm cái ăn. Khi về nhà, họ tưới nước và hết lòng chăm sóc cây khế.', [
+['원망하지','원망하다','Trách người khác vì cho rằng họ làm mình khổ.','다른 사람 때문에 힘들다고 생각하며 탓해요.','예문 · 친구를 원망하지 않았어요.'],
+['남의','남','Người khác, không phải mình.','자기가 아닌 다른 사람을 말해요.','예문 · 남의 물건을 가져가면 안 돼요.'],
+['구했어요','구하다','Tìm hoặc kiếm được thứ mình cần.','필요한 것을 찾거나 얻어요.','예문 · 시장에서 먹을 것을 구했어요.'],
+['정성껏','정성껏','Làm bằng tất cả sự chăm chút và tấm lòng.','마음을 다해서 아주 소중하게 해요.','예문 · 꽃을 정성껏 길렀어요.']]],
+['계절이 지나자 가지마다 열매가 주렁주렁 달렸어요. 길쭉한 노란 열매에는 다섯 줄의 모서리가 있었어요. 부부는 열매를 팔아 쌀을 사려고 했어요.', 'Mùa quả đến, khế sai trĩu cành. Những quả vàng thuôn dài có năm múi nổi dọc thân quả. Hai vợ chồng định bán khế để mua gạo.', [
+['가지마다','마다','Gắn sau danh từ để chỉ từng đối tượng, không bỏ sót.','어느 하나 빠짐없이 모두 그렇다는 뜻이에요.','예문 · 아침마다 운동해요.'],
+['주렁주렁','주렁주렁','Nhiều quả cùng treo trên cành cây.','열매가 여러 개 많이 달린 모습이에요.','예문 · 포도가 주렁주렁 달렸어요.'],
+['모서리','모서리','Phần cạnh nổi lên nơi hai mặt gặp nhau.','물건의 두 면이 만나서 생긴 가장자리예요.','예문 · 책상 모서리에 부딪혔어요.'],
+['사려고','-(으)려고','Diễn tả ý định hoặc mục đích làm một việc.','앞으로 할 생각이나 목적을 나타내요.','예문 · 빵을 사려고 가게에 갔어요.']]],
+['그러던 어느 아침, 커다란 새 한 마리가 날아왔어요. 새는 별나무에 앉아 잘 익은 열매를 먹었어요. 그 뒤로도 아침마다 찾아와 열매를 따 먹었어요.', 'Một buổi sáng, một con chim khổng lồ bay đến. Chim đậu trên cây khế và ăn những quả chín. Từ đó, sáng nào chim cũng đến ăn khế.', [
+['커다란','커다랗다','Có kích thước rất lớn.','크기가 아주 크다는 뜻이에요.','예문 · 커다란 배가 바다를 건너요.'],
+['한 마리','마리','Từ dùng để đếm động vật.','동물의 수를 세는 말이에요.','예문 · 고양이 한 마리가 자고 있어요.'],
+['익은','익다','Quả đã chín và có thể ăn được.','열매가 자라서 먹기 좋게 돼요.','예문 · 잘 익은 바나나를 먹어요.'],
+['따 먹었어요','따 먹다','Hái quả từ cây rồi ăn.','나무에 달린 열매를 떼어서 먹어요.','예문 · 나무에서 감을 따 먹었어요.']]],
+['한 달쯤 지나자 팔 열매가 점점 줄었어요. 동생의 아내가 나무 아래에서 새에게 말했어요. “우리도 열매를 팔아 살아야 해요. 조금만 남겨 주세요.”', 'Khoảng một tháng sau, khế để bán ngày càng ít đi. Vợ người em đứng dưới gốc cây nói với chim: “Chúng tôi cũng phải bán khế để sống. Xin hãy để lại cho chúng tôi một ít.”', [
+['한 달쯤','쯤','Gắn sau số lượng để nói con số gần đúng.','시간이나 수량이 그 정도라는 뜻이에요.','예문 · 한 시간쯤 기다렸어요.'],
+['줄었어요','줄다','Trở nên ít hơn về số lượng.','수나 양이 전보다 적어져요.','예문 · 비가 와서 손님이 줄었어요.'],
+['아래','아래','Vị trí ở phía thấp hơn một vật.','어떤 것보다 낮은 쪽을 말해요.','예문 · 의자 아래에 가방이 있어요.'],
+['남겨 주세요','남기다','Giữ lại một phần, không dùng hết.','모두 쓰거나 먹지 않고 일부를 있게 해요.','예문 · 동생에게 빵을 남겨 주세요.']]],
+['그러자 새가 사람의 말로 대답했어요. “열매를 먹은 값으로 금을 줄게요. 세 뼘짜리 자루를 준비하세요.” 부부는 깜짝 놀라 서로를 바라보았어요.', 'Bỗng chim đáp bằng tiếng người: “Ta sẽ trả vàng cho những quả khế đã ăn. Hãy chuẩn bị một chiếc túi ba gang.” Hai vợ chồng sửng sốt nhìn nhau.', [
+['값','값','Số tiền hay vật trả để đổi lấy một thứ.','물건을 사거나 이용할 때 내는 돈이에요.','예문 · 빵 값을 냈어요.'],
+['뼘','뼘','Khoảng từ đầu ngón cái đến đầu ngón út khi xòe bàn tay.','손을 벌렸을 때 엄지 끝에서 새끼손가락 끝까지의 길이예요.','예문 · 끈의 길이를 뼘으로 쟀어요.'],
+['자루','자루','Túi lớn để đựng đồ vật.','물건을 담을 수 있는 길쭉하고 큰 주머니예요.','예문 · 자루에 쌀을 담았어요.'],
+['깜짝','깜짝','Bất ngờ giật mình trong chốc lát.','갑자기 놀라는 모습이에요.','예문 · 큰 소리에 깜짝 놀랐어요.']]],
+['그날 밤 아내는 천을 꺼내 바느질했어요. 손을 벌려 길이를 재고 세 뼘짜리 자루를 만들었어요. 동생은 새의 말을 기억하며 작은 자루를 챙겼어요.', 'Đêm ấy, người vợ lấy vải ra khâu. Chị xòe tay đo rồi may một chiếc túi ba gang. Người em nhớ lời chim dặn và chuẩn bị chiếc túi nhỏ.', [
+['천','천','Vải dùng để may quần áo hoặc đồ dùng.','옷이나 주머니를 만드는 부드러운 재료예요.','예문 · 천으로 치마를 만들었어요.'],
+['바느질했어요','바느질하다','Dùng kim và chỉ để khâu vải.','바늘과 실로 천을 꿰매요.','예문 · 어머니가 바느질해요.'],
+['재고','재다','Đo chiều dài, khối lượng hoặc kích thước.','길이나 무게가 얼마나 되는지 알아봐요.','예문 · 자로 길이를 재요.'],
+['챙겼어요','챙기다','Chuẩn bị và mang theo thứ cần dùng.','필요한 물건을 준비해서 가지고 있어요.','예문 · 여행 가방을 챙겼어요.']]],
+['다음 날 아침, 새가 다시 찾아왔어요. 새는 동생 앞에 몸을 낮추고 등을 내주었어요. 동생은 자루를 품에 안고 새의 등에 조심스럽게 올라탔어요.', 'Sáng hôm sau, chim lại đến. Chim hạ thấp mình, đưa lưng cho người em. Anh ôm túi vào ngực rồi cẩn thận trèo lên lưng chim.', [
+['다음 날','다음 날','Ngày ngay sau một ngày đã nói đến.','어떤 날의 바로 뒤에 오는 날이에요.','예문 · 다음 날 다시 만났어요.'],
+['낮추고','낮추다','Làm cho vị trí thấp xuống.','높이를 아래쪽으로 내려요.','예문 · 고개를 낮췄어요.'],
+['품','품','Khoảng trước ngực nằm trong vòng tay.','두 팔로 안을 때 가슴 앞에 생기는 자리예요.','예문 · 아기를 품에 안았어요.'],
+['올라탔어요','올라타다','Leo lên và ngồi trên một vật để đi.','높은 곳이나 탈것에 올라서 타요.','예문 · 아이가 말에 올라탔어요.']]],
+['새는 힘차게 날개를 펴고 하늘로 올랐어요. 푸른 논과 높은 산이 발아래로 멀어졌어요. 넓은 바다를 건너자 햇빛을 받는 작은 섬이 보였어요.', 'Chim dang rộng đôi cánh khỏe khoắn rồi bay lên trời. Những cánh đồng xanh và núi cao dần lùi xa bên dưới. Khi bay qua biển rộng, họ thấy một hòn đảo nhỏ ngập nắng.', [
+['힘차게','힘차게','Với sức mạnh và sự khỏe khoắn.','힘이 넘치고 씩씩한 모습이에요.','예문 · 아이들이 힘차게 달려요.'],
+['날개','날개','Bộ phận giúp chim bay.','새가 하늘을 날 때 움직이는 몸의 부분이에요.','예문 · 새가 날개를 펼쳤어요.'],
+['발아래','발아래','Phía bên dưới chân mình.','발보다 아래에 있는 곳이에요.','예문 · 발아래로 강이 보여요.'],
+['건너자','-자','Diễn tả việc sau xảy ra ngay khi việc trước hoàn thành.','앞의 일이 끝나고 바로 뒤의 일이 일어남을 나타내요.','예문 · 문을 열자 바람이 들어왔어요.']]],
+['새는 섬의 바위 앞에 내려앉았어요. 동굴 안에는 금과 보석이 반짝이고 있었어요. 동생은 눈앞의 보물을 보고도 서두르지 않았어요.', 'Chim đáp xuống trước một vách đá trên đảo. Trong hang, vàng và đá quý lấp lánh. Dù thấy kho báu ngay trước mắt, người em vẫn không vội vàng.', [
+['내려앉았어요','내려앉다','Bay hoặc di chuyển từ trên cao xuống rồi đậu lại.','높은 곳에서 아래로 와서 앉아요.','예문 · 새가 지붕에 내려앉았어요.'],
+['동굴','동굴','Khoảng rỗng lớn trong núi hoặc vách đá.','산이나 바위 속에 깊게 뚫린 곳이에요.','예문 · 동굴 안은 어두워요.'],
+['보석','보석','Đá đẹp, quý và có giá trị cao.','빛깔이 아름답고 값이 비싼 돌이에요.','예문 · 반지에 보석이 있어요.'],
+['서두르지','서두르다','Làm gấp cho nhanh hơn.','일을 빨리 하려고 급하게 움직여요.','예문 · 서두르지 말고 천천히 하세요.']]],
+['동생은 입구 가까이에 있는 금을 조금씩 주웠어요. 작은 자루가 차자 더는 담지 않았어요. “이만하면 충분해요.” 동생은 자루를 묶고 새에게 돌아갔어요.', 'Người em nhặt từng ít vàng ở gần cửa hang. Khi chiếc túi nhỏ đã đầy, anh không lấy thêm nữa. “Thế này là đủ rồi.” Anh buộc túi lại và trở về chỗ chim.', [
+['입구','입구','Lối để đi vào một nơi.','어떤 곳으로 들어가는 문이나 길이에요.','예문 · 공원 입구에서 만나요.'],
+['주웠어요','줍다','Nhặt vật đang nằm trên đất hoặc bề mặt khác.','바닥에 있는 것을 손으로 들어 올려요.','예문 · 길에서 동전을 주웠어요.'],
+['담지','담다','Cho một vật vào đồ đựng.','그릇이나 주머니 안에 넣어요.','예문 · 바구니에 사과를 담아요.'],
+['충분해요','충분하다','Đã đủ số lượng cần dùng.','필요한 만큼 넉넉하게 있어요.','예문 · 이 음식이면 충분해요.']]],
+['새는 동생을 무사히 집에 데려다주었어요. 아내는 돌아온 남편을 반갑게 맞았어요. 부부는 새에게 고마워하며 열매를 내주었고, 그 뒤로 살림이 넉넉해졌어요.', 'Chim đưa người em về nhà bình an. Người vợ mừng rỡ đón chồng. Hai vợ chồng cảm ơn và mời chim ăn khế. Từ đó, cuộc sống của họ trở nên đủ đầy.', [
+['무사히','무사히','An toàn, không gặp tai nạn hay chuyện xấu.','위험하거나 나쁜 일을 겪지 않고 안전하게 해요.','예문 · 여행을 마치고 무사히 돌아왔어요.'],
+['반갑게','반갑게','Với niềm vui khi gặp lại ai đó.','만나서 기쁘고 즐거운 마음으로 해요.','예문 · 친구를 반갑게 맞았어요.'],
+['고마워하며','고마워하다','Cảm thấy biết ơn sự giúp đỡ của người khác.','도움을 받은 것을 기쁘고 감사하게 생각해요.','예문 · 친구의 도움을 고마워해요.'],
+['살림','살림','Việc sinh sống và điều kiện kinh tế của một gia đình.','한 집안이 살아가는 일이나 생활 형편이에요.','예문 · 살림이 조금씩 나아졌어요.']]],
+['소식을 들은 형이 동생을 찾아왔어요. 이야기를 듣자 형은 별나무를 갖고 싶어졌어요. “내 집과 논을 줄 테니 이 오두막과 나무를 바꾸자.” 동생은 형의 부탁을 들어주었어요.', 'Nghe tin, người anh đến tìm em. Sau khi nghe chuyện, anh muốn có cây khế. “Anh sẽ cho em nhà và ruộng, đổi lấy túp lều và cây này.” Người em đồng ý với lời đề nghị của anh.', [
+['소식','소식','Thông tin về người hoặc việc ở nơi khác.','다른 사람이나 다른 곳에서 일어난 일을 알려 주는 말이에요.','예문 · 가족의 소식을 들었어요.'],
+['갖고 싶어졌어요','-고 싶어지다','Bắt đầu có mong muốn làm một việc.','전에는 없던 바람이 생긴다는 뜻이에요.','예문 · 사진을 보니 여행 가고 싶어졌어요.'],
+['줄 테니','-(으)ㄹ 테니','Người nói nêu ý định của mình làm cơ sở cho lời sau.','자기가 하려는 일을 말하며 뒤의 일을 부탁하거나 제안해요.','예문 · 내가 도와줄 테니 걱정하지 마세요.'],
+['바꾸자','바꾸다','Đổi thứ mình có lấy một thứ khác.','가지고 있는 것을 다른 것과 서로 주고받아요.','예문 · 내 사과와 네 배를 바꾸자.']]],
+['형 부부는 오두막으로 이사했어요. 두 사람은 일도 하지 않고 나무만 지켜보았어요. 형은 열매 사이로 큰 새가 나타나기만 기다렸어요.', 'Vợ chồng người anh chuyển đến túp lều. Họ không làm việc mà chỉ chăm chăm nhìn cây khế. Người anh chỉ mong con chim lớn xuất hiện giữa những cành đầy quả.', [
+['이사했어요','이사하다','Chuyển nhà đến nơi ở khác.','살던 집을 떠나 다른 집으로 옮겨 가요.','예문 · 지난주에 새집으로 이사했어요.'],
+['지켜보았어요','지켜보다','Chú ý nhìn và theo dõi một việc.','무슨 일이 일어나는지 관심을 두고 계속 봐요.','예문 · 아이가 노는 모습을 지켜봐요.'],
+['사이','사이','Khoảng nằm giữa hai hay nhiều vật.','둘 이상의 물건 가운데 있는 곳이에요.','예문 · 나무 사이로 길이 나 있어요.'],
+['기다렸어요','기다리다','Ở lại cho đến khi người hay việc mình mong đến.','원하는 사람이나 일이 올 때까지 시간을 보내요.','예문 · 정류장에서 버스를 기다려요.']]],
+['마침내 새가 날아와 열매를 먹었어요. 형 부부는 곧바로 나무 아래에 서서 불평했어요. 새는 이번에도 금을 약속하며 세 뼘짜리 자루를 준비하라고 했어요.', 'Cuối cùng, chim bay đến ăn khế. Vợ chồng người anh lập tức đứng dưới gốc cây than phiền. Chim lại hứa trả vàng và bảo họ chuẩn bị một chiếc túi ba gang.', [
+['마침내','마침내','Cuối cùng, sau một thời gian chờ đợi.','오랫동안 기다리던 일이 끝내 이루어짐을 나타내요.','예문 · 마침내 목적지에 도착했어요.'],
+['곧바로','곧바로','Ngay lập tức, không chờ lâu.','시간을 끌지 않고 바로 하는 모습이에요.','예문 · 집에 오자 곧바로 씻었어요.'],
+['불평했어요','불평하다','Nói ra sự không hài lòng.','마음에 들지 않는다고 말해요.','예문 · 음식이 적다고 불평했어요.'],
+['약속하며','약속하다','Hứa chắc chắn sẽ làm một việc.','앞으로 어떤 일을 하겠다고 정해 말해요.','예문 · 내일 만나기로 약속했어요.']]],
+['형은 작은 자루로는 성에 차지 않았어요. 아내와 함께 세 배나 큰 자루를 만들었어요. 아홉 뼘짜리 자루를 펼쳐 놓고 금을 가득 담을 생각에 웃었어요.', 'Người anh không thỏa mãn với một chiếc túi nhỏ. Anh cùng vợ may chiếc túi lớn gấp ba lần. Họ trải chiếc túi chín gang ra, mỉm cười khi nghĩ đến việc đựng đầy vàng.', [
+['성에 차지','성에 차다','Cảm thấy vừa ý, thỏa mãn với điều mình có.','바라는 만큼 이루어져 마음에 들어요.','예문 · 결과가 성에 차지 않았어요.'],
+['세 배','배','Đơn vị diễn tả số lần tăng lên của một lượng.','어떤 수나 양이 몇 번 겹치는지 나타내요.','예문 · 형의 가방이 두 배 더 커요.'],
+['펼쳐 놓고','펼치다','Mở rộng một vật đang gấp hoặc cuộn.','접히거나 말린 것을 넓게 펴요.','예문 · 바닥에 지도를 펼쳤어요.'],
+['가득','가득','Đầy đến mức gần như không còn chỗ trống.','빈 곳이 거의 없을 만큼 꽉 찬 모습이에요.','예문 · 컵에 물을 가득 담았어요.']]],
+['이튿날 새는 형을 섬으로 데려갔어요. 형은 동굴 깊숙이 들어가 큰 자루를 금으로 채웠어요. 바지와 소매 끝까지 묶어 금을 넣느라, 해가 기울 때까지 나오지 않았어요.', 'Hôm sau, chim đưa người anh ra đảo. Anh đi sâu vào hang, nhét vàng đầy chiếc túi lớn. Anh còn buộc cả ống quần và tay áo để đựng vàng, mãi đến lúc mặt trời ngả bóng mới chịu ra.', [
+['이튿날','이튿날','Ngày liền sau ngày đang nói đến.','어떤 날의 바로 다음 날이에요.','예문 · 비는 이튿날 아침에 그쳤어요.'],
+['깊숙이','깊숙이','Vào tận phía sâu bên trong.','안쪽으로 아주 깊이 들어간 곳이나 모습이에요.','예문 · 동굴 깊숙이 들어갔어요.'],
+['소매','소매','Phần áo bao quanh cánh tay.','옷에서 팔을 넣는 부분이에요.','예문 · 긴 소매를 걷었어요.'],
+['넣느라','-느라','Việc trước chiếm thời gian hoặc công sức, dẫn đến việc sau.','앞의 일을 하느라고 뒤의 일을 못 하거나 늦게 했음을 나타내요.','예문 · 숙제하느라 늦게 잤어요.']]],
+['형은 무거운 자루를 몸에 묶고 새의 등에 탔어요. 새는 힘겹게 날아 바다 위로 나갔어요. 거센 바람이 불자 새의 몸이 흔들리고 금 자루가 한쪽으로 기울었어요.', 'Người anh buộc túi nặng vào người rồi leo lên lưng chim. Chim khó nhọc bay ra biển. Khi gió thổi mạnh, thân chim chao đảo và túi vàng nghiêng hẳn sang một bên.', [
+['무거운','무겁다','Có khối lượng lớn, khó nâng hoặc mang.','무게가 많이 나가서 들기 힘들어요.','예문 · 이 가방은 너무 무거워요.'],
+['힘겹게','힘겹게','Một cách khó nhọc, phải cố gắng rất nhiều.','힘이 많이 들어서 어렵게 해요.','예문 · 할아버지가 힘겹게 걸으셨어요.'],
+['거센','거세다','Rất mạnh, có sức lớn.','힘이나 기세가 매우 강해요.','예문 · 거센 바람이 불어요.'],
+['기울었어요','기울다','Nghiêng sang một phía.','한쪽으로 비스듬하게 돼요.','예문 · 배가 옆으로 기울었어요.']]],
+['결국 형은 금 자루와 함께 바다로 떨어졌어요. 무거운 짐에서 벗어난 새는 날개를 펴고 먼 산으로 날아갔어요. 끝없는 욕심 때문에 형은 손에 넣은 것을 모두 잃고 말았어요.', 'Cuối cùng, người anh cùng túi vàng rơi xuống biển. Thoát khỏi gánh nặng, chim dang cánh bay về phía núi xa. Vì lòng tham không đáy, người anh mất hết những gì đã có.', [
+['결국','결국','Sau mọi việc, kết quả cuối cùng là như vậy.','여러 일이 지난 뒤 마지막에 이르게 된 결과를 말해요.','예문 · 결국 버스를 놓쳤어요.'],
+['벗어난','벗어나다','Thoát ra khỏi một vật hoặc tình trạng đang giữ mình.','묶여 있거나 힘들게 하던 것에서 빠져나와요.','예문 · 위험에서 벗어났어요.'],
+['욕심','욕심','Lòng muốn có thêm nhiều thứ hơn mức cần thiết.','필요한 것보다 더 많이 가지려는 마음이에요.','예문 · 욕심을 부려 너무 많이 담았어요.'],
+['잃고 말았어요','-고 말다','Diễn tả việc đã xảy ra hoàn toàn, thường là kết quả đáng tiếc.','바라지 않던 일이 끝내 일어났음을 나타내요.','예문 · 소중한 지갑을 잃고 말았어요.']]]
+];
+
+const grammarPhrases = new Set(['마다','-(으)려고','쯤','-자','-고 싶어지다','-(으)ㄹ 테니','-느라','-고 말다']);
+export const storyPages = rows.map(([koreanText,vietnameseText,notes],index)=>{
+  const annotations = {};
+  const found = notes.map(([phrase,lemma,translation,explanation,note],i)=>{
+    const id = `p${index+1}-${i+1}`;
+    const start = koreanText.indexOf(phrase);
+    if(start<0) throw Error(`없는 주석: ${phrase}`);
+    annotations[id]={id,lemma,type:grammarPhrases.has(lemma)?'문법 · Ngữ pháp':'단어 · Từ vựng',translation,explanation,note};
+    return {start,end:start+phrase.length,phrase,id};
+  }).sort((a,b)=>a.start-b.start);
+  const koreanSegments=[];let cursor=0;
+  for(const item of found){
+    if(item.start<cursor) throw Error('주석 겹침');
+    if(item.start>cursor) koreanSegments.push({text:koreanText.slice(cursor,item.start)});
+    koreanSegments.push({text:item.phrase,annotationId:item.id});cursor=item.end;
+  }
+  if(cursor<koreanText.length) koreanSegments.push({text:koreanText.slice(cursor)});
+  return {pageNumber:index+1,image:`./별나무-${String(index+1).padStart(2,'0')}.webp`,imageAlt:`별나무 ${index+1}쪽: ${koreanText.split('. ')[0]}`,koreanText,koreanSegments,vietnameseText,annotations};
+});
+export const storyCover={image:'./별나무-표지.webp',imageAlt:'베트남 별나무와 동생, 커다란 금빛 새를 그린 수채화',originKorean:'베트남 전래동화',originPartner:'Truyện cổ tích Việt Nam',titleKorean:'별나무',titlePartner:'Cây khế',teaserKorean:'열매를 먹은 새는 왜 작은 자루를 가져오라고 했을까요?',teaserPartner:'Vì sao chim ăn khế lại dặn mang theo một chiếc túi nhỏ?'};
+export const getStoryPage = number => storyPages.find(page=>page.pageNumber===Number(number))??null;
+export const getAnnotation = (number,id)=>getStoryPage(number)?.annotations[id]??null;
+
+export const productionRecord = {
+ dateAsiaSeoul:'2026-10-18',countryKorean:'베트남',titleKorean:'별나무',
+ status:'completed',request:'TK샘의 다른 동화 한 권 제작 요청',
+ pageCount:20,coverCount:1,annotationCount:80,fileCount:24,
+ staticTests:'5개 통과',browserVisualReview:'미실시',nativeLanguageReview:'미실시'
+};
+
+// 그림 제작 지시문: 각 장면은 내장 도구로 개별 생성. 표지와 1쪽은 같은 수채화 참고 이미지 사용.
+export const illustrationPrompts = {"tool":"내장 이미지 생성","style":"ONE wide 16:9 full-scene watercolor folktale illustration, no text or lettering, no panels, no frame. Reference is for watercolor style and the younger man's identity, ivory shirt, indigo headband and trousers; starfruit tree and russet-gold enormous eagle-like bird identity when explicitly present. Warm paper grain, natural proportions, rural historic Vietnamese bamboo/thatch houses and rice fields, soft luminous daylight. Center scene action. Only characters explicitly named in the scene appear; omit all others including reference figures not named. No Mongolian, Chinese or modern artifacts. Younger man's wife when present: young Vietnamese woman, black hair low bun, muted teal cotton blouse, dark skirt. Older brother when present: stockier Vietnamese adult, short mustache, maroon cotton tunic and black headcloth. Older wife when present: ochre blouse and dark skirt.","styleReference":"C:/onmaeum-ai/stories/khukhuu-namjil/page-01-draft.png","characterReference":"별나무-표지.webp","scenes":[["02","Older brother in front of his large timber house pointing toward his own rice fields while younger brother and teal-blouse wife walk away toward a dilapidated thatched hut with one starfruit tree. Only these three people. No bird."],["03","Younger brother waters a small starfruit tree with a clay pot while teal-blouse wife loosens soil with a hoe beside their simple thatched hut. Only the couple, no bird or gold."],["04","Younger couple smiles beside their tree abundant with ripe oblong yellow FIVE-RIDGED starfruit, holding a woven basket to gather fruit. Only couple, no bird. Fruit are real carambola, not decorative stars."],["05","Huge russet-gold bird perched firmly in the starfruit tree eating a ripe yellow fruit in its beak. Younger brother in ivory shirt looks up from below in surprise. Only man and bird, no wife."],["06","Teal-blouse younger wife stands beneath tree and appeals gently to enormous russet-gold bird perched overhead, open palms, a few remaining yellow fruits on branch. Only woman and bird, no man."],["07","Enormous bird perched on branch with slightly open beak as if speaking to younger couple below. Younger man and teal-blouse wife exchange amazed glances, empty hands. Only couple and bird. No gold or bags yet."],["08","Inside a humble bamboo hut at warm lamplight, teal-blouse wife sews a SMALL beige cloth pouch with needle and thread, measuring fabric with an outspread hand. Younger man sits nearby attentive. Only couple, no bird."],["09","At dawn outside the hut, enormous bird crouches wings folded while younger man holding SMALL beige pouch carefully climbs onto its back. Only man and bird."],["10","Younger man securely astride enormous russet-gold bird flying above blue sea, green Vietnamese coast and rice fields receding below, small rocky island ahead. Small beige pouch at his waist. Only man and bird, no boats."],["11","Younger man and huge bird have landed at mouth of rocky cave on deserted tropical island. Man gazes into cave where scattered gold nuggets and small gemstones gleam. His beige pouch remains SMALL. Only man and bird."],["12","Close view of younger man in ivory shirt kneeling at cave entrance, picking a modest few gold nuggets into a SMALL beige pouch, then tying its opening. Golden light on rocks, sea outside cave. Only younger man, no other people, no bird within frame."],["13","Outside humble hut beside starfruit tree, younger man with SMALL filled beige pouch reunites with smiling teal-blouse wife; she offers a basket of yellow starfruit to huge bird resting nearby. Only couple and bird."],["14","Younger brother and older stocky mustached brother discuss a property exchange beside tree and hut; older in maroon tunic eagerly points at tree while younger listens. Distant larger timber house amid rice fields. Only two brothers, no wives, no bird or papers."],["15","Stocky older brother in maroon tunic and ochre-blouse wife sit idly under starfruit tree beside small hut, watching branches expectantly. Only older couple, no younger man, no bird, no gold."],["16","Older stocky mustached man in maroon tunic and ochre-blouse wife stand under tree gesturing complaints to enormous russet-gold bird eating a starfruit above them. Only older couple and bird, no younger man."],["17","Inside hut, ochre-blouse older wife and stocky maroon-clad older man spread out an OVERSIZED beige cloth sack three times normal pouch size, smiling greedily. Only older couple, no bird or gold yet."],["18","Stocky mustached older brother in maroon tunic inside treasure cave stuffing gold into OVERSIZED bulging beige sack. His tied trouser cuffs and sleeve ends also bulge with hidden gold. Only older man; late afternoon light through cave entrance, no bird inside frame."],["19","Older stocky man with mustache and maroon tunic precariously rides enormous russet-gold bird over a windy choppy sea. OVERSIZED bulging beige gold sack tied to his body shifts strongly to one side. Bird strains wings under weight, darkening sky. Only older man and bird."],["20","Distant wide view over rough blue sea: stocky older man in maroon tunic with huge beige sack has slipped OFF the bird and is falling toward water, shown small and non-graphic, no injury, no rescue scene. Freed enormous russet-gold bird flies upward toward distant green mountains. Only this falling older man and bird; no younger man, no wife, no additional figures."]]};

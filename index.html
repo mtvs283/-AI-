@@ -1775,7 +1775,21 @@
           <td>2026. 9. 27.</td>
         </tr>`;
 
-      sharedMaterialList.innerHTML = featuredStoryRow + data.map((item, index) => {
+      const vietnamStoryRow = `
+        <tr>
+          <td>${data.length + 2}</td>
+          <td class="board-title-cell">
+            <strong>베트남 전래동화 별나무 (한국어·베트남어)</strong>
+            <p>한국어와 베트남어로 읽는 표지와 본문 20쪽 동화입니다. 점선 표현을 누르면 베트남어 설명·한국어 설명·예문이 나옵니다.</p>
+            <div class="board-meta">
+              <a class="file-link" href="./별나무.html" target="_blank" rel="noopener">동화 열기</a>
+            </div>
+          </td>
+          <td>이중언어 동화</td>
+          <td>2026. 10. 18.</td>
+        </tr>`;
+
+      sharedMaterialList.innerHTML = vietnamStoryRow + featuredStoryRow + data.map((item, index) => {
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = isVerifiedTeacher
           ? (item.file_path
