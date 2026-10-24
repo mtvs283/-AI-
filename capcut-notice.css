@@ -1,0 +1,36 @@
+#capcut-notice{--cn-ink:#242c29;--cn-green:#d6ee99;color:var(--cn-ink);font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;border:0;padding:0;border-radius:24px;width:min(620px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;background:#fcfaf5;box-shadow:0 28px 100px #101c2950;overscroll-behavior:contain;margin:auto}
+#capcut-notice::backdrop{background:#14211fc2;backdrop-filter:blur(5px)}
+#capcut-notice *{box-sizing:border-box}
+#capcut-notice .cn-main{position:relative;padding:36px 38px 28px}
+#capcut-notice .cn-top{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em;font-weight:750;color:#57664c;margin-bottom:26px}
+#capcut-notice .cn-dot{width:7px;height:7px;background:#879f4e;border-radius:50%}
+#capcut-notice .cn-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border:1px solid #dddeda;background:transparent;border-radius:50%;color:#4a514c;font:26px/1 system-ui;cursor:pointer;display:grid;place-items:center}
+#capcut-notice .cn-close:hover{background:#eceee5}
+#capcut-notice h2{font:750 clamp(25px,4.8vw,34px)/1.35 system-ui,sans-serif;letter-spacing:-1.4px;margin:0 0 13px;max-width:460px;text-align:left;color:#242c29}
+#capcut-notice .cn-intro{font-size:14px;line-height:1.85;letter-spacing:-.3px;color:#6a7068;margin:0 0 25px;text-align:left}
+#capcut-notice .cn-offer{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:22px 26px;border-radius:16px;background:#263c34;color:#fff;position:relative;overflow:hidden;margin:0 0 23px}
+#capcut-notice .cn-offer:after{content:'';position:absolute;width:180px;height:180px;border:1px solid #d6ee992b;border-radius:50%;right:-70px;top:-70px;pointer-events:none}
+#capcut-notice .cn-offer-label{font-size:12px;letter-spacing:.12em;color:#d6ee99;margin:0 0 9px}
+#capcut-notice .cn-percent{display:flex;align-items:baseline;gap:8px;font-size:15px;font-weight:600;letter-spacing:-.3px;white-space:nowrap}
+#capcut-notice .cn-percent strong{font-size:58px;line-height:1;font-weight:750;letter-spacing:-3px;color:#effad8}
+#capcut-notice .cn-percent small{font-size:30px;letter-spacing:-1px}
+#capcut-notice .cn-date{font-size:23px;font-weight:650;letter-spacing:-.8px;margin-bottom:8px;white-space:nowrap}
+#capcut-notice .cn-offer-note{font-size:11px;line-height:1.6;color:#d2ded5;text-align:right}
+#capcut-notice .cn-copy{font-size:13px;line-height:1.9;letter-spacing:-.25px;margin:0 0 20px;color:#5f665f;text-align:left}
+#capcut-notice .cn-copy span{display:block}
+#capcut-notice .cn-class{padding-top:19px;border-top:1px solid #e4e4d8;display:flex;align-items:center;justify-content:space-between;gap:14px}
+#capcut-notice .cn-class h3{font-size:17px;letter-spacing:-.5px;margin:4px 0 5px;color:#26372b}
+#capcut-notice .cn-class p{font-size:12px;color:#737b6c;line-height:1.7;margin:0}
+#capcut-notice .cn-tag{font-size:10px;font-weight:700;color:#5f7143;letter-spacing:.02em}
+#capcut-notice a.cn-apply{background:var(--cn-green);color:#2d3b24;text-decoration:none;font-size:13px;font-weight:750;display:flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:12px 18px;border-radius:10px;white-space:nowrap;transition:background 150ms,transform 150ms}
+#capcut-notice a.cn-apply:hover{background:#c5e47d}
+#capcut-notice a.cn-apply:active{transform:scale(.98)}
+#capcut-notice .cn-source{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:21px;font-size:11px;color:#8a8e81}
+#capcut-notice .cn-source a{font-size:12px;color:#4f5c46;text-underline-offset:4px;white-space:nowrap}
+#capcut-notice .cn-footer{border-top:1px solid #e6e6dc;padding:14px 25px;display:flex;align-items:center;justify-content:space-between;background:#f1f2e9;font-size:12px;color:#69705d}
+#capcut-notice .cn-footer label{display:flex;align-items:center;gap:8px;cursor:pointer}
+#capcut-notice input{accent-color:#415936;width:15px;height:15px;margin:0}
+#capcut-notice .cn-done{font:600 12px system-ui;color:#54604b;background:none;border:0;padding:8px;cursor:pointer}
+#capcut-notice :focus-visible{outline:3px solid #93a96c;outline-offset:4px}
+@media(max-width:520px){#capcut-notice{border-radius:19px}#capcut-notice .cn-main{padding:30px 23px 23px}#capcut-notice .cn-top{margin-bottom:23px;font-size:10px}#capcut-notice .cn-close{top:14px;right:14px;width:34px;height:34px}#capcut-notice h2{letter-spacing:-1px;font-size:26px}#capcut-notice .cn-intro{font-size:13px;margin-bottom:19px}#capcut-notice .cn-offer{padding:19px 18px;gap:10px;margin-bottom:18px}#capcut-notice .cn-percent strong{font-size:49px}#capcut-notice .cn-percent{gap:5px;font-size:12px}#capcut-notice .cn-date{font-size:19px}#capcut-notice .cn-offer-note{font-size:10px}#capcut-notice .cn-class{align-items:flex-start;flex-direction:column;gap:13px}#capcut-notice a.cn-apply{width:100%}#capcut-notice .cn-source{align-items:flex-start;flex-direction:column;gap:8px;margin-top:18px}#capcut-notice .cn-copy{font-size:12px}#capcut-notice .cn-footer{padding:10px 18px}}
+@media(prefers-reduced-motion:no-preference){#capcut-notice[open]{animation:cn-appear 180ms ease-out}@keyframes cn-appear{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}}

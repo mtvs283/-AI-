@@ -154,6 +154,10 @@
     </div>
 
     <div id="admin-view" hidden>
+      <section aria-label="캡컷 기초 강의 신청" style="margin-bottom:28px;">
+        <h2>캡컷 기초 강의 신청</h2>
+        <div id="capcut-class-list" aria-live="polite">신청 내역을 확인하는 중입니다.</div>
+      </section>
       <section aria-label="구인공고 이메일 현황" style="margin-bottom:24px;">
         <h2>활동지역 구인공고 알림</h2>
         <p>새 공고를 활동지역이 맞는 인증 교사에게 약 5분 단위로 모아 보냅니다.</p>
@@ -427,6 +431,22 @@
       renderList();
     });
 
+    async function loadCapcutClassRequests() {
+      const list=document.getElementById('capcut-class-list');
+      const {data,error}=await supabaseClient.rpc('onmaeum_admin_capcut_class_requests');
+      list.replaceChildren();
+      if(error){list.textContent='신청 내역을 불러오지 못했습니다.';return;}
+      if(!data?.length){list.textContent='아직 강의 신청이 없습니다.';return;}
+      for(const row of data){
+        const card=document.createElement('div');card.style.cssText='border-bottom:1px solid #ddd;padding:12px 0';
+        const title=document.createElement('strong');title.textContent=row.name;
+        const email=document.createElement('a');email.href='mailto:'+encodeURIComponent(row.email || '');email.textContent=' '+(row.email || '');
+        const note=document.createElement('p');note.style.whiteSpace='pre-wrap';note.textContent=row.note || '별도 요청 사항 없음';
+        const date=document.createElement('small');date.textContent=new Date(row.created_at).toLocaleString('ko-KR');
+        card.append(title,email,note,date);list.append(card);
+      }
+    }
+
     async function start() {
       if (!supabaseClient) {
         signedOutView.hidden = false;
@@ -452,6 +472,7 @@
       }
 
       adminView.hidden = false;
+      void loadCapcutClassRequests();
       await refreshRecruitmentSummary();
       await loadList();
     }
