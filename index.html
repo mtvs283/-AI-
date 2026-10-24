@@ -951,6 +951,7 @@
     .board-table .num-col { width: 70px; }
     .board-table .type-col { width: 130px; }
     .board-table .date-col { width: 130px; }
+    .board-table .views-col { width: 86px; text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
 
     .board-title-cell strong {
       display: block;
@@ -1347,12 +1348,13 @@
               <th class="num-col">번호</th>
               <th>제목</th>
               <th class="type-col">종류</th>
+              <th class="views-col">조회수</th>
               <th class="date-col">날짜</th>
             </tr>
           </thead>
           <tbody id="shared-material-list">
             <tr>
-              <td colspan="4" class="board-empty">자료를 불러오는 중입니다.</td>
+              <td colspan="5" class="board-empty">자료를 불러오는 중입니다.</td>
             </tr>
           </tbody>
         </table>
@@ -1429,12 +1431,13 @@
               <th class="num-col">번호</th>
               <th>공고</th>
               <th class="date-col">마감</th>
+              <th class="views-col">조회수</th>
               <th class="type-col">링크</th>
             </tr>
           </thead>
           <tbody id="recruitment-notice-list">
             <tr>
-              <td colspan="4" class="board-empty">공고를 불러오는 중입니다.</td>
+              <td colspan="5" class="board-empty">공고를 불러오는 중입니다.</td>
             </tr>
           </tbody>
         </table>
@@ -1516,6 +1519,7 @@
 
   <footer id="contact">Korean Edu AI Institute · 한국어교육AI연구개발원</footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./open-counts.js"></script>
   <script>
     const SUPABASE_URL = 'https://xrrgfbidtzsohddiwcbn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_W7QqGrgNUQ77KgRtdSaANA_F4zrqp8P';
@@ -1545,17 +1549,18 @@
     let currentSiteProfile = null;
     let isVerifiedTeacher = false;
     let isSiteAdmin = false;
+    const openCounts=window.OnmaeumOpenCounts(supabaseClient);
 
     function setProtectedListMessage(message) {
       const teacherNotices = document.getElementById('teacher-announcement-list');
       if (teacherNotices) teacherNotices.textContent = message;
-      if (sharedMaterialList) sharedMaterialList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+      if (sharedMaterialList) sharedMaterialList.innerHTML = `<tr><td colspan="5" class="board-empty">${message}</td></tr>`;
       const materialRequestList = document.getElementById('material-request-list');
       if (materialRequestList) materialRequestList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
       const worryPostList = document.getElementById('worry-post-list');
       if (worryPostList) worryPostList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
       const recruitmentNoticeList = document.getElementById('recruitment-notice-list');
-      if (recruitmentNoticeList) recruitmentNoticeList.innerHTML = `<tr><td colspan="4" class="board-empty">${message}</td></tr>`;
+      if (recruitmentNoticeList) recruitmentNoticeList.innerHTML = `<tr><td colspan="5" class="board-empty">${message}</td></tr>`;
     }
 
     function requireVerifiedTeacher(statusElement, message = '교사 인증이 완료된 회원만 사용할 수 있습니다.') {
@@ -1732,12 +1737,12 @@
       if (!sharedMaterialList) return;
 
       if (!currentSiteUser) {
-        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 자료 목록을 볼 수 있습니다.</td></tr>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="5" class="board-empty">로그인 후 자료 목록을 볼 수 있습니다.</td></tr>';
         return;
       }
 
       if (!supabaseClient) {
-        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료공유 DB 연결 대기 중입니다. 인터넷 연결 후 새로고침해 주세요.</td></tr>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="5" class="board-empty">자료공유 DB 연결 대기 중입니다. 인터넷 연결 후 새로고침해 주세요.</td></tr>';
         return;
       }
 
@@ -1760,7 +1765,7 @@
       }
 
       if (error) {
-        sharedMaterialList.innerHTML = '<tr><td colspan="4" class="board-empty">자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.</td></tr>';
+        sharedMaterialList.innerHTML = '<tr><td colspan="5" class="board-empty">자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.</td></tr>';
         console.error(error);
         return;
       }
@@ -1773,10 +1778,11 @@
             <strong>이중 언어 동화(필리핀)- 거북이와 원숭이</strong>
             <p>한국어와 타갈로그어로 읽고, 점선으로 표시된 한국어 표현을 눌러 단어와 문법을 확인하는 인터랙티브 동화입니다.</p>
             <div class="board-meta">
-              <a class="file-link" href="./story-turtle-monkey.html" target="_blank" rel="noopener">동화 열기</a>
+              <a class="file-link" href="./story-turtle-monkey.html" data-open-kind="story" data-open-key="turtle-monkey" target="_blank" rel="noopener">동화 열기</a>
             </div>
           </td>
           <td>이중언어 동화</td>
+          <td class="views-col">${openCounts.label('story','turtle-monkey')}</td>
           <td>2026. 9. 27.</td>
         </tr>`;
 
@@ -1787,10 +1793,11 @@
             <strong>이중 언어 동화(베트남)- 별나무</strong>
             <p>한국어와 베트남어로 읽는 표지와 본문 20쪽 동화입니다. 점선 표현을 누르면 베트남어 설명·한국어 설명·예문이 나옵니다.</p>
             <div class="board-meta">
-              <a class="file-link" href="./별나무.html" target="_blank" rel="noopener">동화 열기</a>
+              <a class="file-link" href="./별나무.html" data-open-kind="story" data-open-key="star-tree" target="_blank" rel="noopener">동화 열기</a>
             </div>
           </td>
           <td>이중언어 동화</td>
+          <td class="views-col">${openCounts.label('story','star-tree')}</td>
           <td>2026. 10. 18.</td>
         </tr>`;
 
@@ -1801,10 +1808,11 @@
             <strong>이중 언어 동화(중국)- 서유기1</strong>
             <p>돌에서 태어난 손오공 이야기입니다. 한국어·중국어 본문과 클릭 주석을 함께 볼 수 있습니다.</p>
             <div class="board-meta">
-              <a class="file-link" href="./서유기1.html" target="_blank" rel="noopener">동화 열기</a>
+              <a class="file-link" href="./서유기1.html" data-open-kind="story" data-open-key="journey-west-1" target="_blank" rel="noopener">동화 열기</a>
             </div>
           </td>
           <td>이중언어 동화</td>
+          <td class="views-col">${openCounts.label('story','journey-west-1')}</td>
           <td>2026. 10. 18.</td>
         </tr>`;
 
@@ -1815,10 +1823,11 @@
             <strong>한국어 동화(한국)- 왕산악과 거문고</strong>
             <p>왕산악이 음악을 연주하자 검은 학이 춤추었다는 거문고 유래 전설입니다. 한국어 본문 20쪽과 문화·낱말·문법 클릭 주석을 함께 읽습니다.</p>
             <div class="board-meta">
-              <a class="file-link" href="./왕산악과 거문고.html" target="_blank" rel="noopener">동화 열기</a>
+              <a class="file-link" href="./왕산악과 거문고.html" data-open-kind="story" data-open-key="geomungo" target="_blank" rel="noopener">동화 열기</a>
             </div>
           </td>
           <td>한국어 동화</td>
+          <td class="views-col">${openCounts.label('story','geomungo')}</td>
           <td>2026. 10. 18.</td>
         </tr>`;
 
@@ -1826,15 +1835,16 @@
         const createdAt = new Date(item.created_at).toLocaleDateString('ko-KR');
         const fileLink = isVerifiedTeacher
           ? (item.file_path
-            ? `<button class="file-link" type="button" data-file-path="${escapeHtml(item.file_path)}">파일 열기</button>`
+            ? `<button class="file-link" type="button" data-file-path="${escapeHtml(item.file_path)}" data-material-id="${escapeHtml(String(item.id))}">파일 열기</button>`
             : '파일 없음')
           : '교사 인증 후 내용·파일 이용';
         const note = isVerifiedTeacher && item.note ? `<p>${linkifyUrls(item.note)}</p>` : '';
         const removeBtn = isSiteAdmin && item.id
           ? ` <span class="board-meta-sep">·</span> <button class="danger-link" type="button" data-delete-material="${escapeHtml(String(item.id))}" data-delete-title="${escapeHtml(item.title)}" data-delete-path="${escapeHtml(item.file_path || '')}">삭제</button>`
           : '';
-        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}${removeBtn}</div></td><td>${escapeHtml(item.category || '자료')}</td><td>${createdAt}</td></tr>`;
+        return `<tr><td>${data.length - index}</td><td class="board-title-cell"><strong>${escapeHtml(item.title)}</strong>${note}<div class="board-meta">${fileLink}${removeBtn}</div></td><td>${escapeHtml(item.category || '자료')}</td><td class="views-col">${openCounts.label('material',item.id)}</td><td>${createdAt}</td></tr>`;
       }).join('');
+      void openCounts.refresh(sharedMaterialList);
     }
 
     if (sharedMaterialList) {
@@ -1935,7 +1945,7 @@
 
     if (sharedMaterialList) {
       sharedMaterialList.addEventListener('click', async (event) => {
-        const linkButton = event.target.closest('.file-link');
+        const linkButton = event.target.closest('.file-link[data-file-path]');
         if (!linkButton || !supabaseClient) return;
         if (!isVerifiedTeacher) {
           alert('파일 이용은 교사 인증이 완료된 회원만 가능합니다.');
@@ -1958,6 +1968,7 @@
 
         linkButton.textContent = '파일 열기';
         window.open(data.signedUrl, '_blank', 'noopener');
+        void openCounts.record('material',linkButton.dataset.materialId);
       });
     }
 
@@ -2187,11 +2198,11 @@
       const noticeList = document.getElementById('recruitment-notice-list');
       if (!noticeList) return;
       if (!currentSiteUser) {
-        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">로그인 후 공고 목록을 볼 수 있습니다.</td></tr>';
+        noticeList.innerHTML = '<tr><td colspan="5" class="board-empty">로그인 후 공고 목록을 볼 수 있습니다.</td></tr>';
         return;
       }
       if (!supabaseClient) {
-        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">DB 연결 대기 중입니다.</td></tr>';
+        noticeList.innerHTML = '<tr><td colspan="5" class="board-empty">DB 연결 대기 중입니다.</td></tr>';
         return;
       }
 
@@ -2205,12 +2216,12 @@
         .limit(80);
 
       if (error) {
-        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">공고를 불러오지 못했습니다. 공고 표가 준비됐는지 확인해 주세요.</td></tr>';
+        noticeList.innerHTML = '<tr><td colspan="5" class="board-empty">공고를 불러오지 못했습니다. 공고 표가 준비됐는지 확인해 주세요.</td></tr>';
         console.error(error);
         return;
       }
       if (!data.length) {
-        noticeList.innerHTML = '<tr><td colspan="4" class="board-empty">진행 중인 한국어강사 모집 공고가 없습니다.</td></tr>';
+        noticeList.innerHTML = '<tr><td colspan="5" class="board-empty">진행 중인 한국어강사 모집 공고가 없습니다.</td></tr>';
         return;
       }
 
@@ -2221,9 +2232,11 @@
           <td>${data.length - index}</td>
           <td class="board-title-cell"><strong>${escapeHtml(item.position)}</strong><div class="board-meta">${escapeHtml(place)}</div></td>
           <td>${escapeHtml(formatNoticeDeadline(item.deadline))}</td>
-          <td><a class="go-link" href="${url}" target="_blank" rel="noopener noreferrer">바로가기</a></td>
+          <td class="views-col">${openCounts.label('recruitment',item.id)}</td>
+          <td><a class="go-link" href="${url}" data-open-kind="recruitment" data-open-key="${escapeHtml(String(item.id))}" target="_blank" rel="noopener noreferrer">바로가기</a></td>
         </tr>`;
       }).join('');
+      void openCounts.refresh(noticeList);
     }
 
     async function loadComments(postId) {
